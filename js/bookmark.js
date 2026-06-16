@@ -6,14 +6,14 @@ import {
   getJobQualitySignals,
   getJobById,
   getSimilarJobs
-} from "./data.js?v=20260616v";
-import { fetchJobById } from "./providers.js?v=20260616v";
-import { scoreJobForProfile } from "./profile.js?v=20260616v";
-import { recordPageView, trackEvent } from "./analytics.js?v=20260616v";
+} from "./data.js?v=20260616x";
+import { fetchJobById } from "./providers.js?v=20260616x";
+import { scoreJobForProfile } from "./profile.js?v=20260616x";
+import { recordPageView, trackEvent } from "./analytics.js?v=20260616x";
 
 export const BOOKMARK_KEY = "jsa_bookmarks";
 
-const APP_VERSION = "20260616v";
+const APP_VERSION = "20260616x";
 const boundBookmarkRoots = new WeakSet();
 
 export function readBookmarks() {

@@ -2,8 +2,8 @@ import {
   clearAnalyticsEvents,
   getAnalyticsSummary,
   recordPageView
-} from "./analytics.js?v=20260616v";
-import { showSnackbar } from "./bookmark.js?v=20260616v";
+} from "./analytics.js?v=20260616x";
+import { showSnackbar } from "./bookmark.js?v=20260616x";
 
 function escapeHtml(value) {
   return String(value)

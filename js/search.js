@@ -2,18 +2,18 @@ import {
   getFilterOptions,
   rememberJobs,
   salaryAverage
-} from "./data.js?v=20260616v";
+} from "./data.js?v=20260616x";
 import {
   JOB_SOURCES,
   PROVIDER_LABELS,
   loadJobsForSource
-} from "./providers.js?v=20260616v";
+} from "./providers.js?v=20260616x";
 import {
   escapeHtml,
   initBookmarkButtons,
   renderJobCard,
   showSnackbar
-} from "./bookmark.js?v=20260616v";
+} from "./bookmark.js?v=20260616x";
 import {
   clearMatchProfile,
   getProfileSummary,
@@ -21,15 +21,15 @@ import {
   readMatchProfile,
   scoreJobForProfile,
   writeMatchProfile
-} from "./profile.js?v=20260616v";
+} from "./profile.js?v=20260616x";
 import {
   countNewJobs,
   deleteSavedSearch,
   markSearchSeen,
   readSavedSearches,
   saveSearch
-} from "./saved-searches.js?v=20260616v";
-import { recordPageView, trackEvent } from "./analytics.js?v=20260616v";
+} from "./saved-searches.js?v=20260616x";
+import { recordPageView, trackEvent } from "./analytics.js?v=20260616x";
 
 const LAST_SEARCH_KEY = "jsa_last_search";
 const FILTER_GROUPS_SINGLE = new Set(["location", "category", "salary"]);

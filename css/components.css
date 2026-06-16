@@ -1088,8 +1088,16 @@ mark {
   align-items: start;
 }
 
+.tracker-workspace--empty .tracker-workspace__grid {
+  justify-content: center;
+}
+
 .tracker-workspace__main {
   min-width: 0;
+}
+
+.tracker-workspace--empty .tracker-workspace__main {
+  width: min(100%, 720px);
 }
 
 .tracker-list-panel {
@@ -1194,7 +1202,35 @@ mark {
 }
 
 .tracker-dashboard-empty {
-  min-height: 460px;
+  min-height: 420px;
+}
+
+.tracker-dashboard-empty .empty-state {
+  min-height: 0;
+  padding: var(--space-7) var(--space-5);
+}
+
+.tracker-dashboard-empty .empty-state__art {
+  width: 112px;
+  height: 112px;
+  margin-bottom: var(--space-4);
+  border-radius: 30px;
+}
+
+.tracker-dashboard-empty .empty-state__art .material-symbols-outlined {
+  font-size: 54px;
+}
+
+.tracker-empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+.tracker-empty-actions .button {
+  min-width: 180px;
 }
 
 .tracker-panel__header {
@@ -1270,6 +1306,8 @@ mark {
 
 .job-data-form__actions {
   grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .manual-tracker-form {
@@ -1454,12 +1492,12 @@ mark {
   }
 
   .tracker-panel__actions {
-    justify-content: flex-start;
+    justify-content: center;
     width: 100%;
   }
 
   .tracker-panel__actions .button {
-    flex: 0 0 auto;
+    flex: 0 1 132px;
     justify-content: center;
   }
 
@@ -1469,6 +1507,15 @@ mark {
 
   .job-data-form {
     grid-template-columns: 1fr;
+  }
+
+  .job-data-form__actions {
+    justify-content: center;
+  }
+
+  .job-data-form__actions .button {
+    width: min(100%, 260px);
+    justify-content: center;
   }
 
   .manual-tracker-form {
@@ -1609,6 +1656,10 @@ mark {
 
   .tracker-workspace__grid {
     grid-template-columns: minmax(0, 1fr) minmax(320px, 360px);
+  }
+
+  .tracker-workspace--empty .tracker-workspace__grid {
+    grid-template-columns: minmax(0, 720px);
   }
 
   .manual-tracker-form.form-grid--two {

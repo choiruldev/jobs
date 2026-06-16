@@ -4,13 +4,13 @@ import {
   getJobById,
   makeLogo,
   rememberJobs
-} from "./data.js?v=20260616v";
+} from "./data.js?v=20260616x";
 import {
   escapeHtml,
   showSnackbar
-} from "./bookmark.js?v=20260616v";
-import { fetchJobById } from "./providers.js?v=20260616v";
-import { recordPageView, trackEvent } from "./analytics.js?v=20260616v";
+} from "./bookmark.js?v=20260616x";
+import { fetchJobById } from "./providers.js?v=20260616x";
+import { recordPageView, trackEvent } from "./analytics.js?v=20260616x";
 
 const APPLICATION_KEY = "jsa_applications";
 const MAX_CV_SIZE = 5 * 1024 * 1024;
@@ -756,14 +756,20 @@ function renderTrackerList(items, selectedJobId) {
 
 function renderTrackerEmptyDetail() {
   return `
-    <div class="empty-state tracker-dashboard-empty" role="status">
-      <div>
+    <div class="tracker-panel tracker-dashboard-empty" role="status">
+      <div class="empty-state">
         <div class="empty-state__art">
           <span class="material-symbols-outlined" aria-hidden="true">assignment_add</span>
         </div>
         <h2 class="headline-medium">Belum ada tracker</h2>
-        <p class="body-medium">Klik Input Tracker untuk menambahkan link lowongan, atau cari lowongan lalu catat proses apply.</p>
-        <p><a class="button button--tonal" href="search.html">Cari Lowongan</a></p>
+        <p class="body-medium">Tambahkan link lowongan pertama atau cari lowongan lalu catat proses apply.</p>
+        <div class="tracker-empty-actions">
+          <button class="button button--primary" type="button" id="show-manual-tracker">
+            <span class="material-symbols-outlined" aria-hidden="true">add</span>
+            Input Tracker
+          </button>
+          <a class="button button--tonal" href="search.html">Cari Lowongan</a>
+        </div>
       </div>
     </div>
   `;
@@ -842,6 +848,8 @@ function renderTrackerDashboard(root, selectedJob = null, selectedApplication = 
     ? { job: selectedJob, application: selectedApplication }
     : items.find((item) => item.job.id === selectedId) || items[0] || null;
   const mode = options.mode || "detail";
+  const isEmpty = !items.length;
+  const shouldShowListPanel = items.length > 0;
   const mainContent = mode === "new"
     ? renderManualTrackerForm()
     : selectedItem
@@ -849,28 +857,30 @@ function renderTrackerDashboard(root, selectedJob = null, selectedApplication = 
       : renderTrackerEmptyDetail();
 
   root.innerHTML = `
-    <section class="page__content tracker-workspace tracker-workspace--${escapeHtml(mode)}" aria-labelledby="applications-title">
+    <section class="page__content tracker-workspace tracker-workspace--${escapeHtml(mode)}${isEmpty ? " tracker-workspace--empty" : ""}" aria-labelledby="applications-title">
       <h1 class="visually-hidden" id="applications-title">Tracker Lamaran</h1>
 
       <div class="tracker-workspace__grid">
         <section class="tracker-workspace__main">
           ${mainContent}
         </section>
-        <aside class="tracker-list-panel" aria-labelledby="tracker-list-title">
-          <div class="tracker-list-panel__header">
-            <div>
-              <h2 class="title-medium" id="tracker-list-title">List Tracker</h2>
-              <p class="body-medium">${items.length} item</p>
+        ${shouldShowListPanel ? `
+          <aside class="tracker-list-panel" aria-labelledby="tracker-list-title">
+            <div class="tracker-list-panel__header">
+              <div>
+                <h2 class="title-medium" id="tracker-list-title">List Tracker</h2>
+                <p class="body-medium">${items.length} item</p>
+              </div>
+              <button class="button button--tonal tracker-list-add" type="button" id="show-manual-tracker" aria-label="Input Tracker">
+                <span class="material-symbols-outlined" aria-hidden="true">add</span>
+                Input
+              </button>
             </div>
-            <button class="button button--tonal tracker-list-add" type="button" id="show-manual-tracker" aria-label="Input Tracker">
-              <span class="material-symbols-outlined" aria-hidden="true">add</span>
-              Input
-            </button>
-          </div>
-          <div class="tracker-list-scroll">
-            ${renderTrackerList(items, selectedItem?.job.id || "")}
-          </div>
-        </aside>
+            <div class="tracker-list-scroll">
+              ${renderTrackerList(items, selectedItem?.job.id || "")}
+            </div>
+          </aside>
+        ` : ""}
       </div>
     </section>
   `;

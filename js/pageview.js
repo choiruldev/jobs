@@ -1,4 +1,4 @@
-import { recordPageView } from "./analytics.js?v=20260616v";
+import { recordPageView } from "./analytics.js?v=20260616x";
 
 document.addEventListener("DOMContentLoaded", () => {
   recordPageView(document.body.dataset.page || "content", {

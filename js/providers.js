@@ -2,7 +2,7 @@ import {
   JOBS,
   makeLogo,
   rememberJobs
-} from "./data.js?v=20260616v";
+} from "./data.js?v=20260616x";
 
 const EXTERNAL_CACHE_KEY = "jsa_external_jobs_cache_v11";
 const CACHE_TTL_MS = 30 * 60 * 1000;
