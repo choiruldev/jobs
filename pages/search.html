@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cari Lowongan Remote | JobSearch</title>
+  <meta name="description" content="Cari lowongan remote dari Indonesia, remote-anywhere, Asia/APAC, dan global. Simpan job alert lokal dan catat lamaran di tracker pribadi.">
+  <meta property="og:title" content="Cari Lowongan Remote | JobSearch">
+  <meta property="og:description" content="Search lowongan remote, apply ke situs resmi, lalu lacak status lamaran pribadi.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css?v=20260616v">
+  <link rel="stylesheet" href="../css/components.css?v=20260616v">
+</head>
+<body data-page="search">
+  <div class="app-layout">
+    <aside class="side-nav" aria-label="Navigasi utama">
+      <a class="brand-lockup" href="../index.html">
+        <span class="logo-mark" aria-hidden="true"><span class="material-symbols-outlined">work</span></span>
+        <span>JobSearch</span>
+      </a>
+      <nav class="side-nav__links">
+        <a class="nav-link" data-nav="search" href="search.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari</span></a>
+        <a class="nav-link" data-nav="bookmarks" href="bookmarks.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">bookmark</span><span>Simpan</span></a>
+        <a class="nav-link" data-nav="applications" href="apply.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">assignment</span><span>Tracker</span></a>
+      </nav>
+    </aside>
+
+    <header class="top-app-bar">
+      <a class="top-app-bar__brand" href="../index.html" aria-label="JobSearch">
+        <span class="logo-mark logo-mark--small" aria-hidden="true"><span class="material-symbols-outlined">work</span></span>
+        <span class="top-app-bar__title">JobSearch</span>
+      </a>
+      <button class="icon-button" id="focus-search" type="button" aria-label="Fokus ke pencarian">
+        <span class="material-symbols-outlined" aria-hidden="true">search</span>
+      </button>
+    </header>
+
+    <main class="page page--with-topbar" data-page="search">
+      <section class="search-panel" aria-label="Pencarian dan filter">
+        <div class="search-panel__inner">
+          <div class="search-bar">
+            <label class="visually-hidden" for="search-input">Cari lowongan</label>
+            <span class="material-symbols-outlined" aria-hidden="true">search</span>
+            <input id="search-input" type="search" autocomplete="off" placeholder="Cari role, perusahaan, atau skill">
+            <button class="icon-button" id="clear-search" type="button" aria-label="Bersihkan pencarian" hidden>
+              <span class="material-symbols-outlined" aria-hidden="true">close</span>
+            </button>
+          </div>
+
+          <label class="sort-control" for="sort-select">
+            Urutkan
+            <select id="sort-select" autocomplete="off">
+              <option value="relevant">Relevan</option>
+              <option value="match">Paling Cocok</option>
+              <option value="latest">Terbaru</option>
+              <option value="salary">Gaji Tertinggi</option>
+            </select>
+          </label>
+
+          <label class="sort-control" for="source-select">
+            Lokasi
+            <select id="source-select" autocomplete="off">
+              <option value="indonesia">Dari Indonesia</option>
+              <option value="anywhere">Remote-anywhere</option>
+              <option value="apac">Asia/APAC</option>
+              <option value="international">Remote Global</option>
+            </select>
+          </label>
+
+          <div class="filter-row" id="filter-row" aria-label="Filter lowongan"></div>
+          <section class="search-tools" aria-label="Profil match dan job alert lokal">
+            <form class="tool-panel profile-form" id="profile-form">
+              <div class="tool-panel__header">
+                <div>
+                  <h2 class="title-medium">Profil Match</h2>
+                  <p class="tool-panel__summary" id="profile-summary">Profil belum diisi.</p>
+                </div>
+              </div>
+              <div class="profile-form__grid">
+                <label class="compact-field">
+                  Role target
+                  <input name="targetRole" type="text" autocomplete="off" placeholder="Frontend Developer">
+                </label>
+                <label class="compact-field">
+                  Skill
+                  <input name="skills" type="text" autocomplete="off" placeholder="React, SQL, UI">
+                </label>
+                <label class="compact-field">
+                  Pengalaman
+                  <input name="experience" type="text" autocomplete="off" placeholder="3 tahun">
+                </label>
+                <label class="compact-field">
+                  Gaji min.
+                  <input name="expectedSalary" type="text" inputmode="numeric" autocomplete="off" placeholder="Rp 12.000.000">
+                </label>
+                <label class="compact-field">
+                  Timezone
+                  <input name="timezone" type="text" autocomplete="off" value="Asia/Jakarta">
+                </label>
+              </div>
+              <div class="tool-actions">
+                <button class="button button--tonal" type="button" id="edit-profile">
+                  <span class="material-symbols-outlined" aria-hidden="true">manage_accounts</span>
+                  Edit Profil
+                </button>
+                <button class="button button--primary profile-form__save" type="submit">
+                  <span class="material-symbols-outlined" aria-hidden="true">person_check</span>
+                  Simpan Profil
+                </button>
+                <button class="button button--text" type="button" id="clear-profile">Reset</button>
+              </div>
+            </form>
+
+            <section class="tool-panel saved-search-panel" aria-labelledby="saved-search-title">
+              <div class="tool-panel__header">
+                <div>
+                  <h2 class="title-medium" id="saved-search-title">Job Alert Lokal</h2>
+                  <p class="tool-panel__summary" id="saved-search-summary">Belum ada alert tersimpan.</p>
+                </div>
+                <button class="button button--tonal" type="button" id="save-search">
+                  <span class="material-symbols-outlined" aria-hidden="true">notifications</span>
+                  Simpan Alert
+                </button>
+              </div>
+              <div class="saved-search-list" id="saved-search-list"></div>
+            </section>
+          </section>
+          <p class="source-status" id="source-status" role="status">Menyiapkan sumber lowongan...</p>
+          <p class="source-credit" id="source-credit">Data dari sumber publik. Apply selalu ke laman resmi dan bisa dicatat di tracker pribadi.</p>
+        </div>
+      </section>
+
+      <section class="page__content" aria-labelledby="search-title">
+        <div class="search-meta">
+          <div>
+            <h1 class="headline-large" id="search-title">Remote dari Indonesia</h1>
+            <p class="body-medium" id="result-count" role="status">Memuat lowongan...</p>
+          </div>
+        </div>
+
+        <div class="job-grid" id="job-grid" role="list"></div>
+
+        <div class="empty-state" id="search-empty" role="status" hidden>
+          <div>
+            <div class="empty-state__art">
+              <span class="material-symbols-outlined" aria-hidden="true">search_off</span>
+            </div>
+            <h2 class="headline-medium">Belum ada hasil yang cocok</h2>
+            <p class="body-medium">Coba kata kunci yang lebih umum atau hapus filter yang aktif.</p>
+            <p><button class="button button--primary" id="reset-filters" type="button">Reset Filter</button></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Navigasi bawah">
+      <a class="nav-link" data-nav="search" href="search.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari</span></a>
+      <a class="nav-link" data-nav="bookmarks" href="bookmarks.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">bookmark</span><span>Simpan</span></a>
+      <a class="nav-link" data-nav="applications" href="apply.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">assignment</span><span>Tracker</span></a>
+    </nav>
+  </div>
+
+  <script type="module" src="../js/search.js?v=20260616v"></script>
+</body>
+</html>
