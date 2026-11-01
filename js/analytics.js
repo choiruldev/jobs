@@ -1,6 +1,19 @@
 const ANALYTICS_KEY = "jsa_analytics_events_v1";
 const SESSION_KEY = "jsa_analytics_session_v1";
+const TELEMETRY_OPT_KEY = "jsa_telemetry_enabled";
 const MAX_EVENTS = 800;
+
+export function isTelemetryEnabled() {
+  const pref = localStorage.getItem(TELEMETRY_OPT_KEY);
+  return pref === null ? true : pref === "true";
+}
+
+export function setTelemetryEnabled(enabled) {
+  localStorage.setItem(TELEMETRY_OPT_KEY, String(Boolean(enabled)));
+  if (!enabled) {
+    clearAnalyticsEvents();
+  }
+}
 
 function nowIso() {
   return new Date().toISOString();
@@ -52,7 +65,7 @@ export function readAnalyticsEvents() {
 }
 
 export function trackEvent(name, payload = {}) {
-  if (!name) return null;
+  if (!name || !isTelemetryEnabled()) return null;
   const event = {
     id: makeId(),
     name,

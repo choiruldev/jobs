@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kartu Bukti Karya (Proof-of-Work Showcase) | JobSearch</title>
+  <meta name="description" content="Tampilkan proyek GitHub terbaik, live demo, dan metrik dampak kerja dalam satu kartu portfolio digital ringkas untuk rekruter.">
+  <meta property="og:image" content="../assets/og-cover.png">
+  <meta property="og:site_name" content="JobSearch">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="../assets/og-cover.png">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="alternate icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#006a6a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css?v=20260616z">
+  <link rel="stylesheet" href="../css/components.css?v=20260616z">
+  <style>
+    .portfolio-builder-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    @media (min-width: 960px) {
+      .portfolio-builder-layout {
+        grid-template-columns: 440px 1fr;
+        align-items: start;
+      }
+    }
+
+    .proof-card {
+      background: var(--md-sys-color-surface-container-low, #fcfcfc);
+      border: 1px solid var(--md-sys-color-outline-variant, #e0e0e0);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body data-page="portfolio">
+  <div class="app-layout">
+    <aside class="side-nav" aria-label="Navigasi utama">
+      <a class="brand-lockup" href="../index.html">
+        <span class="logo-mark" aria-hidden="true"><span class="material-symbols-outlined">work</span></span>
+        <span>JobSearch</span>
+      </a>
+      <nav class="side-nav__links">
+        <div class="nav-section-label">UTAMA</div>
+        <a class="nav-link" data-nav="search" href="search.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari Lowongan</span></a>
+        <a class="nav-link" data-nav="applications" href="apply.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">assignment</span><span>Tracker Lamaran</span></a>
+        <a class="nav-link" data-nav="bookmarks" href="bookmarks.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">bookmark</span><span>Lowongan Tersimpan</span></a>
+
+        <div class="nav-section-label" style="margin-top:16px;">FITUR KARIR</div>
+        <a class="nav-link" data-nav="resume" href="resume-builder.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">description</span><span>ATS Resume Builder</span></a>
+        <a class="nav-link" data-nav="interview" href="interview-prep.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">record_voice_over</span><span>Latihan Interview</span></a>
+        <a class="nav-link" data-nav="salary" href="salary-benchmark.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">payments</span><span>Kalkulator PPP Gaji</span></a>
+        <a class="nav-link nav-link--active" data-nav="portfolio" href="portfolio-card.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">badge</span><span>Kartu Bukti Karya</span></a>
+        <a class="nav-link" data-nav="contract" href="contract-guide.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">gavel</span><span>Panduan Kontrak & Pajak</span></a>
+        <a class="nav-link" data-nav="invoice" href="invoice-generator.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">receipt_long</span><span>Generator Invoice</span></a>
+        <a class="nav-link" data-nav="alerts" href="alerts.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">notifications_active</span><span>Pusat Notifikasi</span></a>
+        <a class="nav-link" data-nav="companies" href="companies.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">apartment</span><span>Perusahaan Remote</span></a>
+        <a class="nav-link" data-nav="insights" href="insights.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">insights</span><span>Analisis Funnel</span></a>
+      </nav>
+    </aside>
+
+    <header class="top-app-bar">
+      <a class="top-app-bar__brand" href="../index.html"><span class="logo-mark logo-mark--small"><span class="material-symbols-outlined">work</span></span><span class="top-app-bar__title">Kartu Bukti Karya</span></a>
+      <a class="icon-button" href="search.html" aria-label="Cari lowongan"><span class="material-symbols-outlined">search</span></a>
+    </header>
+
+    <main class="page page--with-topbar" data-page="portfolio">
+      <section class="page__content stack" style="max-width:1160px;">
+        <div class="landing-hero" style="margin-bottom:20px;">
+          <span class="landing-hero__eyebrow">Reputasi & Portofolio Cepat</span>
+          <h1 class="display-small" style="margin:0 0 6px;">Kartu Bukti Karya (Proof of Work).</h1>
+          <p class="body-medium" style="margin:0;">Pikat rekruter internasional dalam 15 detik dengan kartu mini yang menampilkan proyek nyata terbaik, metrik dampak, dan tautan live demo Anda.</p>
+        </div>
+
+        <div class="portfolio-builder-layout">
+          <!-- Editor Form -->
+          <div class="stack" style="gap:16px;">
+            <div class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:20px;">
+              <h2 class="title-medium" style="margin:0 0 12px;font-size:16px;">Profil Ringkas</h2>
+              <div class="stack" style="gap:10px;">
+                <div class="field">
+                  <label class="field__label">Nama</label>
+                  <input class="field__input" type="text" id="pf-name">
+                </div>
+                <div class="field">
+                  <label class="field__label">Headline Keahlian</label>
+                  <input class="field__input" type="text" id="pf-headline">
+                </div>
+                <div class="field">
+                  <label class="field__label">Lokasi & Ketersediaan</label>
+                  <input class="field__input" type="text" id="pf-location">
+                </div>
+                <div class="field">
+                  <label class="field__label">Keahlian Kunci (Pisahkan koma)</label>
+                  <input class="field__input" type="text" id="pf-skills">
+                </div>
+              </div>
+            </div>
+
+            <div class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:20px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <h2 class="title-medium" style="margin:0;font-size:16px;">Proyek Unggulan (Max 3)</h2>
+                <button type="button" class="button button--small button--tonal" id="btn-add-project">
+                  <span class="material-symbols-outlined" style="font-size:16px;">add</span> Tambah Proyek
+                </button>
+              </div>
+              <div id="projects-editor-container" class="stack" style="gap:12px;"></div>
+            </div>
+          </div>
+
+          <!-- Live Card Preview -->
+          <div class="stack" style="gap:16px;">
+            <div id="proof-card-preview" class="proof-card"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+        <nav class="bottom-nav" aria-label="Navigasi bawah">
+      <a class="nav-link" data-nav="search" href="search.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari</span></a>
+      <a class="nav-link" data-nav="applications" href="apply.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">assignment</span><span>Tracker</span></a>
+      <a class="nav-link" data-nav="resume" href="resume-builder.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">description</span><span>Resume</span></a>
+      <a class="nav-link" data-nav="bookmarks" href="bookmarks.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">bookmark</span><span>Simpan</span></a>
+      <a class="nav-link" data-nav="companies" href="companies.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">apartment</span><span>Perusahaan</span></a>
+    </nav>
+  </div>
+
+  <script type="module" src="../js/pageview.js?v=20260616z"></script>
+  <script type="module">
+    import { readPortfolioData, writePortfolioData } from "../js/portfolio-builder.js?v=20260616z";
+    import { escapeHtml } from "../js/bookmark.js?v=20260616z";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      let data = readPortfolioData();
+      const preview = document.getElementById("proof-card-preview");
+      const projectsContainer = document.getElementById("projects-editor-container");
+
+      function populateForm() {
+        document.getElementById("pf-name").value = data.name || "";
+        document.getElementById("pf-headline").value = data.headline || "";
+        document.getElementById("pf-location").value = data.location || "";
+        document.getElementById("pf-skills").value = (data.skills || []).join(", ");
+      }
+
+      function renderProjectsEditor() {
+        projectsContainer.innerHTML = (data.projects || []).map((p, idx) => `
+          <div style="background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);border-radius:10px;padding:12px;" data-p-idx="${idx}">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-weight:700;font-size:12px;">Proyek #${idx + 1}</span>
+              ${data.projects.length > 1 ? `
+                <button type="button" class="button button--small button--text js-del-p" data-idx="${idx}" style="color:var(--md-sys-color-error);padding:0;">
+                  <span class="material-symbols-outlined" style="font-size:16px;">delete</span>
+                </button>
+              ` : ""}
+            </div>
+            <input class="field__input p-title" type="text" placeholder="Judul Proyek" value="${escapeHtml(p.title)}" style="margin-bottom:6px;">
+            <input class="field__input p-tech" type="text" placeholder="Stack Teknis (cth: React, Node)" value="${escapeHtml(p.tech)}" style="margin-bottom:6px;">
+            <input class="field__input p-metrics" type="text" placeholder="Metrik Dampak (cth: 1,000+ users, 40% faster)" value="${escapeHtml(p.metrics)}" style="margin-bottom:6px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+              <input class="field__input p-live" type="url" placeholder="Live Demo URL" value="${escapeHtml(p.liveUrl || "")}">
+              <input class="field__input p-repo" type="url" placeholder="GitHub Repo URL" value="${escapeHtml(p.repoUrl || "")}">
+            </div>
+          </div>
+        `).join("");
+
+        projectsContainer.querySelectorAll(".js-del-p").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const idx = parseInt(btn.dataset.idx, 10);
+            data.projects.splice(idx, 1);
+            renderProjectsEditor();
+            updateAndRender();
+          });
+        });
+
+        projectsContainer.querySelectorAll("[data-p-idx]").forEach(card => {
+          const idx = parseInt(card.dataset.pIdx, 10);
+          card.addEventListener("input", () => {
+            data.projects[idx] = {
+              title: card.querySelector(".p-title").value,
+              tech: card.querySelector(".p-tech").value,
+              metrics: card.querySelector(".p-metrics").value,
+              liveUrl: card.querySelector(".p-live").value,
+              repoUrl: card.querySelector(".p-repo").value
+            };
+            updateAndRender();
+          });
+        });
+      }
+
+      function updateAndRender() {
+        data.name = document.getElementById("pf-name").value;
+        data.headline = document.getElementById("pf-headline").value;
+        data.location = document.getElementById("pf-location").value;
+        data.skills = document.getElementById("pf-skills").value.split(",").map(s => s.trim()).filter(Boolean);
+
+        writePortfolioData(data);
+        renderCard();
+      }
+
+      function renderCard() {
+        const initials = (data.name || "UN").split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
+
+        preview.innerHTML = `
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+            <div style="width:56px;height:56px;border-radius:16px;background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;">
+              ${initials}
+            </div>
+            <div>
+              <h2 style="margin:0;font-size:22px;font-weight:900;">${escapeHtml(data.name)}</h2>
+              <div style="font-size:13px;color:var(--md-sys-color-outline);margin-top:2px;">${escapeHtml(data.location)}</div>
+            </div>
+          </div>
+
+          <p style="font-size:15px;line-height:1.5;margin:0 0 20px;font-weight:600;color:var(--md-sys-color-on-surface);">
+            ${escapeHtml(data.headline)}
+          </p>
+
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px;">
+            ${(data.skills || []).map(s => `<span class="chip chip--small chip--outline" style="font-size:12px;font-weight:600;">${escapeHtml(s)}</span>`).join("")}
+          </div>
+
+          <h3 style="font-size:14px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;color:var(--md-sys-color-primary);margin:0 0 12px;">
+            Bukti Karya & Metrik Nyata:
+          </h3>
+
+          <div class="stack" style="gap:14px;">
+            ${(data.projects || []).map(p => `
+              <div style="background:#ffffff;border:1px solid var(--md-sys-color-outline-variant);border-radius:12px;padding:16px;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+                  <div>
+                    <h4 style="margin:0;font-size:16px;font-weight:800;">${escapeHtml(p.title)}</h4>
+                    <span style="font-size:12px;color:var(--md-sys-color-outline);">${escapeHtml(p.tech)}</span>
+                  </div>
+                  <div style="display:flex;gap:6px;">
+                    ${p.liveUrl ? `<a class="button button--small button--primary" href="${escapeHtml(p.liveUrl)}" target="_blank" rel="noopener" style="padding:0 8px;min-height:30px;font-size:11px;">Demo</a>` : ""}
+                    ${p.repoUrl ? `<a class="button button--small button--tonal" href="${escapeHtml(p.repoUrl)}" target="_blank" rel="noopener" style="padding:0 8px;min-height:30px;font-size:11px;">GitHub</a>` : ""}
+                  </div>
+                </div>
+                ${p.metrics ? `
+                  <div style="margin-top:10px;padding:6px 10px;border-radius:6px;background:var(--md-sys-color-surface-container-low);font-size:12px;color:#2e7d32;font-weight:700;">
+                    ⚡ Metrik: ${escapeHtml(p.metrics)}
+                  </div>
+                ` : ""}
+              </div>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      populateForm();
+      renderProjectsEditor();
+      renderCard();
+
+      ["pf-name", "pf-headline", "pf-location", "pf-skills"].forEach(id => {
+        document.getElementById(id)?.addEventListener("input", updateAndRender);
+      });
+
+      document.getElementById("btn-add-project")?.addEventListener("click", () => {
+        data.projects.push({ title: "Proyek Baru", tech: "TypeScript, React", metrics: "100% test coverage", liveUrl: "", repoUrl: "" });
+        renderProjectsEditor();
+        updateAndRender();
+      });
+    });
+  </script>
+</body>
+</html>

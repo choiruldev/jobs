@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kalkulator Daya Beli Gaji Global (PPP) | JobSearch</title>
+  <meta name="description" content="Bandingkan gaji penawaran kerja remote luar negeri (USD/SGD/EUR) dengan daya beli di Indonesia (Purchasing Power Parity). Dapatkan posisi tawar negosiasi gaji terbaik.">
+  <meta property="og:image" content="../assets/og-cover.png">
+  <meta property="og:site_name" content="JobSearch">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="../assets/og-cover.png">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="alternate icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#006a6a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css?v=20260616z">
+  <link rel="stylesheet" href="../css/components.css?v=20260616z">
+</head>
+<body data-page="salary-benchmark">
+  <div class="app-layout">
+    <aside class="side-nav" aria-label="Navigasi utama">
+      <a class="brand-lockup" href="../index.html">
+        <span class="logo-mark" aria-hidden="true"><span class="material-symbols-outlined">work</span></span>
+        <span>JobSearch</span>
+      </a>
+      <nav class="side-nav__links">
+        <div class="nav-section-label">UTAMA</div>
+        <a class="nav-link" data-nav="search" href="search.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari Lowongan</span></a>
+        <a class="nav-link" data-nav="applications" href="apply.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">assignment</span><span>Tracker Lamaran</span></a>
+        <a class="nav-link" data-nav="bookmarks" href="bookmarks.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">bookmark</span><span>Lowongan Tersimpan</span></a>
+
+        <div class="nav-section-label" style="margin-top:16px;">FITUR KARIR</div>
+        <a class="nav-link" data-nav="resume" href="resume-builder.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">description</span><span>ATS Resume Builder</span></a>
+        <a class="nav-link" data-nav="interview" href="interview-prep.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">record_voice_over</span><span>Latihan Interview</span></a>
+        <a class="nav-link nav-link--active" data-nav="salary" href="salary-benchmark.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">payments</span><span>Kalkulator PPP Gaji</span></a>
+        <a class="nav-link" data-nav="companies" href="companies.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">apartment</span><span>Perusahaan Remote</span></a>
+        <a class="nav-link" data-nav="insights" href="insights.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">insights</span><span>Analisis Funnel</span></a>
+      </nav>
+    </aside>
+
+    <header class="top-app-bar">
+      <a class="top-app-bar__brand" href="../index.html" aria-label="JobSearch">
+        <span class="logo-mark logo-mark--small" aria-hidden="true"><span class="material-symbols-outlined">work</span></span>
+        <span class="top-app-bar__title">Kalkulator PPP Gaji</span>
+      </a>
+      <a class="icon-button" href="search.html" aria-label="Cari lowongan">
+        <span class="material-symbols-outlined" aria-hidden="true">search</span>
+      </a>
+    </header>
+
+    <main class="page page--with-topbar" data-page="salary-benchmark">
+      <section class="page__content stack" style="max-width:960px;">
+        <div class="landing-hero" style="margin-bottom:24px;">
+          <span class="landing-hero__eyebrow">Negosiasi & Kompensasi Global</span>
+          <h1 class="display-small">Kalkulator Daya Beli Gaji Remote (PPP).</h1>
+          <p class="body-medium">
+            Ketahui nilai riil penawaran kerja luar negeri jika Anda tinggal di Indonesia. Dihitung berdasarkan <em>Purchasing Power Parity</em> (PPP), tarif pajak PPh 21, dan biaya hidup per kota.
+          </p>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:24px;">
+          <!-- Controls Panel -->
+          <div class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:24px;">
+            <h2 class="title-large" style="margin:0 0 16px;font-size:18px;">Input Penawaran Kerja</h2>
+
+            <div class="field" style="margin-bottom:14px;">
+              <label class="field__label" for="salary-amount" style="font-weight:600;">Nominal Gaji Bulanan</label>
+              <div style="display:flex;gap:8px;">
+                <input class="field__input" id="salary-amount" type="number" value="3500" min="100" step="50" style="flex:1;">
+                <select class="field__input" id="salary-currency" style="width:110px;">
+                  <option value="USD" selected>USD ($)</option>
+                  <option value="SGD">SGD (S$)</option>
+                  <option value="EUR">EUR (€)</option>
+                  <option value="GBP">GBP (£)</option>
+                  <option value="AUD">AUD (A$)</option>
+                  <option value="IDR">IDR (Rp)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field" style="margin-bottom:14px;">
+              <label class="field__label" for="home-city" style="font-weight:600;">Kota Tempat Tinggal (Indonesia)</label>
+              <select class="field__input" id="home-city">
+                <option value="jakarta" selected>Jakarta (Indeks Biaya: 33.5)</option>
+                <option value="bali">Bali / Denpasar (Indeks Biaya: 29.8)</option>
+                <option value="surabaya">Surabaya (Indeks Biaya: 27.2)</option>
+                <option value="bandung">Bandung (Indeks Biaya: 26.4)</option>
+                <option value="yogyakarta">Yogyakarta (Indeks Biaya: 23.1)</option>
+              </select>
+            </div>
+
+            <div class="field" style="margin-bottom:18px;">
+              <label class="field__label" for="benchmark-city" style="font-weight:600;">Kota Pembanding Kantor Klien</label>
+              <select class="field__input" id="benchmark-city">
+                <option value="san_francisco" selected>San Francisco, US (Silicon Valley)</option>
+                <option value="new_york">New York City, US</option>
+                <option value="singapore">Singapore</option>
+                <option value="london">London, UK</option>
+                <option value="berlin">Berlin, Germany</option>
+                <option value="sydney">Sydney, Australia</option>
+                <option value="tokyo">Tokyo, Japan</option>
+              </select>
+            </div>
+
+            <div class="cluster" style="gap:6px;">
+              <span class="label-small" style="font-weight:700;width:100%;">Preset Cepat:</span>
+              <button type="button" class="chip chip--outline chip--small js-preset-btn" data-amt="1500" data-cur="USD">$1.5k / bln</button>
+              <button type="button" class="chip chip--outline chip--small js-preset-btn" data-amt="3000" data-cur="USD">$3.0k / bln</button>
+              <button type="button" class="chip chip--outline chip--small js-preset-btn" data-amt="5000" data-cur="USD">$5.0k / bln</button>
+              <button type="button" class="chip chip--outline chip--small js-preset-btn" data-amt="7000" data-cur="SGD">S$7.0k / bln</button>
+            </div>
+          </div>
+
+          <!-- Output Results Panel -->
+          <div id="ppp-results-root"></div>
+        </div>
+
+        <!-- Comparative Benchmark Table -->
+        <section class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:24px;margin-top:8px;">
+          <h2 class="title-large" style="margin:0 0 8px;font-size:18px;">Standar Benchmark Gaji Remote Software Engineer Indonesia</h2>
+          <p class="body-medium" style="margin:0 0 16px;color:var(--md-sys-color-outline);">Berdasarkan data agregasi penawaran kerja regional & global terkini.</p>
+          <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:14px;text-align:left;">
+              <thead>
+                <tr style="border-bottom:2px solid var(--md-sys-color-outline-variant);">
+                  <th style="padding:10px 12px;">Level Pengalaman</th>
+                  <th style="padding:10px 12px;">Pasar Lokal ID (Gross)</th>
+                  <th style="padding:10px 12px;">Remote Luar Negeri (USD)</th>
+                  <th style="padding:10px 12px;">Daya Beli Ekuivalen SF</th>
+                </tr>
+              </thead>
+              <tbody style="line-height:1.6;">
+                <tr style="border-bottom:1px solid var(--md-sys-color-surface-container-high);">
+                  <td style="padding:10px 12px;font-weight:700;">Junior (1-2 thn)</td>
+                  <td style="padding:10px 12px;">Rp 6jt - 12jt</td>
+                  <td style="padding:10px 12px;color:var(--md-sys-color-primary);font-weight:600;">$1,000 - $2,200</td>
+                  <td style="padding:10px 12px;">~$2,800 - $6,300</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--md-sys-color-surface-container-high);">
+                  <td style="padding:10px 12px;font-weight:700;">Mid-Level (3-5 thn)</td>
+                  <td style="padding:10px 12px;">Rp 14jt - 25jt</td>
+                  <td style="padding:10px 12px;color:var(--md-sys-color-primary);font-weight:600;">$2,500 - $4,500</td>
+                  <td style="padding:10px 12px;">~$7,100 - $12,900</td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--md-sys-color-surface-container-high);">
+                  <td style="padding:10px 12px;font-weight:700;">Senior (5-8 thn)</td>
+                  <td style="padding:10px 12px;">Rp 28jt - 48jt</td>
+                  <td style="padding:10px 12px;color:var(--md-sys-color-primary);font-weight:600;">$4,500 - $7,500</td>
+                  <td style="padding:10px 12px;">~$12,900 - $21,500</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px 12px;font-weight:700;">Lead / Staff (8+ thn)</td>
+                  <td style="padding:10px 12px;">Rp 50jt - 85jt</td>
+                  <td style="padding:10px 12px;color:var(--md-sys-color-primary);font-weight:600;">$7,500 - $12,000+</td>
+                  <td style="padding:10px 12px;">~$21,500 - $34,400+</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+
+        <nav class="bottom-nav" aria-label="Navigasi bawah">
+      <a class="nav-link" data-nav="search" href="search.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari</span></a>
+      <a class="nav-link" data-nav="applications" href="apply.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">assignment</span><span>Tracker</span></a>
+      <a class="nav-link" data-nav="resume" href="resume-builder.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">description</span><span>Resume</span></a>
+      <a class="nav-link" data-nav="bookmarks" href="bookmarks.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">bookmark</span><span>Simpan</span></a>
+      <a class="nav-link" data-nav="companies" href="companies.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">apartment</span><span>Perusahaan</span></a>
+    </nav>
+  </div>
+
+  <script type="module" src="../js/pageview.js?v=20260616z"></script>
+  <script type="module">
+    import { calculatePPP } from "../js/salary-ppp.js?v=20260616z";
+    import { escapeHtml } from "../js/bookmark.js?v=20260616z";
+
+    function updateCalculations() {
+      const amount = Number(document.getElementById("salary-amount").value) || 0;
+      const currency = document.getElementById("salary-currency").value;
+      const homeCityKey = document.getElementById("home-city").value;
+      const benchmarkCityKey = document.getElementById("benchmark-city").value;
+
+      const ppp = calculatePPP({ amount, currency, homeCityKey, benchmarkCityKey });
+      const root = document.getElementById("ppp-results-root");
+
+      root.innerHTML = `
+        <div class="stack" style="gap:16px;">
+          <div class="ats-scorecard" style="background:var(--md-sys-color-surface-container-low);border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:20px;margin:0;">
+            <div class="ats-scorecard__header" style="align-items:flex-start;">
+              <div>
+                <span class="label-small" style="color:var(--md-sys-color-outline);font-weight:700;">ESTIMASI GAJI BERSIH (NET)</span>
+                <div style="font-size:26px;font-weight:900;color:var(--md-sys-color-primary);margin:4px 0;">${ppp.formatted.netMonthlyIdr} <span style="font-size:14px;font-weight:500;color:var(--md-sys-color-on-surface);">/ bulan</span></div>
+                <div class="body-medium" style="font-size:13px;color:var(--md-sys-color-outline);">
+                  Kotor: ${ppp.formatted.grossMonthlyIdr} | Estimasi PPh 21: - ${ppp.formatted.monthlyTax}
+                </div>
+              </div>
+              <span class="badge" style="background:#e8f5e9;color:#2e7d32;font-weight:800;font-size:14px;">${ppp.savingsRatePercent}% Tabungan</span>
+            </div>
+
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--md-sys-color-outline-variant);display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;">
+              <div>
+                <span class="label-small" style="color:var(--md-sys-color-outline);">Ekuivalen Gaya Hidup di ${escapeHtml(ppp.input.targetCity.name)}:</span>
+                <div style="font-size:16px;font-weight:800;color:var(--md-sys-color-tertiary);margin-top:2px;">${escapeHtml(ppp.equivalentDisplay)}</div>
+                <span class="label-small" style="color:var(--md-sys-color-outline);font-size:11px;">Rasio Daya Beli: ${ppp.pppMultiplier}x lipat</span>
+              </div>
+              <div>
+                <span class="label-small" style="color:var(--md-sys-color-outline);">Potensi Tabungan Bersih:</span>
+                <div style="font-size:16px;font-weight:800;color:#2e7d32;margin-top:2px;">${ppp.formatted.potentialSavings} / bln</div>
+                <span class="label-small" style="color:var(--md-sys-color-outline);font-size:11px;">Setelah living cost: ${ppp.formatted.estLivingCost}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-block" style="border-radius:16px;background:var(--md-sys-color-surface-container);padding:18px;">
+            <strong class="title-medium" style="display:flex;align-items:center;gap:6px;font-size:14px;color:var(--md-sys-color-primary);">
+              <span class="material-symbols-outlined" style="font-size:18px;">psychology_alt</span>
+              Rekomendasi Strategi Negosiasi Gaji:
+            </strong>
+            <p class="body-medium" style="margin:6px 0 0;font-size:13px;line-height:1.5;">${escapeHtml(ppp.negotiationAdvice)}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      updateCalculations();
+      document.getElementById("salary-amount").addEventListener("input", updateCalculations);
+      document.getElementById("salary-currency").addEventListener("change", updateCalculations);
+      document.getElementById("home-city").addEventListener("change", updateCalculations);
+      document.getElementById("benchmark-city").addEventListener("change", updateCalculations);
+
+      document.querySelectorAll(".js-preset-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.getElementById("salary-amount").value = btn.dataset.amt;
+          document.getElementById("salary-currency").value = btn.dataset.cur;
+          updateCalculations();
+        });
+      });
+    });
+  </script>
+</body>
+</html>

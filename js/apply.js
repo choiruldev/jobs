@@ -4,13 +4,19 @@ import {
   getJobById,
   makeLogo,
   rememberJobs
-} from "./data.js?v=20260616x";
+} from "./data.js?v=20260616z";
 import {
   escapeHtml,
   showSnackbar
-} from "./bookmark.js?v=20260616x";
-import { fetchJobById } from "./providers.js?v=20260616x";
-import { recordPageView, trackEvent } from "./analytics.js?v=20260616x";
+} from "./bookmark.js?v=20260616z";
+import { fetchJobById } from "./providers.js?v=20260616z";
+import { recordPageView, trackEvent } from "./analytics.js?v=20260616z";
+import { renderKanbanBoard, bindKanbanEvents } from "./apply-kanban.js?v=20260616z";
+import { downloadInterviewIcs, getPendingFollowUps } from "./apply-reminders.js?v=20260616z";
+import { exportAllData, exportApplicationsCSV, importBackupData } from "./backup-sync.js?v=20260616z";
+import { parseRecruiterEmail } from "./email-status-parser.js?v=20260616z";
+import { renderGoalBanner, recordApplicationActivity } from "./goal-tracker.js?v=20260616z";
+import { saveFeedbackLocally } from "./beta-feedback.js?v=20260616z";
 
 const APPLICATION_KEY = "jsa_applications";
 const MAX_CV_SIZE = 5 * 1024 * 1024;
@@ -70,7 +76,7 @@ const URL_WORD_BLOCKLIST = new Set([
 const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 const phoneRegex = /^08\d{8,11}$/;
 
-function readApplications() {
+export function readApplications() {
   try {
     const raw = localStorage.getItem(APPLICATION_KEY);
     const parsed = raw ? JSON.parse(raw) : {};
@@ -431,14 +437,18 @@ function isProgressStatus(status) {
 
 function progressBaseFor(application) {
   if (isProgressStatus(application.status)) return application.status;
-  if (isProgressStatus(application.progressBaseStatus)) return application.progressBaseStatus;
+  if (isProgressStatus(application.progressBaseStatus)) {
+    return application.progressBaseStatus === "Accepted" ? "Offer" : application.progressBaseStatus;
+  }
   return "Applied";
 }
 
 function nextProgressBaseStatus(currentApplication, nextStatus) {
   if (isProgressStatus(nextStatus)) return nextStatus;
-  if (isProgressStatus(currentApplication.status)) return currentApplication.status;
-  if (isProgressStatus(currentApplication.progressBaseStatus)) return currentApplication.progressBaseStatus;
+  const currentBase = isProgressStatus(currentApplication.status)
+    ? currentApplication.status
+    : currentApplication.progressBaseStatus;
+  if (isProgressStatus(currentBase)) return currentBase === "Accepted" ? "Offer" : currentBase;
   return "Applied";
 }
 
@@ -480,8 +490,7 @@ function visibleStepperSteps(application) {
     const baseIndex = Math.max(0, progressIndex(progressBaseFor(application)));
     return [
       ...PROGRESS_STEPS.slice(0, baseIndex + 1),
-      FOLLOW_UP_STEP,
-      ...PROGRESS_STEPS.slice(baseIndex + 1)
+      FOLLOW_UP_STEP
     ];
   }
 
@@ -718,7 +727,7 @@ function bindJobDataForm(root, job, application) {
   });
 }
 
-function getTrackedApplicationItems() {
+export function getTrackedApplicationItems() {
   return Object.values(readApplications())
     .map((application) => {
       const job = getJobById(application.jobId);
@@ -821,6 +830,12 @@ function renderTrackerDetail(job, application) {
               <span class="material-symbols-outlined" aria-hidden="true">save</span>
               Simpan Status
             </button>
+            ${application.status === "Interview" ? `
+              <button class="button button--tonal" type="button" id="download-calendar-invite">
+                <span class="material-symbols-outlined" aria-hidden="true">event</span>
+                Unduh Jadwal Interview (.ics)
+              </button>
+            ` : ""}
             <button class="button button--text" type="button" id="delete-application">
               <span class="material-symbols-outlined" aria-hidden="true">delete</span>
               Hapus Tracker
@@ -841,24 +856,175 @@ function renderTrackerDetail(job, application) {
   `;
 }
 
+function seedSampleApplications() {
+  const sampleApps = {
+    "sample-1": {
+      jobId: "sample-1",
+      status: "Interview",
+      followUpAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+      note: "Technical interview dengan Lead Engineer dijadwalkan via Google Meet.",
+      progressBaseStatus: "Interview",
+      history: [
+        { date: new Date().toISOString(), status: "Interview", label: "Lolos screening CV, lanjut technical interview" },
+        { date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), status: "Applied", label: "Lamaran dikirim via LinkedIn" }
+      ],
+      manualJob: {
+        id: "sample-1",
+        title: "Senior Frontend Engineer",
+        company: "Traveloka",
+        location: "Jakarta (Remote-First)",
+        salary: "Rp 22.000.000 - Rp 32.000.000/bln",
+        category: "Teknologi"
+      }
+    },
+    "sample-2": {
+      jobId: "sample-2",
+      status: "Applied",
+      followUpAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+      note: "Lamaran dikirim via JobStreet resmi BCA. Menunggu jadwal online assessment.",
+      progressBaseStatus: "Applied",
+      history: [
+        { date: new Date().toISOString(), status: "Applied", label: "Submit aplikasi via JobStreet" }
+      ],
+      manualJob: {
+        id: "sample-2",
+        title: "Data Analyst Specialist",
+        company: "PT Bank Central Asia Tbk",
+        location: "Jakarta Pusat",
+        salary: "Rp 15.000.000 - Rp 24.000.000/bln",
+        category: "Data"
+      }
+    },
+    "sample-3": {
+      jobId: "sample-3",
+      status: "Offer",
+      followUpAt: "",
+      note: "Offering letter diterima. Negosiasi benefit asuransi kesehatan keluarga.",
+      progressBaseStatus: "Offer",
+      history: [
+        { date: new Date().toISOString(), status: "Offer", label: "Offering letter dikirim oleh HR" },
+        { date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), status: "Interview", label: "User interview selesai" }
+      ],
+      manualJob: {
+        id: "sample-3",
+        title: "Product Manager (E-commerce)",
+        company: "Tokopedia",
+        location: "Jakarta Selatan (Hybrid)",
+        salary: "Rp 25.000.000 - Rp 35.000.000/bln",
+        category: "Produk"
+      }
+    }
+  };
+
+  const existing = readApplications();
+  const merged = { ...existing, ...sampleApps };
+  writeApplications(merged);
+  return merged;
+}
+
 function renderTrackerDashboard(root, selectedJob = null, selectedApplication = null, options = {}) {
   const items = getTrackedApplicationItems();
   const selectedId = selectedJob?.id || items[0]?.job.id || "";
   const selectedItem = selectedJob && selectedApplication
     ? { job: selectedJob, application: selectedApplication }
     : items.find((item) => item.job.id === selectedId) || items[0] || null;
-  const mode = options.mode || "detail";
+  const mode = options.mode || (items.length > 0 ? "kanban" : "detail");
   const isEmpty = !items.length;
-  const shouldShowListPanel = items.length > 0;
-  const mainContent = mode === "new"
-    ? renderManualTrackerForm()
-    : selectedItem
-      ? renderTrackerDetail(selectedItem.job, selectedItem.application)
-      : renderTrackerEmptyDetail();
+  const shouldShowListPanel = mode !== "kanban" && items.length > 0;
+  
+  const mainContent = mode === "kanban"
+    ? renderKanbanBoard(items)
+    : mode === "new"
+      ? renderManualTrackerForm()
+      : selectedItem
+        ? renderTrackerDetail(selectedItem.job, selectedItem.application)
+        : renderTrackerEmptyDetail();
+
+  const toolbarHtml = `
+    <div class="kanban-view-controls">
+      <div class="view-mode-toggle" role="group" aria-label="Pilihan tampilan tracker">
+        <button class="view-mode-btn ${mode === "kanban" ? "view-mode-btn--active" : ""}" type="button" id="view-mode-kanban">
+          <span class="material-symbols-outlined" aria-hidden="true">view_kanban</span>
+          Papan Kanban
+        </button>
+        <button class="view-mode-btn ${mode === "detail" ? "view-mode-btn--active" : ""}" type="button" id="view-mode-detail">
+          <span class="material-symbols-outlined" aria-hidden="true">view_list</span>
+          Tabel & Detail
+        </button>
+      </div>
+      <div class="landing-actions" style="margin:0;gap:8px;">
+        <button class="button button--primary button--small" type="button" id="show-manual-tracker-top">
+          <span class="material-symbols-outlined" aria-hidden="true">add</span>
+          Input Lamaran
+        </button>
+        ${isEmpty ? `
+          <button class="button button--tonal button--small" type="button" id="seed-sample-btn" title="Muat contoh lamaran untuk coba tracker">
+            <span class="material-symbols-outlined" aria-hidden="true">auto_fix_high</span>
+            Muat Contoh Data
+          </button>
+        ` : ""}
+        <button class="button button--tonal button--small" type="button" id="scan-email-status-btn" title="Pindai email balasan dari HR untuk update status otomatis">
+          <span class="material-symbols-outlined" aria-hidden="true">mark_email_read</span>
+          Scan Email Balasan
+        </button>
+        <button class="button button--tonal button--small" type="button" id="export-backup-btn" title="Download backup JSON">
+          <span class="material-symbols-outlined" aria-hidden="true">download</span>
+          Backup JSON
+        </button>
+        <button class="button button--tonal button--small" type="button" id="export-csv-btn" title="Download spreadsheet CSV">
+          <span class="material-symbols-outlined" aria-hidden="true">table_view</span>
+          Export CSV
+        </button>
+        <label class="button button--tonal button--small" style="cursor:pointer;margin:0;" title="Restore backup JSON">
+          <span class="material-symbols-outlined" aria-hidden="true">upload</span>
+          Restore
+          <input type="file" id="import-backup-input" accept=".json" style="display:none;">
+        </label>
+      </div>
+    </div>
+  `;
+
+  const showNps = items.length >= 3 && !localStorage.getItem("jobsearch_nps_submitted_v1");
+  const npsBannerHtml = showNps ? `
+    <div class="content-block" id="nps-card" style="margin-bottom:16px;padding:16px 20px;border-radius:16px;border:1px solid #cce8d9;background:#f4fbf7;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div>
+        <strong style="font-size:14px;color:#0f5223;display:flex;align-items:center;gap:6px;">
+          <span class="material-symbols-outlined" style="font-size:18px;">sentiment_satisfied</span>
+          Bagaimana pengalaman Anda melacak lamaran di JobSearch?
+        </strong>
+        <p style="margin:2px 0 0;font-size:12px;color:#444;">Beri nilai 1 (kurang) sampai 10 (sangat puas) untuk evaluasi rilis beta kami.</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;" id="nps-btn-group">
+        ${[1,2,3,4,5,6,7,8,9,10].map(n => `<button type="button" class="nps-btn" data-score="${n}" style="width:28px;height:28px;border-radius:6px;border:1px solid #b7dfca;background:#fff;font-size:11px;font-weight:700;cursor:pointer;">${n}</button>`).join("")}
+        <button type="button" id="nps-dismiss-btn" style="background:transparent;border:none;color:#888;font-size:18px;cursor:pointer;padding:4px;margin-left:4px;">✕</button>
+      </div>
+    </div>
+  ` : "";
+
+  const pendingFollowUps = getPendingFollowUps(items);
+  const followUpBannerHtml = pendingFollowUps.length > 0 ? `
+    <div class="followup-alert-banner" style="background:#fff8e1;border:1px solid #ffe082;border-radius:12px;padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="material-symbols-outlined" style="color:#f57f17;font-size:24px;">alarm</span>
+        <div>
+          <strong style="font-size:14px;color:#e65100;">Ada ${pendingFollowUps.length} lamaran perlu follow-up!</strong>
+          <p style="margin:2px 0 0;font-size:12px;color:#795548;">Perusahaan: ${pendingFollowUps.slice(0, 3).map(p => escapeHtml(p.job.company)).join(", ")}${pendingFollowUps.length > 3 ? "..." : ""}</p>
+        </div>
+      </div>
+      <button type="button" class="button button--small button--tonal" id="btn-filter-followups" style="background:#ffe082;color:#5d4037;font-weight:700;">
+        Fokus Follow-Up
+      </button>
+    </div>
+  ` : "";
 
   root.innerHTML = `
     <section class="page__content tracker-workspace tracker-workspace--${escapeHtml(mode)}${isEmpty ? " tracker-workspace--empty" : ""}" aria-labelledby="applications-title">
       <h1 class="visually-hidden" id="applications-title">Tracker Lamaran</h1>
+
+      <div id="goal-tracker-container"></div>
+      ${followUpBannerHtml}
+      ${npsBannerHtml}
+      ${toolbarHtml}
 
       <div class="tracker-workspace__grid">
         <section class="tracker-workspace__main">
@@ -885,11 +1051,223 @@ function renderTrackerDashboard(root, selectedJob = null, selectedApplication = 
     </section>
   `;
 
+  root.querySelector("#btn-filter-followups")?.addEventListener("click", () => {
+    if (pendingFollowUps[0]) {
+      renderTrackerDashboard(root, pendingFollowUps[0].job, pendingFollowUps[0].application, { mode: "detail" });
+      showSnackbar(`Menampilkan lamaran ${pendingFollowUps[0].job.company} yang perlu ditindaklanjuti`);
+    }
+  });
+
+  // Bind Toolbar Buttons
+  root.querySelector("#view-mode-kanban")?.addEventListener("click", () => {
+    renderTrackerDashboard(root, selectedItem?.job || null, selectedItem?.application || null, { mode: "kanban" });
+  });
+
+  root.querySelector("#view-mode-detail")?.addEventListener("click", () => {
+    renderTrackerDashboard(root, selectedItem?.job || null, selectedItem?.application || null, { mode: "detail" });
+  });
+
+  root.querySelector("#show-manual-tracker-top")?.addEventListener("click", () => {
+    renderTrackerDashboard(root, selectedItem?.job || null, selectedItem?.application || null, { mode: "new" });
+  });
+
+  root.querySelector("#seed-sample-btn")?.addEventListener("click", () => {
+    seedSampleApplications();
+    showSnackbar("Contoh lamaran berhasil dimuat ke papan tracker!");
+    renderTrackerDashboard(root, null, null, { mode: "kanban" });
+  });
+
+  root.querySelector("#export-backup-btn")?.addEventListener("click", async () => {
+    await exportAllData();
+    showSnackbar("Data lamaran & profil berhasil diekspor ke JSON!");
+  });
+
+  root.querySelector("#export-csv-btn")?.addEventListener("click", () => {
+    try {
+      const items = getTrackedApplicationItems();
+      exportApplicationsCSV(items);
+      showSnackbar("Data tracker berhasil diunduh dalam format CSV!");
+    } catch (err) {
+      showSnackbar(err.message || "Gagal mengekspor CSV.");
+    }
+  });
+
+  const goalContainer = root.querySelector("#goal-tracker-container");
+  if (goalContainer) renderGoalBanner(goalContainer);
+
+  root.querySelectorAll(".nps-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const score = parseInt(btn.dataset.score, 10);
+      await saveFeedbackLocally({
+        type: "nps_survey",
+        rating: Math.round(score / 2),
+        score: score,
+        detail: `NPS Rating ${score}/10 dari pengguna dengan ${items.length} lamaran aktif.`,
+        pathname: "/pages/apply.html",
+        timestamp: new Date().toISOString()
+      });
+      localStorage.setItem("jobsearch_nps_submitted_v1", "true");
+      root.querySelector("#nps-card")?.remove();
+      showSnackbar("Terima kasih atas penilaian Anda! Sangat berharga untuk penyempurnaan platform.");
+    });
+  });
+
+  root.querySelector("#nps-dismiss-btn")?.addEventListener("click", () => {
+    localStorage.setItem("jobsearch_nps_submitted_v1", "true");
+    root.querySelector("#nps-card")?.remove();
+  });
+
+  root.querySelector("#scan-email-status-btn")?.addEventListener("click", () => {
+    let modal = document.getElementById("scan-email-modal");
+    if (modal) modal.remove();
+
+    modal = document.createElement("div");
+    modal.id = "scan-email-modal";
+    modal.style.cssText = `
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      backdrop-filter: blur(4px);
+    `;
+
+    modal.innerHTML = `
+      <div style="background:var(--md-sys-color-surface, #ffffff);color:var(--md-sys-color-on-surface, #111);width:100%;max-width:540px;border-radius:18px;padding:24px;border:1px solid var(--md-sys-color-outline-variant);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+          <h2 class="title-large" style="margin:0;font-size:18px;">Pindai Email Balasan HR</h2>
+          <button type="button" class="icon-button" id="close-email-modal-btn"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <p class="body-medium" style="font-size:13px;color:var(--md-sys-color-outline);margin:0 0 12px;">Paste teks email balasan recruiter untuk deteksi otomatis status (Interview / Offer / Rejection).</p>
+
+        <textarea class="field__input" id="raw-email-textarea" rows="5" placeholder="Contoh: Dear candidate, we would like to invite you to an interview with our Engineering Lead..." style="width:100%;font-size:13px;resize:vertical;"></textarea>
+
+        <div id="email-analysis-preview" style="margin-top:12px;display:none;"></div>
+
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px;">
+          <button type="button" class="button button--tonal button--small" id="btn-run-email-analysis">Analisis Email</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    const closeEmailModal = () => {
+      window.removeEventListener("keydown", handleEmailModalKeydown);
+      modal.remove();
+    };
+
+    const handleEmailModalKeydown = (e) => {
+      if (e.key === "Escape") closeEmailModal();
+    };
+    window.addEventListener("keydown", handleEmailModalKeydown);
+
+    modal.querySelector("#close-email-modal-btn")?.addEventListener("click", closeEmailModal);
+    modal.addEventListener("click", (e) => { if (e.target === modal) closeEmailModal(); });
+
+    modal.querySelector("#btn-run-email-analysis")?.addEventListener("click", () => {
+      const text = modal.querySelector("#raw-email-textarea")?.value || "";
+      const result = parseRecruiterEmail(text);
+      const previewEl = modal.querySelector("#email-analysis-preview");
+
+      if (items.length === 0) {
+        showSnackbar("Belum ada lamaran aktif untuk di-update.");
+        return;
+      }
+
+      previewEl.style.display = "block";
+      previewEl.innerHTML = `
+        <div class="ats-scorecard" style="background:var(--md-sys-color-surface-container-low);border:1px solid var(--md-sys-color-outline-variant);border-radius:12px;padding:14px;margin:0;">
+          <div style="font-weight:800;color:var(--md-sys-color-primary);font-size:14px;display:flex;align-items:center;gap:6px;">
+            <span class="material-symbols-outlined">auto_awesome</span>
+            Terdeteksi: ${escapeHtml(result.label)} (${result.confidence}%)
+          </div>
+          <p style="font-size:12px;margin:4px 0 10px;line-height:1.4;">${escapeHtml(result.summary)}</p>
+
+          <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">Pilih Lamaran yang Diperbarui:</label>
+          <select class="field__input" id="select-app-to-update" style="width:100%;font-size:13px;">
+            ${items.map(it => `<option value="${escapeHtml(it.job.id)}">${escapeHtml(it.job.company)} - ${escapeHtml(it.job.title)}</option>`).join("")}
+          </select>
+
+          <button type="button" class="button button--primary button--small button--full" id="btn-apply-email-status" style="margin-top:12px;">
+            Terapkan ke Status ${escapeHtml(result.label)}
+          </button>
+        </div>
+      `;
+
+      previewEl.querySelector("#btn-apply-email-status")?.addEventListener("click", () => {
+        const jobId = previewEl.querySelector("#select-app-to-update")?.value;
+        if (jobId) {
+          const app = getApplication(jobId);
+          if (app) {
+            let nextStatus = "Applied";
+            if (result.status === "interview") nextStatus = "Interview";
+            else if (result.status === "offer") nextStatus = "Offer";
+            else if (result.status === "rejected") nextStatus = "Rejected";
+
+            saveApplication(jobId, { ...app, status: nextStatus, updatedAt: new Date().toISOString() });
+            recordApplicationActivity();
+            modal.remove();
+            showSnackbar(`Status lamaran berhasil diubah ke ${nextStatus}!`);
+            renderTrackerDashboard(root, null, null, { mode: "kanban" });
+          }
+        }
+      });
+    });
+  });
+
+  root.querySelector("#import-backup-input")?.addEventListener("change", async (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        const res = await importBackupData(file);
+        showSnackbar(`Berhasil restore ${res.totalApplications} lamaran!`);
+        renderTrackerDashboard(root);
+      } catch (err) {
+        showSnackbar("Gagal restore data: format file salah.");
+      }
+    }
+  });
+
   root.querySelector("#show-manual-tracker")?.addEventListener("click", () => {
     renderTrackerDashboard(root, selectedItem?.job || null, selectedItem?.application || null, { mode: "new" });
   });
 
-  if (mode === "new") {
+  if (mode === "kanban") {
+    // Click on "Edit" on any kanban card
+    root.querySelectorAll('[data-action="open-detail"]').forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const jobId = btn.getAttribute("data-job-id");
+        const found = items.find((it) => it.job.id === jobId);
+        if (found) {
+          renderTrackerDashboard(root, found.job, found.application, { mode: "detail" });
+        }
+      });
+    });
+
+    bindKanbanEvents(root, (jobId, targetStatus) => {
+      const currentApp = readApplications()[jobId] || { id: jobId, jobId, status: "Applied", history: [] };
+      const now = new Date().toISOString();
+      const history = [...(currentApp.history || [])];
+      history.unshift({
+        date: now,
+        status: targetStatus,
+        label: `Status diubah ke ${STATUS_LABELS[targetStatus] || targetStatus} (via Kanban)`
+      });
+      saveApplication({
+        ...currentApp,
+        status: targetStatus,
+        progressBaseStatus: nextProgressBaseStatus(currentApp, targetStatus),
+        history
+      });
+      showSnackbar(`Lamaran dipindah ke "${STATUS_LABELS[targetStatus] || targetStatus}"`);
+      renderTrackerDashboard(root, null, null, { mode: "kanban" });
+    });
+  } else if (mode === "new") {
     bindManualTrackerForm(root);
   } else if (selectedItem) {
     bindTrackerActions(root, selectedItem.job, selectedItem.application);
@@ -947,6 +1325,16 @@ function bindTrackerActions(root, job, application) {
     });
     showSnackbar("Tracker lamaran diperbarui.");
     renderTracker(root, job, next);
+  });
+
+  root.querySelector("#download-calendar-invite")?.addEventListener("click", () => {
+    downloadInterviewIcs({
+      jobTitle: job.title,
+      companyName: job.company,
+      interviewDate: application.followUpAt ? `${application.followUpAt}T10:00:00` : new Date().toISOString(),
+      notes: application.note
+    });
+    showSnackbar("File kalender (.ics) berhasil diunduh!");
   });
 
   root.querySelector("#delete-application")?.addEventListener("click", () => {

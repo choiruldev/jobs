@@ -125,11 +125,13 @@
   z-index: 1;
 }
 
-.nav-link[aria-current="page"] {
+.nav-link[aria-current="page"],
+.nav-link--active {
   color: var(--md-sys-color-primary);
 }
 
-.nav-link[aria-current="page"] .nav-link__indicator {
+.nav-link[aria-current="page"] .nav-link__indicator,
+.nav-link--active .nav-link__indicator {
   opacity: 1;
 }
 
@@ -1745,3 +1747,472 @@ mark {
     width: min(420px, calc(100vw - var(--side-nav-width) - 64px));
   }
 }
+
+/* ==========================================================================
+   KANBAN BOARD & ATS SUITE EXTENSIONS
+   ========================================================================== */
+.kanban-view-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.kanban-board-wrapper {
+  overflow-x: auto;
+  padding-bottom: var(--space-4);
+}
+
+.kanban-board {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(280px, 1fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.kanban-column {
+  background: var(--md-sys-color-surface-container-low, #f4f4f4);
+  border: 1px solid var(--md-sys-color-outline-variant, #e0e0e0);
+  border-radius: 16px;
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+
+.kanban-column__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  padding: var(--space-2) var(--space-2) var(--space-3);
+  border-bottom: 2px solid transparent;
+}
+
+.kanban-col--saved .kanban-column__header { border-color: #9e9e9e; }
+.kanban-col--applied .kanban-column__header { border-color: #2196f3; }
+.kanban-col--interview .kanban-column__header { border-color: #ff9800; }
+.kanban-col--offer .kanban-column__header { border-color: #9c27b0; }
+.kanban-col--accepted .kanban-column__header { border-color: #4caf50; }
+.kanban-col--rejected .kanban-column__header { border-color: #f44336; }
+
+.kanban-column__count {
+  background: var(--md-sys-color-surface-container-high, #e5e5e5);
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.kanban-column__cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 120px;
+  padding: var(--space-2) 0;
+  overflow-y: auto;
+}
+
+.kanban-column__cards--dragover {
+  background: rgba(33, 150, 243, 0.08);
+  border-radius: 12px;
+  outline: 2px dashed #2196f3;
+}
+
+.kanban-column__empty {
+  text-align: center;
+  color: var(--md-sys-color-outline, #888);
+  font-size: 13px;
+  padding: var(--space-4) var(--space-2);
+}
+
+.kanban-card {
+  background: var(--md-sys-color-surface, #fff);
+  border: 1px solid var(--md-sys-color-outline-variant, #e0e0e0);
+  border-radius: 12px;
+  padding: var(--space-3);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  cursor: grab;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.kanban-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.kanban-card--dragging {
+  opacity: 0.5;
+}
+
+.kanban-card__title {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.kanban-card__company {
+  font-size: 13px;
+  color: var(--md-sys-color-on-surface-variant, #555);
+}
+
+.kanban-card__salary {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2e7d32;
+  margin-top: 6px;
+}
+
+.kanban-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--md-sys-color-outline, #777);
+}
+
+/* ==========================================================================
+   ATS SCORECARD STYLES
+   ========================================================================== */
+.ats-scorecard {
+  background: var(--md-sys-color-surface-container, #f9f9f9);
+  border: 1px solid var(--md-sys-color-outline-variant, #e0e0e0);
+  border-radius: 16px;
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.ats-scorecard__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.ats-scorecard__circle {
+  font-size: 20px;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.ats-scorecard__circle--warning {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+.ats-scorecard__circle--danger {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.ats-keyword-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.ats-chip {
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.ats-chip--missing {
+  background: #ffebee;
+  color: #c62828;
+}
+
+/* ==========================================================================
+   SOURCE BADGES & KANBAN DESKTOP RESPONSIVE ENHANCEMENTS
+   ========================================================================== */
+.source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  line-height: 1.2;
+}
+
+.source-badge .badge-icon {
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.source-badge--linkedin {
+  background: #e8f4f9;
+  color: #0077b5;
+  border: 1px solid #bce1f1;
+}
+
+.source-badge--jobstreet {
+  background: #ede7f6;
+  color: #512da8;
+  border: 1px solid #d1c4e9;
+}
+
+.source-badge--indeed {
+  background: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #bbdefb;
+}
+
+.source-badge--remote {
+  background: #e0f2f1;
+  color: #00796b;
+  border: 1px solid #b2dfdb;
+}
+
+/* Kanban Workspace Layout Fix for Desktop */
+.tracker-workspace--kanban .tracker-workspace__grid {
+  grid-template-columns: 1fr !important;
+  max-width: 100% !important;
+}
+
+.tracker-workspace--kanban .tracker-workspace__main {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Kanban Toolbar Segmented Control */
+.view-mode-toggle {
+  display: inline-flex;
+  background: var(--md-sys-color-surface-container-high, #e8eaed);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.view-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-mode-btn:hover {
+  color: var(--md-sys-color-on-surface);
+}
+
+.view-mode-btn--active {
+  background: var(--md-sys-color-surface, #ffffff) !important;
+  color: var(--md-sys-color-primary, #006a6a) !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}
+
+/* Kanban Column & Card Enhanced Design */
+.kanban-board {
+  grid-auto-columns: minmax(300px, 320px) !important;
+}
+
+.kanban-column {
+  background: var(--md-sys-color-surface-container-lowest, #ffffff) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.kanban-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.kanban-card__btn {
+  background: transparent;
+  border: none;
+  color: var(--md-sys-color-primary, #006a6a);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.kanban-card__btn:hover {
+  background: var(--md-sys-color-primary-container, #d5eeee);
+}
+
+/* ==========================================================================
+   CONSISTENT GLOBAL NAVIGATION & BOTTOM NAV 5-TAB
+   ========================================================================== */
+.nav-section-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--md-sys-color-outline, #767676);
+  padding: 0 var(--space-4) 4px;
+}
+
+.bottom-nav {
+  grid-template-columns: repeat(5, 1fr) !important;
+}
+
+.bottom-nav .nav-link {
+  width: 100% !important;
+  min-height: 54px !important;
+  padding: 4px 2px 2px !important;
+}
+
+.bottom-nav .nav-link .material-symbols-outlined {
+  font-size: 22px !important;
+}
+
+.bottom-nav .nav-link > span:last-child:not(.material-symbols-outlined) {
+  font-size: 0.68rem !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Dark Mode Overrides */
+[data-theme="dark"] .job-card,
+[data-theme="dark"] .content-block,
+[data-theme="dark"] .ats-scorecard {
+  background: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface);
+  border-color: var(--md-sys-color-outline-variant);
+}
+
+[data-theme="dark"] .field__input,
+[data-theme="dark"] select.field__input,
+[data-theme="dark"] textarea.field__input {
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  border-color: var(--md-sys-color-outline-variant);
+}
+
+[data-theme="dark"] .search-bar {
+  background: var(--md-sys-color-surface-container-high);
+  border-color: var(--md-sys-color-outline-variant);
+}
+
+[data-theme="dark"] .search-bar input {
+  color: var(--md-sys-color-on-surface);
+}
+
+[data-theme="dark"] .chip--outline {
+  border-color: var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface);
+}
+
+/* ==========================================================================
+   FASE 2: UX POLISH, SKELETON LOADERS, TOAST NOTIFICATIONS & WCAG 2.1 AA
+   ========================================================================== */
+
+/* 1. Unified Toast / Snackbar Variants */
+.snackbar--success {
+  background: #0d4722 !important;
+  border-left: 4px solid #4caf50 !important;
+}
+
+.snackbar--error {
+  background: #5c1414 !important;
+  border-left: 4px solid #f44336 !important;
+}
+
+.snackbar--warning {
+  background: #543a05 !important;
+  border-left: 4px solid #ff9800 !important;
+}
+
+.snackbar--info {
+  background: #1e2638 !important;
+  border-left: 4px solid #2196f3 !important;
+}
+
+/* 2. Skeleton Loading State Animation */
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-card {
+  border-radius: var(--shape-card, 16px);
+  border: 1px solid var(--md-sys-color-outline-variant, #e0e2ec);
+  background: var(--md-sys-color-surface-container, #f8f9fa);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(224, 226, 236, 0.6) 25%,
+    rgba(255, 255, 255, 0.9) 50%,
+    rgba(224, 226, 236, 0.6) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite ease-in-out;
+  border-radius: 6px;
+}
+
+[data-theme="dark"] .skeleton-card {
+  background: var(--md-sys-color-surface-container, #1e1f23);
+  border-color: var(--md-sys-color-outline-variant, #44474f);
+}
+
+[data-theme="dark"] .skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    #25272c 25%,
+    #32353c 50%,
+    #25272c 75%
+  );
+  background-size: 200% 100%;
+}
+
+/* 3. WCAG 2.1 AA Keyboard Navigation & Focus Visible */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.chip:focus-visible,
+.icon-button:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary, #006a6a) !important;
+  outline-offset: 2px !important;
+}
+
+/* 4. Touch Target Minimum 48px */
+.icon-button {
+  min-width: 48px !important;
+  min-height: 48px !important;
+  touch-action: manipulation;
+}
+
+.bottom-nav .nav-link {
+  min-height: 56px !important;
+  touch-action: manipulation;
+}
+
+/* 5. Safe Area Inset Support for iOS Home Bar */
+.bottom-nav {
+  padding-bottom: max(6px, env(safe-area-inset-bottom, 0px)) !important;
+  height: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+}
+

@@ -1,7 +1,7 @@
 import {
   getSalaryEstimate,
   salaryAverage
-} from "./data.js?v=20260616x";
+} from "./data.js?v=20260616z";
 
 const PROFILE_KEY = "jsa_match_profile_v1";
 

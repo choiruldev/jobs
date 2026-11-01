@@ -1,0 +1,28 @@
+{
+  "name": "jobsearch-indonesia",
+  "version": "1.0.0-beta.1",
+  "type": "module",
+  "description": "Platform pencarian lowongan remote dan lokal Indonesia, tracker lamaran, dan tools karir privacy-first.",
+  "scripts": {
+    "test": "node tests/health-check.test.mjs && node tests/e2e.test.mjs && node tests/benchmark.test.mjs && node tests/broken-links.test.mjs && node tests/user-journey.test.mjs",
+    "test:health": "node tests/health-check.test.mjs",
+    "test:e2e": "node tests/e2e.test.mjs",
+    "test:benchmark": "node tests/benchmark.test.mjs",
+    "test:links": "node tests/broken-links.test.mjs",
+    "test:journey": "node tests/user-journey.test.mjs",
+    "build": "node scripts/build.mjs",
+    "sitemap": "node scripts/generate_sitemap.mjs",
+    "icons": "python3 scripts/generate-icons.py",
+    "serve": "python3 -m http.server 8080"
+  },
+  "keywords": [
+    "jobsearch",
+    "lowongan-kerja",
+    "remote-indonesia",
+    "loker-indonesia",
+    "pwa",
+    "ats-resume"
+  ],
+  "author": "JobSearch Team",
+  "license": "MIT"
+}

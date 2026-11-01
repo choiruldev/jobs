@@ -2,14 +2,15 @@ import {
   JOBS,
   makeLogo,
   rememberJobs
-} from "./data.js?v=20260616x";
+} from "./data.js?v=20260616z";
+import { dbSaveJobs, dbGetAllJobs } from "./storage-db.js?v=20260616z";
 
 const EXTERNAL_CACHE_KEY = "jsa_external_jobs_cache_v11";
 const CACHE_TTL_MS = 30 * 60 * 1000;
-const REQUEST_TIMEOUT_MS = 12000;
+const REQUEST_TIMEOUT_MS = 4000;
 const FIELD_LABEL_PATTERN = "(?:Job\\s+Title|Title|Position|Location|Reports?\\s+To|Department|Employment\\s+Type|Workplace|Compensation|Salary)";
 const ALL_PROVIDERS = ["remotive", "arbeitnow", "remoteok", "jobicy"];
-const INDONESIA_LOCATION_TERMS = [
+export const INDONESIA_LOCATION_TERMS = [
   "indonesia",
   "jakarta",
   "bandung",
@@ -24,7 +25,20 @@ const INDONESIA_LOCATION_TERMS = [
   "tangerang",
   "bekasi",
   "depok",
-  "bogor"
+  "bogor",
+  "batam",
+  "malang",
+  "solo",
+  "surakarta",
+  "palembang",
+  "balikpapan",
+  "samarinda",
+  "pekanbaru",
+  "lampung",
+  "cikarang",
+  "karawang",
+  "sidoarjo",
+  "cimahi"
 ];
 
 export const JOB_SOURCES = {
@@ -35,6 +49,10 @@ export const JOB_SOURCES = {
 };
 
 export const PROVIDER_LABELS = {
+  local_feed: "Loker Terverifikasi",
+  linkedin: "LinkedIn",
+  jobstreet: "JobStreet",
+  indeed: "Indeed",
   remotive: "Remotive",
   arbeitnow: "Arbeitnow",
   remoteok: "Remote OK",
@@ -269,8 +287,15 @@ function isPureRemote(location = "") {
   return normalized === "remote" || normalized === "remote,";
 }
 
-function isIndonesiaScope(job) {
+export function isIndonesiaScope(job) {
   const location = String(job.location || "").toLowerCase();
+  const platform = String(job.sourcePlatform || job.source?.name || "").toLowerCase();
+  if (platform.includes("linkedin") || platform.includes("jobstreet") || platform.includes("indeed")) {
+    return true;
+  }
+  if (job.remoteTier === "indonesia" || (job.type || []).includes("Dari Indonesia") || (job.tags || []).includes("Indonesia") || (job.tags || []).includes("Lokal Indonesia")) {
+    return true;
+  }
   return INDONESIA_LOCATION_TERMS.some((term) => location.includes(term)) || isPureRemote(location);
 }
 
@@ -534,7 +559,73 @@ async function fetchJobicyJobs(geo = "") {
   return { jobs, fromCache: false };
 }
 
+async function fetchLocalFeedJobs() {
+  try {
+    const res = await fetch("../data/jobs.json").catch(() => fetch("data/jobs.json"));
+    if (!res || !res.ok) return { jobs: [], fromCache: false };
+    const data = await res.json();
+    const rawJobs = Array.isArray(data.jobs) ? data.jobs : [];
+    const jobs = rawJobs.map((j) => {
+      const isRemote = j.workplaceType === "remote" || (j.location && j.location.toLowerCase().includes("remote"));
+      const isHybrid = j.workplaceType === "hybrid" || (j.location && j.location.toLowerCase().includes("hybrid"));
+      const wpLabel = isRemote ? "Remote" : (isHybrid ? "Hybrid" : "On-site");
+      const isId = j.remoteTier === "indonesia" || isIndonesiaScope(j);
+      return {
+        id: j.id,
+        title: j.title,
+        company: j.company,
+        location: j.location,
+        salary: {
+          min: Number(j.salary?.min || 0),
+          max: Number(j.salary?.max || 0),
+          label: j.salary?.display || "Gaji kompetitif",
+          currency: j.salary?.currency || "IDR",
+          period: j.salary?.period || "monthly"
+        },
+        type: [
+          wpLabel,
+          isId ? "Dari Indonesia" : (j.remoteTier === "apac" ? "Asia/APAC" : "Remote Global")
+        ].filter(Boolean),
+        category: j.category || "Teknologi",
+        posted: j.postedAt || new Date().toISOString(),
+        date: j.postedAt || new Date().toISOString(),
+        logo: j.logo || makeLogo(j.company),
+        applyUrl: j.applyUrl,
+        sourcePlatform: j.sourcePlatform || "JobStreet",
+        source: {
+          key: (j.sourcePlatform || "feed").toLowerCase(),
+          name: j.sourcePlatform || "Portal Resmi",
+          url: j.applyUrl
+        },
+        description: j.descriptionText || j.descriptionHtml || "",
+        descriptionHtml: j.descriptionHtml || `<p>${j.descriptionText || j.title}</p>`,
+        requirements: j.requirements && j.requirements.length ? j.requirements : [
+          `Pengalaman relevan dalam bidang ${j.category || 'terkait'}.`,
+          `Menguasai keahlian teknis dan komunikasi profesional.`,
+          `Mampu berkolaborasi dalam tim secara mandiri dan berorientasi hasil.`
+        ],
+        about_company: `${j.company} adalah perusahaan terkemuka yang membuka lowongan ini secara resmi melalui ${j.sourcePlatform || 'portal rekrutmen'}.`,
+        tags: [
+          ...(j.tags || []),
+          j.sourcePlatform || "Verified",
+          j.category || "Teknologi",
+          wpLabel,
+          isId ? "Indonesia" : "",
+          isId ? "Lokal Indonesia" : ""
+        ].filter((v, idx, arr) => Boolean(v) && arr.indexOf(v) === idx),
+        remoteTier: j.remoteTier || "indonesia",
+        workplaceType: j.workplaceType || (isRemote ? "remote" : (isHybrid ? "hybrid" : "onsite")),
+        experienceLevel: j.experienceLevel || "mid"
+      };
+    });
+    return { jobs, fromCache: true };
+  } catch (e) {
+    return { jobs: [], fromCache: false };
+  }
+}
+
 async function fetchProvider(provider, source) {
+  if (provider === "local_feed") return fetchLocalFeedJobs();
   if (provider === "remotive") return fetchRemotiveJobs();
   if (provider === "arbeitnow") return fetchArbeitnowJobs();
   if (provider === "remoteok") return fetchRemoteOkJobs();
@@ -558,7 +649,9 @@ function fallbackJobsForSource(source) {
 }
 
 export async function loadJobsForSource(source = "international") {
-  const providers = ALL_PROVIDERS;
+  const providers = source === "indonesia"
+    ? ["local_feed"]
+    : (source === "apac" ? ["local_feed", "jobicy"] : ["local_feed", ...ALL_PROVIDERS]);
 
   const settled = await Promise.allSettled(providers.map((provider) => fetchProvider(provider, source)));
   const loadedJobs = uniqueJobs(settled.flatMap((result) => result.status === "fulfilled" ? result.value.jobs : []));
@@ -570,6 +663,7 @@ export async function loadJobsForSource(source = "international") {
     .filter(Boolean);
 
   rememberJobs(jobs);
+  dbSaveJobs(jobs).catch(() => {});
   return {
     jobs,
     failures,
@@ -581,6 +675,25 @@ export async function loadJobsForSource(source = "international") {
 export async function fetchJobById(id) {
   if (!id) return null;
 
+  // 1. Cek dari memori data.js
+  const cachedJob = getJobById(id);
+  if (cachedJob) return cachedJob;
+
+  // 2. Cek dari local verified feed (LinkedIn, JobStreet, Indeed, dll.)
+  try {
+    const feed = await fetchLocalFeedJobs();
+    if (feed && feed.jobs) {
+      const match = feed.jobs.find((j) => j.id === id);
+      if (match) {
+        rememberJobs([match]);
+        return match;
+      }
+    }
+  } catch (err) {
+    console.warn("Gagal lookup job dari feed:", err);
+  }
+
+  // 3. Fallback ke external API provider
   const source = id.startsWith("remotive_")
     ? "remotive"
     : id.startsWith("arbeitnow_")

@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ATS Resume Builder | JobSearch</title>
+  <meta name="description" content="Buat CV ATS-friendly 1 halaman gratis langsung di browser. Format bersih yang ramah mesin pemindai ATS rekruter global.">
+  <meta property="og:image" content="../assets/og-cover.png">
+  <meta property="og:site_name" content="JobSearch">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="../assets/og-cover.png">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="alternate icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#006a6a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css?v=20260616z">
+  <link rel="stylesheet" href="../css/components.css?v=20260616z">
+  <style>
+    .builder-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: var(--space-6);
+      align-items: start;
+    }
+    @media (max-width: 960px) {
+      .builder-layout { grid-template-columns: 1fr; }
+      .builder-preview-col { display: none; }
+      .builder-preview-col.builder-preview-col--active { display: block; }
+      .builder-form-col.builder-form-col--hidden { display: none; }
+    }
+    .ats-paper {
+      background: #ffffff;
+      color: #111111;
+      padding: 36px 40px;
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .ats-header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #111; padding-bottom: 12px; }
+    .ats-name { font-size: 22px; font-weight: 800; text-transform: uppercase; margin: 0 0 6px; letter-spacing: 0.5px; }
+    .ats-contact { font-size: 11px; color: #444; }
+    .ats-section { margin-bottom: 16px; }
+    .ats-section__title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #ccc; padding-bottom: 2px; margin: 0 0 8px; }
+    .ats-text { margin: 0; }
+    .ats-resume-section__item { margin-bottom: 12px; }
+    .ats-resume-item__header { display: flex; justify-content: space-between; font-weight: 700; }
+    .ats-resume-item__sub { font-style: italic; color: #333; margin-bottom: 4px; }
+    .ats-resume-item__list { margin: 4px 0 0 16px; padding: 0; }
+    .ats-resume-item__list li { margin-bottom: 3px; }
+
+    .sub-item-card {
+      background: var(--md-sys-color-surface, #ffffff);
+      border: 1px solid var(--md-sys-color-outline-variant, #e0e0e0);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .sub-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 12mm 12mm 12mm 12mm;
+      }
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .app-layout, .side-nav, .top-app-bar, .bottom-nav, .builder-form-col,
+      .landing-hero, .landing-actions, .mobile-view-tabs, #beta-feedback-btn,
+      #network-status-banner, .view-mode-toggle {
+        display: none !important;
+      }
+      .page, .main-content, .builder-layout, .builder-preview-col {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      #ats-paper-preview, .ats-paper {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-size: 10pt !important;
+        line-height: 1.35 !important;
+      }
+      .ats-section {
+        page-break-inside: avoid;
+        margin-bottom: 12px !important;
+      }
+      .ats-header {
+        margin-bottom: 14px !important;
+      }
+      .ats-name {
+        font-size: 20pt !important;
+        margin-bottom: 4px !important;
+        color: #000000 !important;
+      }
+    }
+  </style>
+</head>
+<body data-page="resume">
+  <div class="app-layout">
+    <aside class="side-nav" aria-label="Navigasi utama">
+      <a class="brand-lockup" href="../index.html">
+        <span class="logo-mark" aria-hidden="true"><span class="material-symbols-outlined">work</span></span>
+        <span>JobSearch</span>
+      </a>
+      <nav class="side-nav__links">
+        <div class="nav-section-label">UTAMA</div>
+        <a class="nav-link" data-nav="search" href="search.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari Lowongan</span></a>
+        <a class="nav-link" data-nav="applications" href="apply.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">assignment</span><span>Tracker Lamaran</span></a>
+        <a class="nav-link" data-nav="bookmarks" href="bookmarks.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">bookmark</span><span>Lowongan Tersimpan</span></a>
+
+        <div class="nav-section-label" style="margin-top:16px;">FITUR KARIR</div>
+        <a class="nav-link nav-link--active" data-nav="resume" href="resume-builder.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">description</span><span>ATS Resume Builder</span></a>
+        <a class="nav-link" data-nav="interview" href="interview-prep.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">record_voice_over</span><span>Latihan Interview</span></a>
+        <a class="nav-link" data-nav="salary" href="salary-benchmark.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">payments</span><span>Kalkulator PPP Gaji</span></a>
+        <a class="nav-link" data-nav="companies" href="companies.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">apartment</span><span>Perusahaan Remote</span></a>
+        <a class="nav-link" data-nav="insights" href="insights.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">insights</span><span>Analisis Funnel</span></a>
+      </nav>
+    </aside>
+
+    <header class="top-app-bar">
+      <a class="top-app-bar__brand" href="../index.html"><span class="logo-mark logo-mark--small"><span class="material-symbols-outlined">work</span></span><span class="top-app-bar__title">ATS Resume Builder</span></a>
+      <div style="display:flex;gap:8px;">
+        <button class="button button--primary button--small" type="button" id="print-resume-btn">
+          <span class="material-symbols-outlined">print</span>
+          Cetak PDF
+        </button>
+      </div>
+    </header>
+
+    <main class="page page--with-topbar">
+      <section class="page__content stack">
+        <div class="landing-hero" style="margin-bottom:0;">
+          <h1 class="display-small">ATS Resume Builder (Standar 1 Halaman)</h1>
+          <p class="body-medium">Ketik informasi Anda di kiri, dan lihat format CV bersih yang 100% lolos sistem seleksi ATS rekruter global.</p>
+        </div>
+
+        <!-- Mobile View Tabs -->
+        <div class="mobile-view-tabs" style="display:none;margin-bottom:16px;">
+          <div class="view-mode-toggle" style="width:100%;justify-content:center;">
+            <button class="view-mode-btn view-mode-btn--active" type="button" id="tab-form-btn">
+              <span class="material-symbols-outlined">edit_note</span> Edit Form
+            </button>
+            <button class="view-mode-btn" type="button" id="tab-preview-btn">
+              <span class="material-symbols-outlined">visibility</span> Preview CV
+            </button>
+          </div>
+        </div>
+
+        <div class="builder-layout">
+          <!-- FORM COLUMN -->
+          <div class="builder-form-col stack" id="builder-form-container">
+            <!-- 1-Click Import CV Card -->
+            <div class="content-block" style="border:1px solid var(--md-sys-color-primary);border-radius:16px;padding:16px;background:var(--md-sys-color-surface-container-low);">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                <div>
+                  <strong class="title-medium" style="display:flex;align-items:center;gap:6px;color:var(--md-sys-color-primary);font-size:15px;">
+                    <span class="material-symbols-outlined">auto_awesome</span>
+                    Import Cepat dari CV Lama
+                  </strong>
+                  <p class="body-medium" style="font-size:12px;color:var(--md-sys-color-outline);margin:2px 0 0;">
+                    Paste teks CV Anda untuk mengekstrak data profil dan riwayat kerja otomatis.
+                  </p>
+                </div>
+                <button type="button" class="button button--small button--tonal" id="btn-toggle-import">
+                  <span class="material-symbols-outlined" style="font-size:16px;">upload_file</span>
+                  Import Teks CV
+                </button>
+              </div>
+
+              <div id="import-cv-drawer" style="display:none;margin-top:14px;">
+                <textarea class="field__input" id="inp-cv-raw-text" rows="5" placeholder="Paste seluruh teks dokumen CV (PDF/Word) Anda di sini..." style="font-size:13px;width:100%;resize:vertical;"></textarea>
+                <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+                  <button type="button" class="button button--primary button--small" id="btn-parse-cv-action">
+                    Ekstrak & Isi Otomatis
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Data Diri Card -->
+            <div class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:20px;">
+              <h2 class="title-large" style="margin:0 0 16px;">Data Diri & Kontak</h2>
+              <div class="stack" style="gap:12px;">
+                <div class="field">
+                  <label class="field__label">Nama Lengkap</label>
+                  <input class="field__input" type="text" id="inp-name" placeholder="cth: Budi Santoso">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                  <div class="field">
+                    <label class="field__label">Email</label>
+                    <input class="field__input" type="email" id="inp-email" placeholder="budi@email.com">
+                  </div>
+                  <div class="field">
+                    <label class="field__label">Telepon / WA</label>
+                    <input class="field__input" type="text" id="inp-phone" placeholder="+62 812-...">
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                  <div class="field">
+                    <label class="field__label">Lokasi</label>
+                    <input class="field__input" type="text" id="inp-location" placeholder="Jakarta, Indonesia (Remote)">
+                  </div>
+                  <div class="field">
+                    <label class="field__label">LinkedIn / Portofolio</label>
+                    <input class="field__input" type="text" id="inp-linkedin" placeholder="linkedin.com/in/...">
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="field__label">Ringkasan Profesional (Summary)</label>
+                  <textarea class="field__input" id="inp-summary" rows="3" placeholder="Ringkasan pengalaman, keahlian utama, dan value prop..."></textarea>
+                </div>
+                <div class="field">
+                  <label class="field__label">Keahlian Utama (Pisahkan dengan koma)</label>
+                  <input class="field__input" type="text" id="inp-skills" placeholder="JavaScript, React, TypeScript, SQL, Figma...">
+                </div>
+              </div>
+            </div>
+
+            <!-- Pengalaman Kerja Card -->
+            <div class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:20px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                <h2 class="title-large" style="margin:0;">Pengalaman Kerja</h2>
+                <button class="button button--tonal button--small" type="button" id="add-exp-btn">
+                  <span class="material-symbols-outlined">add</span> Tambah Posisi
+                </button>
+              </div>
+              <div id="experiences-list"></div>
+            </div>
+
+            <!-- Pendidikan Card -->
+            <div class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:20px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                <h2 class="title-large" style="margin:0;">Pendidikan</h2>
+                <button class="button button--tonal button--small" type="button" id="add-edu-btn">
+                  <span class="material-symbols-outlined">add</span> Tambah Pendidikan
+                </button>
+              </div>
+              <div id="education-list"></div>
+            </div>
+          </div>
+
+          <!-- PREVIEW COLUMN -->
+          <div class="builder-preview-col" id="builder-preview-container">
+            <div style="position:sticky;top:calc(var(--app-bar-height) + 16px);">
+              <div id="ats-paper-preview"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+        <nav class="bottom-nav" aria-label="Navigasi bawah">
+      <a class="nav-link" data-nav="search" href="search.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari</span></a>
+      <a class="nav-link" data-nav="applications" href="apply.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">assignment</span><span>Tracker</span></a>
+      <a class="nav-link" data-nav="resume" href="resume-builder.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">description</span><span>Resume</span></a>
+      <a class="nav-link" data-nav="bookmarks" href="bookmarks.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">bookmark</span><span>Simpan</span></a>
+      <a class="nav-link" data-nav="companies" href="companies.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">apartment</span><span>Perusahaan</span></a>
+    </nav>
+  </div>
+
+  <script type="module">
+    import { readResumeData, writeResumeData, renderLivePreview } from "../js/resume-builder.js?v=20260616z";
+    import { parseResumeText } from "../js/resume-parser.js?v=20260616z";
+    import { showSnackbar } from "../js/bookmark.js?v=20260616z";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      let resume = readResumeData();
+      const preview = document.getElementById("ats-paper-preview");
+
+      // Bind Import CV
+      const toggleImportBtn = document.getElementById("btn-toggle-import");
+      const importDrawer = document.getElementById("import-cv-drawer");
+      const parseActionBtn = document.getElementById("btn-parse-cv-action");
+      const rawCvInput = document.getElementById("inp-cv-raw-text");
+
+      toggleImportBtn?.addEventListener("click", () => {
+        importDrawer.style.display = importDrawer.style.display === "none" ? "block" : "none";
+      });
+
+      parseActionBtn?.addEventListener("click", () => {
+        const text = rawCvInput.value.trim();
+        if (!text) {
+          showSnackbar("Tempelkan teks CV Anda terlebih dahulu");
+          return;
+        }
+
+        const parsed = parseResumeText(text);
+        if (parsed.name) {
+          resume.fullName = parsed.name;
+          document.getElementById("inp-name").value = parsed.name;
+        }
+        if (parsed.email) {
+          resume.email = parsed.email;
+          document.getElementById("inp-email").value = parsed.email;
+        }
+        if (parsed.phone) {
+          resume.phone = parsed.phone;
+          document.getElementById("inp-phone").value = parsed.phone;
+        }
+        if (parsed.linkedin) {
+          resume.linkedin = parsed.linkedin;
+          document.getElementById("inp-linkedin").value = parsed.linkedin;
+        }
+        if (parsed.summary || parsed.targetRole) {
+          resume.summary = parsed.summary || `${parsed.targetRole || "Software Engineer"} dengan keahlian teknis dalam ${parsed.skills.slice(0, 4).join(", ")}.`;
+          document.getElementById("inp-summary").value = resume.summary;
+        }
+        if (parsed.skills.length) {
+          resume.skills = parsed.skills.join(", ");
+          document.getElementById("inp-skills").value = resume.skills;
+        }
+        if (parsed.experiences.length) {
+          resume.experiences = parsed.experiences.map(e => ({
+            role: e.role || "Software Engineer",
+            company: e.company || "Perusahaan",
+            period: e.period || "2022 - Sekarang",
+            bullets: (e.bullets || []).join("\n") || "Mengembangkan fitur aplikasi utama."
+          }));
+          renderExperiencesList();
+        }
+
+        updateAndRender();
+        importDrawer.style.display = "none";
+        showSnackbar("Data CV berhasil diekstrak dan diisikan!");
+      });
+
+      // Populate basic inputs
+      document.getElementById("inp-name").value = resume.fullName || "";
+      document.getElementById("inp-email").value = resume.email || "";
+      document.getElementById("inp-phone").value = resume.phone || "";
+      document.getElementById("inp-location").value = resume.location || "";
+      document.getElementById("inp-linkedin").value = resume.linkedin || "";
+      document.getElementById("inp-summary").value = resume.summary || "";
+      document.getElementById("inp-skills").value = resume.skills || "";
+
+      function updateAndRender() {
+        resume.fullName = document.getElementById("inp-name").value;
+        resume.email = document.getElementById("inp-email").value;
+        resume.phone = document.getElementById("inp-phone").value;
+        resume.location = document.getElementById("inp-location").value;
+        resume.linkedin = document.getElementById("inp-linkedin").value;
+        resume.summary = document.getElementById("inp-summary").value;
+        resume.skills = document.getElementById("inp-skills").value;
+        writeResumeData(resume);
+        renderLivePreview(preview, resume);
+      }
+
+      // Render Dynamic Experiences
+      function renderExperiencesList() {
+        const container = document.getElementById("experiences-list");
+        container.innerHTML = (resume.experiences || []).map((exp, idx) => `
+          <div class="sub-item-card" data-exp-idx="${idx}">
+            <div class="sub-item-header">
+              <strong class="title-small">Pengalaman #${idx + 1}</strong>
+              <button class="button button--small button--text js-del-exp" data-idx="${idx}" type="button" style="color:var(--md-sys-color-error);">
+                <span class="material-symbols-outlined">delete</span> Hapus
+              </button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <input class="field__input exp-role" type="text" placeholder="Posisi / Jabatan" value="${exp.role || ""}">
+              <input class="field__input exp-company" type="text" placeholder="Nama Perusahaan" value="${exp.company || ""}">
+            </div>
+            <input class="field__input exp-period" type="text" placeholder="Periode (cth: 2022 - Sekarang)" value="${exp.period || ""}">
+            <textarea class="field__input exp-bullets" rows="3" placeholder="Poin tanggung jawab & pencapaian (pisahkan per baris)">${exp.bullets || ""}</textarea>
+          </div>
+        `).join("");
+
+        // Bind delete
+        container.querySelectorAll(".js-del-exp").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const idx = parseInt(btn.dataset.idx, 10);
+            resume.experiences.splice(idx, 1);
+            renderExperiencesList();
+            updateAndRender();
+          });
+        });
+
+        // Bind input changes
+        container.querySelectorAll(".sub-item-card").forEach((card) => {
+          const idx = parseInt(card.dataset.expIdx, 10);
+          card.addEventListener("input", () => {
+            resume.experiences[idx] = {
+              role: card.querySelector(".exp-role").value,
+              company: card.querySelector(".exp-company").value,
+              period: card.querySelector(".exp-period").value,
+              bullets: card.querySelector(".exp-bullets").value
+            };
+            updateAndRender();
+          });
+        });
+      }
+
+      // Render Dynamic Education
+      function renderEducationList() {
+        const container = document.getElementById("education-list");
+        container.innerHTML = (resume.education || []).map((edu, idx) => `
+          <div class="sub-item-card" data-edu-idx="${idx}">
+            <div class="sub-item-header">
+              <strong class="title-small">Pendidikan #${idx + 1}</strong>
+              <button class="button button--small button--text js-del-edu" data-idx="${idx}" type="button" style="color:var(--md-sys-color-error);">
+                <span class="material-symbols-outlined">delete</span> Hapus
+              </button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <input class="field__input edu-degree" type="text" placeholder="Gelar / Jurusan" value="${edu.degree || ""}">
+              <input class="field__input edu-school" type="text" placeholder="Universitas / Kampus" value="${edu.school || ""}">
+            </div>
+            <input class="field__input edu-period" type="text" placeholder="Tahun (cth: 2018 - 2022)" value="${edu.period || ""}">
+          </div>
+        `).join("");
+
+        container.querySelectorAll(".js-del-edu").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const idx = parseInt(btn.dataset.idx, 10);
+            resume.education.splice(idx, 1);
+            renderEducationList();
+            updateAndRender();
+          });
+        });
+
+        container.querySelectorAll(".sub-item-card").forEach((card) => {
+          const idx = parseInt(card.dataset.eduIdx, 10);
+          card.addEventListener("input", () => {
+            resume.education[idx] = {
+              degree: card.querySelector(".edu-degree").value,
+              school: card.querySelector(".edu-school").value,
+              period: card.querySelector(".edu-period").value
+            };
+            updateAndRender();
+          });
+        });
+      }
+
+      document.getElementById("add-exp-btn")?.addEventListener("click", () => {
+        resume.experiences.push({ role: "", company: "", period: "", bullets: "" });
+        renderExperiencesList();
+        updateAndRender();
+      });
+
+      document.getElementById("add-edu-btn")?.addEventListener("click", () => {
+        resume.education.push({ degree: "", school: "", period: "" });
+        renderEducationList();
+        updateAndRender();
+      });
+
+      // Basic inputs listeners
+      ["inp-name", "inp-email", "inp-phone", "inp-location", "inp-linkedin", "inp-summary", "inp-skills"].forEach((id) => {
+        document.getElementById(id)?.addEventListener("input", updateAndRender);
+      });
+
+      // Mobile Tab Toggle
+      const tabFormBtn = document.getElementById("tab-form-btn");
+      const tabPreviewBtn = document.getElementById("tab-preview-btn");
+      const formCol = document.getElementById("builder-form-container");
+      const previewCol = document.getElementById("builder-preview-container");
+
+      tabFormBtn?.addEventListener("click", () => {
+        tabFormBtn.classList.add("view-mode-btn--active");
+        tabPreviewBtn.classList.remove("view-mode-btn--active");
+        formCol.classList.remove("builder-form-col--hidden");
+        previewCol.classList.remove("builder-preview-col--active");
+      });
+
+      tabPreviewBtn?.addEventListener("click", () => {
+        tabPreviewBtn.classList.add("view-mode-btn--active");
+        tabFormBtn.classList.remove("view-mode-btn--active");
+        formCol.classList.add("builder-form-col--hidden");
+        previewCol.classList.add("builder-preview-col--active");
+      });
+
+      // Initial Render
+      renderExperiencesList();
+      renderEducationList();
+      renderLivePreview(preview, resume);
+
+      // Print
+      document.getElementById("print-resume-btn")?.addEventListener("click", () => window.print());
+    });
+  </script>
+  <script type="module" src="../js/pageview.js?v=20260616z"></script>
+</body>
+</html>

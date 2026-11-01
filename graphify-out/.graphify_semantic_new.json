@@ -1,0 +1,3088 @@
+{
+  "nodes": [
+    {
+      "id": "404_page",
+      "label": "404: Halaman Tidak Ditemukan | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/404.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "index_page",
+      "label": "JobSearch | Lowongan Remote untuk Pencari Kerja Indonesia",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_alerts_page",
+      "label": "Pusat Notifikasi & Job Alerts (Telegram / Discord) | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/alerts.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_apply_page",
+      "label": "Tracker Lamaran | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/apply.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_bookmarks_page",
+      "label": "Lowongan Tersimpan | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/bookmarks.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_codesandbox_page",
+      "label": "Simulasi Coding Interview & Sandbox | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_companies_page",
+      "label": "Direktori Perusahaan Ramah Remote | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/companies.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_contractguide_page",
+      "label": "Panduan Kontrak Kerja Remote & Pajak W-8BEN | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/contract-guide.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_dataanalystremote_page",
+      "label": "Lowongan Data Analyst Remote | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/data-analyst-remote.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_detail_page",
+      "label": "Detail Lowongan | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/detail.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_freshgraduateremote_page",
+      "label": "Lowongan Remote untuk Fresh Graduate | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/fresh-graduate-remote.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_frontenddeveloperremote_page",
+      "label": "Lowongan Frontend Developer Remote | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/frontend-developer-remote.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_insights_page",
+      "label": "Analisis Funnel & Insight Lokal | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/insights.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_interviewprep_page",
+      "label": "Simulasi & Latihan Interview STAR | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/interview-prep.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_invoicegenerator_page",
+      "label": "Generator Invoice Klien Internasional | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/invoice-generator.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_marketingremote_page",
+      "label": "Lowongan Marketing Remote | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/marketing-remote.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_offline_page",
+      "label": "Mode Offline | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/offline.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_portfoliocard_page",
+      "label": "Kartu Bukti Karya (Proof-of-Work Showcase) | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/portfolio-card.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_remoteindonesia_page",
+      "label": "Lowongan Remote dari Indonesia | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/remote-indonesia.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_resumebuilder_page",
+      "label": "ATS Resume Builder | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/resume-builder.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_salarybenchmark_page",
+      "label": "Kalkulator Daya Beli Gaji Global (PPP) | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-benchmark.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_salarysubmit_page",
+      "label": "Lapor & Riset Gaji Anonim Komunitas IT | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_search_page",
+      "label": "Cari Lowongan Remote | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/search.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "pages_skillsroadmap_page",
+      "label": "Peta Jalan Karir & Nilai Pasar Skill Tech | JobSearch",
+      "file_type": "document",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/skills-roadmap.html",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "appletouchicon_asset",
+      "label": "PWA Asset apple-touch-icon.png",
+      "file_type": "image",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/apple-touch-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "assets_icons_appletouchicon_asset",
+      "label": "PWA Asset apple-touch-icon.png",
+      "file_type": "image",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/assets/icons/apple-touch-icon.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "assets_icons_favicon32_asset",
+      "label": "PWA Asset favicon-32.png",
+      "file_type": "image",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/assets/icons/favicon-32.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "assets_icons_icon192_asset",
+      "label": "PWA Asset icon-192.png",
+      "file_type": "image",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/assets/icons/icon-192.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "assets_icons_icon512_asset",
+      "label": "PWA Asset icon-512.png",
+      "file_type": "image",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/assets/icons/icon-512.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "assets_icons_iconmaskable_asset",
+      "label": "PWA Asset icon-maskable.png",
+      "file_type": "image",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/assets/icons/icon-maskable.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "css_icon192_asset",
+      "label": "PWA Asset icon-192.png",
+      "file_type": "image",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/css/icon-192.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "css_icon512_asset",
+      "label": "PWA Asset icon-512.png",
+      "file_type": "image",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/css/icon-512.png",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    },
+    {
+      "id": "favicon_asset",
+      "label": "PWA Asset favicon.svg",
+      "file_type": "image",
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/favicon.svg",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null
+    }
+  ],
+  "edges": [
+    {
+      "source": "404_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/404.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "404_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/404.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "404_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/404.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "404_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/404.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "404_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/404.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "404_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/404.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "404_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/404.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "404_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/404.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "404_page",
+      "target": "pages_salarybenchmark_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/404.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_dataanalystremote_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_contractguide_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_portfoliocard_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_remoteindonesia_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_freshgraduateremote_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_frontenddeveloperremote_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_alerts_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_guides_caracarikerjaremote_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_invoicegenerator_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_marketingremote_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "index_page",
+      "target": "pages_salarybenchmark_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/index.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_alerts_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/alerts.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_alerts_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/alerts.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_alerts_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/alerts.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_alerts_page",
+      "target": "pages_alerts_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/alerts.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_alerts_page",
+      "target": "pages_contractguide_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/alerts.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_alerts_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/alerts.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_alerts_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/alerts.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_alerts_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/alerts.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_alerts_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/alerts.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_alerts_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/alerts.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_alerts_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/alerts.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_alerts_page",
+      "target": "pages_invoicegenerator_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/alerts.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_alerts_page",
+      "target": "pages_salarybenchmark_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/alerts.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_apply_page",
+      "target": "js_apply",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/apply.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_apply_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/apply.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_apply_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/apply.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_apply_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/apply.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_apply_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/apply.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_apply_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/apply.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_apply_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/apply.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_apply_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/apply.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_apply_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/apply.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_bookmarks_page",
+      "target": "js_bookmark",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/bookmarks.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_bookmarks_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/bookmarks.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_bookmarks_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/bookmarks.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_bookmarks_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/bookmarks.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_bookmarks_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/bookmarks.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_bookmarks_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/bookmarks.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_bookmarks_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/bookmarks.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_bookmarks_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/bookmarks.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_bookmarks_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/bookmarks.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_codesandbox_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_codesandbox_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_codesandbox_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_codesandbox_page",
+      "target": "pages_contractguide_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_codesandbox_page",
+      "target": "pages_alerts_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_codesandbox_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_codesandbox_page",
+      "target": "pages_portfoliocard_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_codesandbox_page",
+      "target": "pages_codesandbox_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_codesandbox_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_codesandbox_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_codesandbox_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_codesandbox_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_codesandbox_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_codesandbox_page",
+      "target": "pages_invoicegenerator_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_codesandbox_page",
+      "target": "pages_skillsroadmap_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_codesandbox_page",
+      "target": "pages_salarybenchmark_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/code-sandbox.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_companies_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/companies.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_companies_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/companies.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_companies_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/companies.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_companies_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/companies.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_companies_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/companies.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_companies_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/companies.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_companies_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/companies.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_companies_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/companies.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_companies_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/companies.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_contractguide_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/contract-guide.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_contractguide_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/contract-guide.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_contractguide_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/contract-guide.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_contractguide_page",
+      "target": "pages_contractguide_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/contract-guide.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_contractguide_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/contract-guide.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_contractguide_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/contract-guide.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_contractguide_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/contract-guide.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_contractguide_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/contract-guide.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_contractguide_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/contract-guide.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_contractguide_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/contract-guide.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_contractguide_page",
+      "target": "pages_salarybenchmark_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/contract-guide.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_dataanalystremote_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/data-analyst-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_dataanalystremote_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/data-analyst-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_dataanalystremote_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/data-analyst-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_dataanalystremote_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/data-analyst-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_dataanalystremote_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/data-analyst-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_dataanalystremote_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/data-analyst-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_dataanalystremote_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/data-analyst-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_dataanalystremote_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/data-analyst-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_dataanalystremote_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/data-analyst-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_detail_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/detail.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_detail_page",
+      "target": "js_bookmark",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/detail.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_detail_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/detail.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_detail_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/detail.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_detail_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/detail.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_detail_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/detail.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_detail_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/detail.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_detail_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/detail.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_detail_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/detail.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_detail_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/detail.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_freshgraduateremote_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/fresh-graduate-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_freshgraduateremote_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/fresh-graduate-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_freshgraduateremote_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/fresh-graduate-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_freshgraduateremote_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/fresh-graduate-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_freshgraduateremote_page",
+      "target": "pages_guides_caracarikerjaremote_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/fresh-graduate-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_freshgraduateremote_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/fresh-graduate-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_freshgraduateremote_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/fresh-graduate-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_freshgraduateremote_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/fresh-graduate-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_freshgraduateremote_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/fresh-graduate-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_frontenddeveloperremote_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/frontend-developer-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_frontenddeveloperremote_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/frontend-developer-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_frontenddeveloperremote_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/frontend-developer-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_frontenddeveloperremote_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/frontend-developer-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_frontenddeveloperremote_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/frontend-developer-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_frontenddeveloperremote_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/frontend-developer-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_frontenddeveloperremote_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/frontend-developer-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_frontenddeveloperremote_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/frontend-developer-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_frontenddeveloperremote_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/frontend-developer-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_insights_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/insights.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_insights_page",
+      "target": "js_insights",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/insights.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_insights_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/insights.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_insights_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/insights.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_insights_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/insights.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_insights_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/insights.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_insights_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/insights.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_insights_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/insights.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_insights_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/insights.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_insights_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/insights.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_interviewprep_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/interview-prep.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_interviewprep_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/interview-prep.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_interviewprep_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/interview-prep.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_interviewprep_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/interview-prep.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_interviewprep_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/interview-prep.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_interviewprep_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/interview-prep.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_interviewprep_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/interview-prep.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_interviewprep_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/interview-prep.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_interviewprep_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/interview-prep.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_invoicegenerator_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/invoice-generator.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_invoicegenerator_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/invoice-generator.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_invoicegenerator_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/invoice-generator.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_invoicegenerator_page",
+      "target": "pages_contractguide_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/invoice-generator.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_invoicegenerator_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/invoice-generator.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_invoicegenerator_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/invoice-generator.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_invoicegenerator_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/invoice-generator.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_invoicegenerator_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/invoice-generator.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_invoicegenerator_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/invoice-generator.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_invoicegenerator_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/invoice-generator.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_invoicegenerator_page",
+      "target": "pages_invoicegenerator_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/invoice-generator.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_invoicegenerator_page",
+      "target": "pages_salarybenchmark_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/invoice-generator.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_marketingremote_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/marketing-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_marketingremote_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/marketing-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_marketingremote_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/marketing-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_marketingremote_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/marketing-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_marketingremote_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/marketing-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_marketingremote_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/marketing-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_marketingremote_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/marketing-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_marketingremote_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/marketing-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_marketingremote_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/marketing-remote.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_offline_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/offline.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_offline_page",
+      "target": "pages_contractguide_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/offline.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_offline_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/offline.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_offline_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/offline.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_offline_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/offline.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_offline_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/offline.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_offline_page",
+      "target": "pages_salarybenchmark_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/offline.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_portfoliocard_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/portfolio-card.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_portfoliocard_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/portfolio-card.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_portfoliocard_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/portfolio-card.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_portfoliocard_page",
+      "target": "pages_contractguide_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/portfolio-card.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_portfoliocard_page",
+      "target": "pages_alerts_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/portfolio-card.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_portfoliocard_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/portfolio-card.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_portfoliocard_page",
+      "target": "pages_portfoliocard_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/portfolio-card.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_portfoliocard_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/portfolio-card.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_portfoliocard_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/portfolio-card.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_portfoliocard_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/portfolio-card.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_portfoliocard_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/portfolio-card.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_portfoliocard_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/portfolio-card.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_portfoliocard_page",
+      "target": "pages_invoicegenerator_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/portfolio-card.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_portfoliocard_page",
+      "target": "pages_salarybenchmark_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/portfolio-card.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_remoteindonesia_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/remote-indonesia.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_remoteindonesia_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/remote-indonesia.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_remoteindonesia_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/remote-indonesia.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_remoteindonesia_page",
+      "target": "pages_dataanalystremote_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/remote-indonesia.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_remoteindonesia_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/remote-indonesia.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_remoteindonesia_page",
+      "target": "pages_frontenddeveloperremote_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/remote-indonesia.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_remoteindonesia_page",
+      "target": "pages_guides_caracarikerjaremote_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/remote-indonesia.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_remoteindonesia_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/remote-indonesia.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_remoteindonesia_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/remote-indonesia.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_remoteindonesia_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/remote-indonesia.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_remoteindonesia_page",
+      "target": "pages_marketingremote_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/remote-indonesia.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_remoteindonesia_page",
+      "target": "pages_freshgraduateremote_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/remote-indonesia.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_remoteindonesia_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/remote-indonesia.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_resumebuilder_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/resume-builder.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_resumebuilder_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/resume-builder.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_resumebuilder_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/resume-builder.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_resumebuilder_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/resume-builder.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_resumebuilder_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/resume-builder.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_resumebuilder_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/resume-builder.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_resumebuilder_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/resume-builder.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_resumebuilder_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/resume-builder.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_resumebuilder_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/resume-builder.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_resumebuilder_page",
+      "target": "pages_salarybenchmark_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/resume-builder.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarybenchmark_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-benchmark.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarybenchmark_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-benchmark.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarybenchmark_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-benchmark.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarybenchmark_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-benchmark.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarybenchmark_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-benchmark.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarybenchmark_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-benchmark.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarybenchmark_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-benchmark.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarybenchmark_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-benchmark.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarybenchmark_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-benchmark.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarybenchmark_page",
+      "target": "pages_salarybenchmark_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-benchmark.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "pages_contractguide_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "pages_alerts_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "pages_portfoliocard_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "pages_salarysubmit_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "pages_codesandbox_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "pages_invoicegenerator_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "pages_skillsroadmap_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_salarysubmit_page",
+      "target": "pages_salarybenchmark_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/salary-submit.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_search_page",
+      "target": "js_search",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/search.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_search_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/search.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_search_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/search.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_search_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/search.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_search_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/search.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_search_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/search.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_search_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/search.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_search_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/search.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_search_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/search.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_search_page",
+      "target": "pages_salarybenchmark_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/search.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_skillsroadmap_page",
+      "target": "js_pageview",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/skills-roadmap.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_skillsroadmap_page",
+      "target": "pages_search_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/skills-roadmap.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_skillsroadmap_page",
+      "target": "pages_interviewprep_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/skills-roadmap.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_skillsroadmap_page",
+      "target": "pages_contractguide_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/skills-roadmap.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_skillsroadmap_page",
+      "target": "pages_alerts_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/skills-roadmap.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_skillsroadmap_page",
+      "target": "pages_companies_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/skills-roadmap.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_skillsroadmap_page",
+      "target": "pages_portfoliocard_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/skills-roadmap.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_skillsroadmap_page",
+      "target": "pages_apply_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/skills-roadmap.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_skillsroadmap_page",
+      "target": "pages_insights_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/skills-roadmap.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_skillsroadmap_page",
+      "target": "pages_bookmarks_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/skills-roadmap.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_skillsroadmap_page",
+      "target": "pages_resumebuilder_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/skills-roadmap.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_skillsroadmap_page",
+      "target": "index_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/skills-roadmap.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_skillsroadmap_page",
+      "target": "pages_invoicegenerator_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/skills-roadmap.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_skillsroadmap_page",
+      "target": "pages_skillsroadmap_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/skills-roadmap.html",
+      "source_location": null,
+      "weight": 1.0
+    },
+    {
+      "source": "pages_skillsroadmap_page",
+      "target": "pages_salarybenchmark_page",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/pages/skills-roadmap.html",
+      "source_location": null,
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "pwa_application_routes",
+      "label": "JobSearch Web Application Routes",
+      "nodes": [
+        "404_page",
+        "index_page",
+        "pages_alerts_page",
+        "pages_apply_page",
+        "pages_bookmarks_page",
+        "pages_codesandbox_page",
+        "pages_companies_page",
+        "pages_contractguide_page",
+        "pages_dataanalystremote_page",
+        "pages_detail_page",
+        "pages_freshgraduateremote_page",
+        "pages_frontenddeveloperremote_page",
+        "pages_insights_page",
+        "pages_interviewprep_page",
+        "pages_invoicegenerator_page"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "/Users/irul/Documents/PROJECT/jobseekers/404.html"
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Generator Invoice Klien Internasional | JobSearch</title>
+  <meta name="description" content="Buat invoice penagihan resmi klien remote luar negeri (USD/EUR/IDR) siap cetak PDF lengkap dengan SWIFT, Wise, dan NPWP.">
+  <meta property="og:image" content="../assets/og-cover.png">
+  <meta property="og:site_name" content="JobSearch">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="../assets/og-cover.png">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="alternate icon" href="../favicon.ico">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#006a6a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css?v=20260616z">
+  <link rel="stylesheet" href="../css/components.css?v=20260616z">
+  <style>
+    .invoice-builder-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    @media (min-width: 960px) {
+      .invoice-builder-layout {
+        grid-template-columns: 460px 1fr;
+        align-items: start;
+      }
+    }
+
+    /* A4 Paper Simulation */
+    .invoice-paper {
+      background: #ffffff;
+      color: #1a1a1a;
+      padding: 40px;
+      border: 1px solid #d0d7de;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      .app-layout, .side-nav, .top-app-bar, .bottom-nav, .builder-form-col, .landing-hero, .landing-actions { display: none !important; }
+      #invoice-paper-preview, #invoice-paper-preview * { visibility: visible; }
+      #invoice-paper-preview { position: absolute; left: 0; top: 0; width: 100%; border: none; box-shadow: none; padding: 0; }
+    }
+  </style>
+</head>
+<body data-page="invoice">
+  <div class="app-layout">
+    <aside class="side-nav" aria-label="Navigasi utama">
+      <a class="brand-lockup" href="../index.html">
+        <span class="logo-mark" aria-hidden="true"><span class="material-symbols-outlined">work</span></span>
+        <span>JobSearch</span>
+      </a>
+      <nav class="side-nav__links">
+        <div class="nav-section-label">UTAMA</div>
+        <a class="nav-link" data-nav="search" href="search.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari Lowongan</span></a>
+        <a class="nav-link" data-nav="applications" href="apply.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">assignment</span><span>Tracker Lamaran</span></a>
+        <a class="nav-link" data-nav="bookmarks" href="bookmarks.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">bookmark</span><span>Lowongan Tersimpan</span></a>
+
+        <div class="nav-section-label" style="margin-top:16px;">FITUR KARIR</div>
+        <a class="nav-link" data-nav="resume" href="resume-builder.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">description</span><span>ATS Resume Builder</span></a>
+        <a class="nav-link" data-nav="interview" href="interview-prep.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">record_voice_over</span><span>Latihan Interview</span></a>
+        <a class="nav-link" data-nav="salary" href="salary-benchmark.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">payments</span><span>Kalkulator PPP Gaji</span></a>
+        <a class="nav-link" data-nav="contract" href="contract-guide.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">gavel</span><span>Panduan Kontrak & Pajak</span></a>
+        <a class="nav-link nav-link--active" data-nav="invoice" href="invoice-generator.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">receipt_long</span><span>Generator Invoice</span></a>
+        <a class="nav-link" data-nav="companies" href="companies.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">apartment</span><span>Perusahaan Remote</span></a>
+        <a class="nav-link" data-nav="insights" href="insights.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">insights</span><span>Analisis Funnel</span></a>
+      </nav>
+    </aside>
+
+    <header class="top-app-bar">
+      <a class="top-app-bar__brand" href="../index.html"><span class="logo-mark logo-mark--small"><span class="material-symbols-outlined">work</span></span><span class="top-app-bar__title">Generator Invoice</span></a>
+      <button class="button button--primary button--small" type="button" id="btn-print-invoice">
+        <span class="material-symbols-outlined">print</span> Cetak PDF
+      </button>
+    </header>
+
+    <main class="page page--with-topbar" data-page="invoice">
+      <section class="page__content stack" style="max-width:1200px;">
+        <div class="landing-hero" style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;">
+          <div>
+            <span class="landing-hero__eyebrow">Keuangan & Penagihan Klien</span>
+            <h1 class="display-small" style="margin:0 0 4px;">Generator Invoice Internasional.</h1>
+            <p class="body-medium" style="margin:0;">Buat invoice profesional untuk klien remote (USD, SGD, EUR, IDR) dengan rekening bank lokal & SWIFT.</p>
+          </div>
+          <button class="button button--primary" type="button" id="btn-print-invoice-hero">
+            <span class="material-symbols-outlined">picture_as_pdf</span> Cetak / Simpan PDF
+          </button>
+        </div>
+
+        <div class="invoice-builder-layout">
+          <!-- Editor Controls -->
+          <div class="builder-form-col stack" style="gap:16px;">
+            <!-- Invoice Meta -->
+            <div class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:20px;">
+              <h2 class="title-medium" style="margin:0 0 12px;font-size:16px;">Detail Invoice & Mata Uang</h2>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                <div class="field">
+                  <label class="field__label">Nomor Invoice</label>
+                  <input class="field__input" type="text" id="inv-number">
+                </div>
+                <div class="field">
+                  <label class="field__label">Mata Uang</label>
+                  <select class="field__input" id="inv-currency">
+                    <option value="USD">USD ($)</option>
+                    <option value="SGD">SGD (S$)</option>
+                    <option value="EUR">EUR (€)</option>
+                    <option value="GBP">GBP (£)</option>
+                    <option value="AUD">AUD (A$)</option>
+                    <option value="IDR">IDR (Rp)</option>
+                  </select>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
+                <div class="field">
+                  <label class="field__label">Tanggal Terbit</label>
+                  <input class="field__input" type="date" id="inv-date">
+                </div>
+                <div class="field">
+                  <label class="field__label">Jatuh Tempo (Due Date)</label>
+                  <input class="field__input" type="date" id="inv-due-date">
+                </div>
+              </div>
+            </div>
+
+            <!-- Contractor Info -->
+            <div class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:20px;">
+              <h2 class="title-medium" style="margin:0 0 12px;font-size:16px;">Informasi Anda (Kontraktor)</h2>
+              <div class="stack" style="gap:10px;">
+                <div class="field">
+                  <label class="field__label">Nama Lengkap</label>
+                  <input class="field__input" type="text" id="inv-c-name">
+                </div>
+                <div class="field">
+                  <label class="field__label">Email</label>
+                  <input class="field__input" type="email" id="inv-c-email">
+                </div>
+                <div class="field">
+                  <label class="field__label">Alamat Domisili & NPWP / NIK</label>
+                  <input class="field__input" type="text" id="inv-c-addr" placeholder="Alamat...">
+                  <input class="field__input" type="text" id="inv-c-tax" placeholder="NPWP / NIK..." style="margin-top:6px;">
+                </div>
+              </div>
+            </div>
+
+            <!-- Client Info -->
+            <div class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:20px;">
+              <h2 class="title-medium" style="margin:0 0 12px;font-size:16px;">Informasi Klien</h2>
+              <div class="stack" style="gap:10px;">
+                <div class="field">
+                  <label class="field__label">Nama Perusahaan Klien</label>
+                  <input class="field__input" type="text" id="inv-client-comp">
+                </div>
+                <div class="field">
+                  <label class="field__label">Email Billing / Finance</label>
+                  <input class="field__input" type="email" id="inv-client-email">
+                </div>
+                <div class="field">
+                  <label class="field__label">Alamat Klien</label>
+                  <input class="field__input" type="text" id="inv-client-addr">
+                </div>
+              </div>
+            </div>
+
+            <!-- Line Items -->
+            <div class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:20px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <h2 class="title-medium" style="margin:0;font-size:16px;">Rincian Pekerjaan (Line Items)</h2>
+                <button type="button" class="button button--small button--tonal" id="btn-add-item">
+                  <span class="material-symbols-outlined" style="font-size:16px;">add</span> Tambah Item
+                </button>
+              </div>
+              <div id="line-items-container" class="stack" style="gap:10px;"></div>
+            </div>
+
+            <!-- Bank / Wise -->
+            <div class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:20px;">
+              <h2 class="title-medium" style="margin:0 0 12px;font-size:16px;">Instruksi Pembayaran (Bank / SWIFT)</h2>
+              <div class="stack" style="gap:10px;">
+                <div class="field">
+                  <label class="field__label">Nama Bank / Platform</label>
+                  <input class="field__input" type="text" id="inv-bank-name">
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                  <div class="field">
+                    <label class="field__label">Nomor Rekening / IBAN</label>
+                    <input class="field__input" type="text" id="inv-acc-num">
+                  </div>
+                  <div class="field">
+                    <label class="field__label">SWIFT / BIC Code</label>
+                    <input class="field__input" type="text" id="inv-swift">
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="field__label">Catatan Pembayaran</label>
+                  <textarea class="field__input" id="inv-pay-notes" rows="2"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- A4 Paper Live Preview -->
+          <div id="invoice-paper-preview" class="invoice-paper"></div>
+        </div>
+      </section>
+    </main>
+
+        <nav class="bottom-nav" aria-label="Navigasi bawah">
+      <a class="nav-link" data-nav="search" href="search.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari</span></a>
+      <a class="nav-link" data-nav="applications" href="apply.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">assignment</span><span>Tracker</span></a>
+      <a class="nav-link" data-nav="resume" href="resume-builder.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">description</span><span>Resume</span></a>
+      <a class="nav-link" data-nav="bookmarks" href="bookmarks.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">bookmark</span><span>Simpan</span></a>
+      <a class="nav-link" data-nav="companies" href="companies.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">apartment</span><span>Perusahaan</span></a>
+    </nav>
+  </div>
+
+  <script type="module" src="../js/pageview.js?v=20260616z"></script>
+  <script type="module">
+    import { readInvoiceData, writeInvoiceData, formatCurrencyAmount } from "../js/invoice.js?v=20260616z";
+    import { escapeHtml } from "../js/bookmark.js?v=20260616z";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      let inv = readInvoiceData();
+      const preview = document.getElementById("invoice-paper-preview");
+      const itemsContainer = document.getElementById("line-items-container");
+
+      function populateInputs() {
+        document.getElementById("inv-number").value = inv.invoiceNumber || "";
+        document.getElementById("inv-currency").value = inv.currency || "USD";
+        document.getElementById("inv-date").value = inv.invoiceDate || "";
+        document.getElementById("inv-due-date").value = inv.dueDate || "";
+        document.getElementById("inv-c-name").value = inv.contractorName || "";
+        document.getElementById("inv-c-email").value = inv.contractorEmail || "";
+        document.getElementById("inv-c-addr").value = inv.contractorAddress || "";
+        document.getElementById("inv-c-tax").value = inv.contractorTaxId || "";
+        document.getElementById("inv-client-comp").value = inv.clientCompany || "";
+        document.getElementById("inv-client-email").value = inv.clientEmail || "";
+        document.getElementById("inv-client-addr").value = inv.clientAddress || "";
+        document.getElementById("inv-bank-name").value = inv.bankName || "";
+        document.getElementById("inv-acc-num").value = inv.accountNumber || "";
+        document.getElementById("inv-swift").value = inv.swiftCode || "";
+        document.getElementById("inv-pay-notes").value = inv.paymentNotes || "";
+      }
+
+      function renderItemsEditor() {
+        itemsContainer.innerHTML = (inv.items || []).map((it, idx) => `
+          <div style="background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);border-radius:10px;padding:12px;" data-item-idx="${idx}">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-weight:700;font-size:12px;">Item #${idx + 1}</span>
+              ${inv.items.length > 1 ? `
+                <button type="button" class="button button--small button--text js-del-item" data-idx="${idx}" style="color:var(--md-sys-color-error);padding:0;">
+                  <span class="material-symbols-outlined" style="font-size:16px;">delete</span>
+                </button>
+              ` : ""}
+            </div>
+            <input class="field__input it-desc" type="text" placeholder="Deskripsi pekerjaan" value="${escapeHtml(it.description)}" style="width:100%;margin-bottom:8px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+              <div>
+                <label style="font-size:11px;color:var(--md-sys-color-outline);">Kuantitas / Jam</label>
+                <input class="field__input it-qty" type="number" step="any" value="${it.quantity || 1}">
+              </div>
+              <div>
+                <label style="font-size:11px;color:var(--md-sys-color-outline);">Tarif Satuan</label>
+                <input class="field__input it-rate" type="number" step="any" value="${it.unitPrice || 0}">
+              </div>
+            </div>
+          </div>
+        `).join("");
+
+        itemsContainer.querySelectorAll(".js-del-item").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const idx = parseInt(btn.dataset.idx, 10);
+            inv.items.splice(idx, 1);
+            renderItemsEditor();
+            updateAndRender();
+          });
+        });
+
+        itemsContainer.querySelectorAll("[data-item-idx]").forEach(card => {
+          const idx = parseInt(card.dataset.itemIdx, 10);
+          card.addEventListener("input", () => {
+            inv.items[idx] = {
+              description: card.querySelector(".it-desc").value,
+              quantity: parseFloat(card.querySelector(".it-qty").value) || 0,
+              unit: "Unit",
+              unitPrice: parseFloat(card.querySelector(".it-rate").value) || 0
+            };
+            updateAndRender();
+          });
+        });
+      }
+
+      function updateAndRender() {
+        inv.invoiceNumber = document.getElementById("inv-number").value;
+        inv.currency = document.getElementById("inv-currency").value;
+        inv.invoiceDate = document.getElementById("inv-date").value;
+        inv.dueDate = document.getElementById("inv-due-date").value;
+        inv.contractorName = document.getElementById("inv-c-name").value;
+        inv.contractorEmail = document.getElementById("inv-c-email").value;
+        inv.contractorAddress = document.getElementById("inv-c-addr").value;
+        inv.contractorTaxId = document.getElementById("inv-c-tax").value;
+        inv.clientCompany = document.getElementById("inv-client-comp").value;
+        inv.clientEmail = document.getElementById("inv-client-email").value;
+        inv.clientAddress = document.getElementById("inv-client-addr").value;
+        inv.bankName = document.getElementById("inv-bank-name").value;
+        inv.accountNumber = document.getElementById("inv-acc-num").value;
+        inv.swiftCode = document.getElementById("inv-swift").value;
+        inv.paymentNotes = document.getElementById("inv-pay-notes").value;
+
+        writeInvoiceData(inv);
+        renderInvoicePaper();
+      }
+
+      function renderInvoicePaper() {
+        let total = 0;
+        const rowsHtml = (inv.items || []).map(it => {
+          const sub = (it.quantity || 0) * (it.unitPrice || 0);
+          total += sub;
+          return `
+            <tr style="border-bottom:1px solid #eaeaea;">
+              <td style="padding:10px 8px;">${escapeHtml(it.description)}</td>
+              <td style="padding:10px 8px;text-align:center;">${it.quantity}</td>
+              <td style="padding:10px 8px;text-align:right;">${formatCurrencyAmount(it.unitPrice, inv.currency)}</td>
+              <td style="padding:10px 8px;text-align:right;font-weight:700;">${formatCurrencyAmount(sub, inv.currency)}</td>
+            </tr>
+          `;
+        }).join("");
+
+        preview.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #111;padding-bottom:20px;margin-bottom:24px;">
+            <div>
+              <h1 style="margin:0;font-size:26px;font-weight:900;letter-spacing:1px;text-transform:uppercase;">INVOICE</h1>
+              <div style="font-size:12px;color:#666;margin-top:4px;">No: <strong>${escapeHtml(inv.invoiceNumber)}</strong></div>
+            </div>
+            <div style="text-align:right;font-size:12px;color:#555;">
+              <div>Tanggal Terbit: <strong>${escapeHtml(inv.invoiceDate)}</strong></div>
+              <div>Jatuh Tempo: <strong>${escapeHtml(inv.dueDate)}</strong></div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:28px;font-size:12px;">
+            <div>
+              <span style="font-weight:800;text-transform:uppercase;color:#888;display:block;margin-bottom:4px;">DITERBITKAN OLEH:</span>
+              <div style="font-size:15px;font-weight:800;">${escapeHtml(inv.contractorName)}</div>
+              <div>${escapeHtml(inv.contractorEmail)}</div>
+              <div>${escapeHtml(inv.contractorAddress)}</div>
+              <div style="color:#555;margin-top:2px;">${escapeHtml(inv.contractorTaxId)}</div>
+            </div>
+            <div>
+              <span style="font-weight:800;text-transform:uppercase;color:#888;display:block;margin-bottom:4px;">DITAGIHKAN KEPADA:</span>
+              <div style="font-size:15px;font-weight:800;">${escapeHtml(inv.clientCompany)}</div>
+              <div>${escapeHtml(inv.clientEmail)}</div>
+              <div>${escapeHtml(inv.clientAddress)}</div>
+            </div>
+          </div>
+
+          <table style="width:100%;border-collapse:collapse;margin-bottom:24px;font-size:13px;">
+            <thead>
+              <tr style="border-bottom:2px solid #333;text-align:left;font-weight:800;font-size:11px;text-transform:uppercase;color:#555;">
+                <th style="padding:8px;">Deskripsi Layanan</th>
+                <th style="padding:8px;text-align:center;">Qty / Jam</th>
+                <th style="padding:8px;text-align:right;">Tarif</th>
+                <th style="padding:8px;text-align:right;">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+
+          <div style="display:flex;justify-content:flex-end;margin-bottom:30px;">
+            <div style="width:260px;border-top:2px solid #111;padding-top:10px;">
+              <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:900;">
+                <span>TOTAL:</span>
+                <span>${formatCurrencyAmount(total, inv.currency)}</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="border-top:1px solid #eaeaea;padding-top:16px;font-size:11px;color:#555;">
+            <span style="font-weight:800;text-transform:uppercase;display:block;margin-bottom:4px;color:#333;">INSTRUKSI PEMBAYARAN:</span>
+            <div>Metode: <strong>${escapeHtml(inv.paymentMethod)}</strong></div>
+            <div>Bank: <strong>${escapeHtml(inv.bankName)}</strong></div>
+            <div>No. Rekening / IBAN: <strong>${escapeHtml(inv.accountNumber)}</strong></div>
+            <div>SWIFT / BIC Code: <strong>${escapeHtml(inv.swiftCode)}</strong></div>
+            ${inv.paymentNotes ? `<div style="margin-top:6px;font-style:italic;">Catatan: ${escapeHtml(inv.paymentNotes)}</div>` : ""}
+          </div>
+        `;
+      }
+
+      // Initial setup
+      populateInputs();
+      renderItemsEditor();
+      renderInvoicePaper();
+
+      // Form change listeners
+      const inputIds = [
+        "inv-number", "inv-currency", "inv-date", "inv-due-date",
+        "inv-c-name", "inv-c-email", "inv-c-addr", "inv-c-tax",
+        "inv-client-comp", "inv-client-email", "inv-client-addr",
+        "inv-bank-name", "inv-acc-num", "inv-swift", "inv-pay-notes"
+      ];
+      inputIds.forEach(id => {
+        document.getElementById(id)?.addEventListener("input", updateAndRender);
+      });
+
+      document.getElementById("btn-add-item")?.addEventListener("click", () => {
+        inv.items.push({ description: "Layanan Pengembangan Perangkat Lunak", quantity: 1, unit: "Unit", unitPrice: 0 });
+        renderItemsEditor();
+        updateAndRender();
+      });
+
+      const printAction = () => window.print();
+      document.getElementById("btn-print-invoice")?.addEventListener("click", printAction);
+      document.getElementById("btn-print-invoice-hero")?.addEventListener("click", printAction);
+    });
+  </script>
+</body>
+</html>

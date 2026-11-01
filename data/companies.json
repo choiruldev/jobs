@@ -1,0 +1,57 @@
+[
+  {
+    "id": "automattic",
+    "name": "Automattic",
+    "logo": "https://automattic.com/wp-content/themes/a8c-2017/images/automattic-logo.svg",
+    "website": "https://automattic.com/work-with-us/",
+    "industry": "Software & Web Development",
+    "hiresInIndonesia": true,
+    "workStyle": "100% Distributed (Async-First)",
+    "badges": ["Async-First", "Equipment Stipend", "Flexible Hours", "Health Coverage", "Hires in ID"],
+    "description": "Perusahaan di balik WordPress.com, WooCommerce, dan Tumblr. Pelopor kultur remote murni 100% tanpa kantor pusat sejak awal berdiri."
+  },
+  {
+    "id": "gitlab",
+    "name": "GitLab",
+    "logo": "https://about.gitlab.com/images/press/logo/svg/gitlab-icon-rgb.svg",
+    "website": "https://about.gitlab.com/jobs/",
+    "industry": "DevSecOps Platform",
+    "hiresInIndonesia": true,
+    "workStyle": "All-Remote Global",
+    "badges": ["All-Remote", "Transparent Salaries", "Equipment Stipend", "Hires in ID"],
+    "description": "Salah satu perusahaan all-remote terbesar di dunia dengan handbook publik komprehensif mengenai best practices kerja jarak jauh."
+  },
+  {
+    "id": "buffer",
+    "name": "Buffer",
+    "logo": "https://buffer.com/static/brand/buffer-logo.svg",
+    "website": "https://buffer.com/journey",
+    "industry": "Social Media Management",
+    "hiresInIndonesia": true,
+    "workStyle": "Fully Remote (4-Day Work Week)",
+    "badges": ["4-Day Workweek", "Transparent Salaries", "Async-First", "Hires in ID"],
+    "description": "Perusahaan manajemen media sosial yang terkenal dengan transparansi gaji, waktu kerja 4 hari sepekan, dan kultur kerja sehat."
+  },
+  {
+    "id": "zapier",
+    "name": "Zapier",
+    "logo": "https://cdn.zapier.com/zapier/images/logos/zapier-logo.svg",
+    "website": "https://zapier.com/jobs",
+    "industry": "Automation & Integration",
+    "hiresInIndonesia": true,
+    "workStyle": "100% Remote",
+    "badges": ["100% Remote", "Equipment Stipend", "Learning Budget", "Hires in ID"],
+    "description": "Platform integrasi dan otomasi alur kerja tanpa kode yang beroperasi 100% secara jarak jauh di seluruh dunia."
+  },
+  {
+    "id": "xendit",
+    "name": "Xendit",
+    "logo": "https://www.xendit.co/wp-content/themes/xendit/assets/images/logo-xendit.svg",
+    "website": "https://www.xendit.co/careers/",
+    "industry": "Fintech & Payments",
+    "hiresInIndonesia": true,
+    "workStyle": "Remote-Friendly (ID/APAC)",
+    "badges": ["APAC Remote", "Tech Leader", "Hires in ID"],
+    "description": "Payment gateway terkemuka di Asia Tenggara yang mendukung fleksibilitas kerja remote dan hybrid bagi talenta Indonesia."
+  }
+]

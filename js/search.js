@@ -2,18 +2,21 @@ import {
   getFilterOptions,
   rememberJobs,
   salaryAverage
-} from "./data.js?v=20260616x";
+} from "./data.js?v=20260616z";
+import { detectExperienceLevel } from "./schema.js?v=20260616z";
 import {
   JOB_SOURCES,
   PROVIDER_LABELS,
+  INDONESIA_LOCATION_TERMS,
+  isIndonesiaScope,
   loadJobsForSource
-} from "./providers.js?v=20260616x";
+} from "./providers.js?v=20260616z";
 import {
   escapeHtml,
   initBookmarkButtons,
   renderJobCard,
   showSnackbar
-} from "./bookmark.js?v=20260616x";
+} from "./bookmark.js?v=20260616z";
 import {
   clearMatchProfile,
   getProfileSummary,
@@ -21,15 +24,15 @@ import {
   readMatchProfile,
   scoreJobForProfile,
   writeMatchProfile
-} from "./profile.js?v=20260616x";
+} from "./profile.js?v=20260616z";
 import {
   countNewJobs,
   deleteSavedSearch,
   markSearchSeen,
   readSavedSearches,
   saveSearch
-} from "./saved-searches.js?v=20260616x";
-import { recordPageView, trackEvent } from "./analytics.js?v=20260616x";
+} from "./saved-searches.js?v=20260616z";
+import { recordPageView, trackEvent } from "./analytics.js?v=20260616z";
 
 const LAST_SEARCH_KEY = "jsa_last_search";
 const FILTER_GROUPS_SINGLE = new Set(["location", "category", "salary"]);
@@ -53,19 +56,25 @@ const salaryFilters = [
 ];
 
 const HIDDEN_CATEGORIES = new Set(["all others", "germany"]);
-const DATA_CREDIT = "Data publik dari Remotive, Remote OK, Arbeitnow, dan Jobicy. Apply selalu diarahkan ke laman resmi, lalu bisa dicatat di tracker pribadi.";
+const DATA_CREDIT = "Data resmi terintegrasi dari LinkedIn, JobStreet, Indeed, dan Portal Remote Global. Lamaran selalu diarahkan ke situs resmi.";
 const SOURCE_TITLES = {
-  indonesia: "Remote dari Indonesia",
+  indonesia: "Lowongan Kerja Indonesia",
   anywhere: "Remote-anywhere",
-  apac: "Remote Asia/APAC",
-  international: "Remote Global"
+  apac: "Lowongan Asia/APAC",
+  international: "Lowongan Global"
 };
 const SOURCE_RESULT_LABELS = {
-  indonesia: "lowongan bisa dilamar dari Indonesia",
+  indonesia: "lowongan di Indonesia & remote",
   anywhere: "lowongan remote-anywhere",
   apac: "lowongan remote Asia/APAC",
   international: "lowongan remote global"
 };
+
+const SEARCH_STOPWORDS = new Set([
+  "jobs", "job", "loker", "lowongan", "kerja", "pekerjaan", "vacancies", "vacancy", "hiring",
+  "untuk", "di", "ke", "dari", "pada", "yang", "dan", "dengan", "buat", "cari", "mencari",
+  "in", "at", "for", "the", "a", "an", "of", "to"
+]);
 
 function readLastSearch() {
   try {
@@ -114,16 +123,26 @@ function makeInitialState() {
       location: new Set(),
       type: new Set(),
       category: new Set(),
-      salary: new Set()
+      salary: new Set(),
+      exp: new Set(),
+      platform: new Set()
     }
   };
 }
 
 function parseUrlState(state) {
   const params = new URLSearchParams(window.location.search);
-  state.query = params.get("q") || readLastSearch();
+  state.query = params.get("q") ?? (params.has("source") ? "" : readLastSearch());
   state.source = JOB_SOURCES[params.get("source")] ? params.get("source") : state.source;
   state.sort = params.get("sort") || "relevant";
+
+  if (params.get("exp") && state.filters.exp) {
+    state.filters.exp.add(params.get("exp"));
+  }
+
+  if (params.get("platform") && state.filters.platform && params.get("platform") !== "all") {
+    state.filters.platform.add(params.get("platform"));
+  }
 
   const rawFilter = params.get("filter");
   if (!rawFilter) return;
@@ -212,6 +231,29 @@ function tokenizeSmartQuery(query = "") {
 }
 
 function jobSearchText(job) {
+  const isIndonesia = isIndonesiaScope(job);
+  const wpType = String(job.workplaceType || "").toLowerCase();
+  const remoteTier = String(job.remoteTier || "").toLowerCase();
+  const platform = String(job.sourcePlatform || job.source?.name || "").toLowerCase();
+  const types = Array.isArray(job.type) ? job.type.join(" ").toLowerCase() : "";
+
+  const synonyms = [];
+  if (isIndonesia || remoteTier === "indonesia" || types.includes("indonesia") || (job.location && INDONESIA_LOCATION_TERMS.some((term) => String(job.location).toLowerCase().includes(term)))) {
+    synonyms.push("indonesia", "lokal", "local", "loker", "lowongan", "kerja", "loker indonesia", "lowongan kerja", "pekerjaan", "dalam negeri");
+  }
+  if (wpType.includes("remote") || types.includes("remote") || (job.location && /remote/i.test(job.location))) {
+    synonyms.push("remote", "wfh", "kerja remote", "telecommute", "jarak jauh");
+  }
+  if (wpType.includes("onsite") || wpType.includes("on-site") || types.includes("onsite") || types.includes("on-site") || (job.location && !/remote/i.test(job.location))) {
+    synonyms.push("onsite", "on-site", "wfo", "kantor", "kerja di kantor");
+  }
+  if (wpType.includes("hybrid") || types.includes("hybrid")) {
+    synonyms.push("hybrid", "wfh wfo", "fleksibel");
+  }
+  if (platform) {
+    synonyms.push(platform);
+  }
+
   return [
     job.title,
     job.company,
@@ -219,16 +261,34 @@ function jobSearchText(job) {
     job.category,
     job.description,
     job.source?.name,
+    job.sourcePlatform,
+    types,
+    wpType,
     (job.tags || []).join(" "),
-    (job.requirements || []).join(" ")
+    (job.requirements || []).join(" "),
+    synonyms.join(" ")
   ].join(" ").toLowerCase();
+}
+
+function escapeRegExp(value = "") {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function matchHaystackTerm(haystack, term) {
+  if (!term) return true;
+  if (term.length <= 4) {
+    const rx = new RegExp("(?:^|[^a-zA-Z0-9])" + escapeRegExp(term) + "(?:[^a-zA-Z0-9]|$)", "i");
+    return rx.test(haystack);
+  }
+  return haystack.includes(term);
 }
 
 function jobMatchesQuery(job, query) {
   const trimmed = query.trim().toLowerCase();
   if (!trimmed) return true;
   const haystack = jobSearchText(job);
-  const tokens = tokenizeSmartQuery(trimmed);
+  const rawTokens = tokenizeSmartQuery(trimmed);
+
   const excluded = [];
   const positives = [];
   const orGroups = [];
@@ -236,7 +296,10 @@ function jobMatchesQuery(job, query) {
   let negateNext = false;
   let hasOr = false;
 
-  tokens.forEach((token) => {
+  const nonStopwordTokens = rawTokens.filter((t) => !SEARCH_STOPWORDS.has(t.toLowerCase()) && !["and", "or", "not"].includes(t.toLowerCase()));
+  const activeTokens = nonStopwordTokens.length > 0 ? rawTokens.filter((t) => !SEARCH_STOPWORDS.has(t.toLowerCase())) : rawTokens;
+
+  activeTokens.forEach((token) => {
     const lower = token.toLowerCase();
     if (lower === "and") return;
     if (lower === "or") {
@@ -262,21 +325,22 @@ function jobMatchesQuery(job, query) {
     currentOrGroup.push(clean);
   });
 
-  if (excluded.some((term) => haystack.includes(term))) return false;
+  if (excluded.some((term) => matchHaystackTerm(haystack, term))) return false;
   if (hasOr) {
     if (currentOrGroup.length) orGroups.push(currentOrGroup);
-    return orGroups.some((group) => group.every((term) => haystack.includes(term)));
+    return orGroups.some((group) => group.every((term) => matchHaystackTerm(haystack, term)));
   }
 
-  return positives.every((term) => haystack.includes(term));
+  return positives.every((term) => matchHaystackTerm(haystack, term));
 }
 
 function jobMatchesFilters(job, filters) {
   if (filters.location.size && !filters.location.has(job.location)) return false;
   if (filters.category.size && !filters.category.has(job.category)) return false;
 
-  for (const type of filters.type) {
-    if (!(job.type || []).includes(type)) return false;
+  if (filters.type && filters.type.size) {
+    const hasTypeMatch = Array.from(filters.type).some((type) => (job.type || []).includes(type));
+    if (!hasTypeMatch) return false;
   }
 
   for (const value of filters.salary) {
@@ -284,28 +348,64 @@ function jobMatchesFilters(job, filters) {
     if (filter && !filter.match(job)) return false;
   }
 
+  if (filters.exp && filters.exp.size) {
+    const level = job.experienceLevel || detectExperienceLevel(job.title, job.description || "");
+    if (!filters.exp.has(level)) return false;
+  }
+
+  if (filters.platform && filters.platform.size) {
+    const p = String(job.sourcePlatform || job.source?.name || "").toLowerCase();
+    let hasMatch = false;
+    for (const plat of filters.platform) {
+      if (plat === "all" || p.includes(plat.toLowerCase())) {
+        hasMatch = true;
+        break;
+      }
+    }
+    if (!hasMatch) return false;
+  }
+
   return true;
 }
 
 function relevanceScore(job, query) {
   const trimmed = query.trim().toLowerCase();
-  if (!trimmed) return new Date(job.posted).getTime();
+  if (!trimmed) return new Date(job.posted || job.date || 0).getTime();
+
+  const tokens = tokenizeSmartQuery(trimmed).filter((t) => !SEARCH_STOPWORDS.has(t.toLowerCase()));
+  const activeTokens = tokens.length ? tokens : tokenizeSmartQuery(trimmed);
 
   let score = 0;
-  if (job.title.toLowerCase().includes(trimmed)) score += 10;
-  if (job.company.toLowerCase().includes(trimmed)) score += 5;
-  if ((job.tags || []).some((tag) => tag.toLowerCase().includes(trimmed))) score += 4;
-  if (job.description.toLowerCase().includes(trimmed)) score += 2;
-  if (job.location.toLowerCase().includes(trimmed)) score += 1;
+  const title = (job.title || "").toLowerCase();
+  const company = (job.company || "").toLowerCase();
+  const location = (job.location || "").toLowerCase();
+  const desc = (job.description || "").toLowerCase();
+  const tags = (job.tags || []).map((t) => String(t).toLowerCase());
+
+  if (title.includes(trimmed)) score += 30;
+  if (company.includes(trimmed)) score += 20;
+
+  activeTokens.forEach((token) => {
+    const t = token.toLowerCase();
+    if (title.includes(t)) score += 15;
+    if (company.includes(t)) score += 10;
+    if (tags.some((tag) => tag.includes(t))) score += 8;
+    if (location.includes(t)) score += 6;
+    if (desc.includes(t)) score += 3;
+  });
+
   return score;
 }
 
 function sourceRank(job) {
-  if (job.source?.key === "jobicy") return 4;
-  if (job.source?.key === "remotive") return 3;
-  if (job.source?.key === "remoteok") return 2;
-  if (job.source?.key === "arbeitnow") return 1;
-  return 0;
+  const plat = String(job.sourcePlatform || job.source?.name || "").toLowerCase();
+  if (plat.includes("linkedin")) return 10;
+  if (plat.includes("jobstreet")) return 9;
+  if (plat.includes("indeed")) return 8;
+  if (job.source?.key === "remotive") return 5;
+  if (job.source?.key === "arbeitnow") return 4;
+  if (job.source?.key === "jobicy") return 3;
+  return 1;
 }
 
 function scopeRank(job, source) {
@@ -330,8 +430,11 @@ function filterAndSortJobs(state, allJobs) {
     .filter((job) => jobMatchesFilters(job, state.filters));
 
   return [...jobs].sort((a, b) => {
+    const timeA = new Date(a.postedAt || a.posted || 0).getTime();
+    const timeB = new Date(b.postedAt || b.posted || 0).getTime();
+
     if (state.sort === "latest") {
-      return new Date(b.posted) - new Date(a.posted);
+      return timeB - timeA;
     }
 
     if (state.sort === "salary") {
@@ -340,17 +443,17 @@ function filterAndSortJobs(state, allJobs) {
 
     if (state.sort === "match" && profileHasSignal(readMatchProfile())) {
       return scoreJobForProfile(b).score - scoreJobForProfile(a).score
-        || new Date(b.posted) - new Date(a.posted);
+        || (timeB - timeA);
     }
 
     if (!state.query.trim()) {
       return scopeRank(b, state.source) - scopeRank(a, state.source)
         || sourceRank(b) - sourceRank(a)
-        || new Date(b.posted) - new Date(a.posted);
+        || (timeB - timeA);
     }
 
     const scoreDiff = relevanceScore(b, state.query) - relevanceScore(a, state.query);
-    return scoreDiff || new Date(b.posted) - new Date(a.posted);
+    return scoreDiff || (timeB - timeA);
   });
 }
 
@@ -403,6 +506,7 @@ function initSearchPage() {
   const focusSearchButton = document.getElementById("focus-search");
   const filterRow = document.getElementById("filter-row");
   const sourceSelect = document.getElementById("source-select");
+  const platformSelect = document.getElementById("platform-select");
   const sourceStatus = document.getElementById("source-status");
   const sourceCredit = document.getElementById("source-credit");
   const searchTitle = document.getElementById("search-title");
@@ -431,15 +535,19 @@ function initSearchPage() {
   function syncControls() {
     sourceSelect.value = state.source;
     sortSelect.value = state.sort;
+    if (platformSelect) {
+      const selected = Array.from(state.filters.platform || [])[0] || "all";
+      platformSelect.value = selected;
+    }
   }
 
-  function populateProfileForm(profile) {
-    if (!profileForm) return;
-    profileForm.elements.targetRole.value = profile.targetRole || "";
-    profileForm.elements.skills.value = profile.skills || "";
-    profileForm.elements.experience.value = profile.experience || "";
-    profileForm.elements.expectedSalary.value = profile.expectedSalary || "";
-    profileForm.elements.timezone.value = profile.timezone || "Asia/Jakarta";
+  function populateProfileForm(profile = {}) {
+    if (!profileForm || !profileForm.elements) return;
+    if (profileForm.elements.targetRole) profileForm.elements.targetRole.value = profile?.targetRole || "";
+    if (profileForm.elements.skills) profileForm.elements.skills.value = profile?.skills || "";
+    if (profileForm.elements.experience) profileForm.elements.experience.value = profile?.experience || "";
+    if (profileForm.elements.expectedSalary) profileForm.elements.expectedSalary.value = profile?.expectedSalary || "";
+    if (profileForm.elements.timezone) profileForm.elements.timezone.value = profile?.timezone || "Asia/Jakarta";
     renderProfileSummary(profile);
   }
 
@@ -604,6 +712,16 @@ function initSearchPage() {
     refreshJobs();
   });
 
+  if (platformSelect) {
+    platformSelect.addEventListener("change", () => {
+      state.filters.platform.clear();
+      if (platformSelect.value && platformSelect.value !== "all") {
+        state.filters.platform.add(platformSelect.value);
+      }
+      render();
+    });
+  }
+
   profileForm?.addEventListener("submit", (event) => {
     event.preventDefault();
     const formData = new FormData(profileForm);
@@ -693,6 +811,16 @@ function initSearchPage() {
     render();
   });
 
+  document.querySelectorAll(".search-suggestion-chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      resetFilters(state);
+      state.query = chip.dataset.query || "";
+      input.value = state.query;
+      renderFilterChips(filterRow, state, allJobs);
+      render();
+    });
+  });
+
   initBookmarkButtons(page, ({ bookmarked }) => {
     showSnackbar(bookmarked ? "Lowongan disimpan" : "Lowongan dihapus dari tersimpan");
   });
@@ -704,4 +832,10 @@ function initSearchPage() {
   refreshJobs();
 }
 
-document.addEventListener("DOMContentLoaded", initSearchPage);
+if (typeof document !== "undefined") {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSearchPage);
+  } else {
+    initSearchPage();
+  }
+}
