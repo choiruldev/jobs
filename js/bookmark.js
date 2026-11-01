@@ -338,6 +338,8 @@ export function showSnackbar(message, type = "info") {
   }, 3200);
 }
 
+export const showToast = showSnackbar;
+
 function initShellNavigation() {
   const page = document.body.dataset.page || document.querySelector("[data-page]")?.dataset.page || "";
   const navKey = page === "apply" ? "applications" : page;
