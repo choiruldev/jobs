@@ -337,7 +337,7 @@ function isApacScope(job) {
   return includesAny(location, apacEligible);
 }
 
-function matchesScope(job, scope) {
+export function matchesScope(job, scope) {
   if (scope === "indonesia") return isIndonesiaScope(job);
   if (scope === "anywhere") return isRemoteAnywhereScope(job);
   if (scope === "apac") return isApacScope(job);
@@ -560,9 +560,31 @@ async function fetchJobicyJobs(geo = "") {
 }
 
 async function fetchLocalFeedJobs() {
+  const cached = readExternalCache("local_feed");
+  if (cached && cached.length > 0) {
+    // Revalidasi di latar belakang tanpa memblokir render
+    fetchFreshLocalFeed().catch(() => {});
+    return { jobs: cached, fromCache: true };
+  }
+  return fetchFreshLocalFeed();
+}
+
+async function fetchFreshLocalFeed() {
   try {
-    const res = await fetch("../data/jobs.json").catch(() => fetch("data/jobs.json"));
-    if (!res || !res.ok) return { jobs: [], fromCache: false };
+    const isPages = typeof window !== "undefined" && window.location.pathname.includes("/pages/");
+    const primaryUrl = isPages ? "../data/jobs.json" : "data/jobs.json";
+    const fallbackUrl = isPages ? "data/jobs.json" : "../data/jobs.json";
+
+    let res = await fetch(primaryUrl).catch(() => null);
+    if (!res || !res.ok) {
+      res = await fetch(fallbackUrl).catch(() => null);
+    }
+    if (!res || !res.ok) {
+      const cached = readExternalCache("local_feed");
+      if (cached && cached.length) return { jobs: cached, fromCache: true };
+      return { jobs: [], fromCache: false };
+    }
+
     const data = await res.json();
     const rawJobs = Array.isArray(data.jobs) ? data.jobs : [];
     const jobs = rawJobs.map((j) => {
@@ -618,8 +640,12 @@ async function fetchLocalFeedJobs() {
         experienceLevel: j.experienceLevel || "mid"
       };
     });
-    return { jobs, fromCache: true };
+
+    writeExternalCache("local_feed", jobs);
+    return { jobs, fromCache: false };
   } catch (e) {
+    const cached = readExternalCache("local_feed");
+    if (cached && cached.length) return { jobs: cached, fromCache: true };
     return { jobs: [], fromCache: false };
   }
 }

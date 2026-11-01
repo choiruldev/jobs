@@ -1,5 +1,6 @@
 import {
   getFilterOptions,
+  getAllKnownJobs,
   rememberJobs,
   salaryAverage
 } from "./data.js?v=20260616z";
@@ -9,6 +10,7 @@ import {
   PROVIDER_LABELS,
   INDONESIA_LOCATION_TERMS,
   isIndonesiaScope,
+  matchesScope,
   loadJobsForSource
 } from "./providers.js?v=20260616z";
 import {
@@ -523,7 +525,8 @@ function initSearchPage() {
   const savedSearchList = document.getElementById("saved-search-list");
   const savedSearchSummary = document.getElementById("saved-search-summary");
 
-  let allJobs = [];
+  const known = getAllKnownJobs();
+  let allJobs = known.length ? known.filter((j) => matchesScope(j, state.source)) : [];
   let visibleJobs = [];
   let currentLoadId = 0;
 
@@ -531,6 +534,9 @@ function initSearchPage() {
   populateProfileForm(readMatchProfile());
   syncControls();
   renderFilterChips(filterRow, state, allJobs);
+  if (allJobs.length) {
+    render();
+  }
 
   function syncControls() {
     sourceSelect.value = state.source;

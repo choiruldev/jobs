@@ -3,13 +3,14 @@
  * Advanced caching, offline fallback screen, and instant update lifecycle.
  */
 
-const CACHE_NAME = "jobsearch-cache-v5";
+const CACHE_NAME = "jobsearch-cache-v6";
 
 const STATIC_ASSETS = [
   "./",
   "index.html",
   "404.html",
   "manifest.json",
+  "data/jobs.json",
   "favicon.svg",
   "favicon.ico",
   "apple-touch-icon.png",
