@@ -14,524 +14,404 @@ function logo(name, background = "1565C0") {
 
 export const JOBS = [
   {
-    id: "job_001",
-    title: "Frontend Developer",
-    company: "PT Teknologi Maju",
-    logo: logo("TM"),
+    id: "job_bca_frontend",
+    title: "Senior Frontend Developer (React / Next.js)",
+    company: "PT Bank Central Asia Tbk (BCA)",
+    logo: logo("BCA", "003399"),
+    location: "Jakarta Pusat",
+    type: ["Full-time", "Hybrid"],
+    category: "Teknologi",
+    salary: { min: 18000000, max: 28000000 },
+    posted: "2026-10-31",
+    description: "BCA mencari Senior Frontend Developer berpengalaman untuk merancang arsitektur aplikasi perbankan digital generasi terbaru menggunakan React, TypeScript, dan micro-frontend. Menjamin SLA 99.99% dan standar keamanan PCI-DSS.",
+    requirements: [
+      "Min. S1 Ilmu Komputer, Teknik Informatika, atau pengalaman setara.",
+      "Pengalaman 4+ tahun membangun aplikasi web enterprise dengan React dan TypeScript.",
+      "Paham arsitektur micro-frontend, web performance, dan secure coding perbankan.",
+      "Mampu berkolaborasi dalam sprint Scrum dengan backend engineer dan UI/UX team."
+    ],
+    about_company: "PT Bank Central Asia Tbk (BCA) adalah bank swasta terbesar di Indonesia yang terus memimpin inovasi transaksi perbankan digital nasional.",
+    tags: ["React", "TypeScript", "BCA", "Fintech"]
+  },
+  {
+    id: "job_goto_data",
+    title: "Data Analyst (Commercial & Growth)",
+    company: "PT Tokopedia (GoTo)",
+    logo: logo("TP", "00AA5B"),
+    location: "Jakarta Selatan",
+    type: ["Full-time", "Hybrid"],
+    category: "Data",
+    salary: { min: 12000000, max: 20000000 },
+    posted: "2026-10-30",
+    description: "Menganalisis performa merchant, funnel belanja pengguna, dan efektivitas promosi menggunakan BigQuery, SQL, Python, dan Tableau. Terbiasa presentasi insight bisnis langsung ke VP dan Category Managers.",
+    requirements: [
+      "Min. 2 tahun pengalaman sebagai Data Analyst di e-commerce atau tech company.",
+      "Mahir SQL tingkat lanjut (window functions, query optimization) dan Python data stack.",
+      "Pengalaman visualisasi data dengan Tableau atau Looker Studio.",
+      "Kemampuan storytelling berbasis data yang kuat."
+    ],
+    about_company: "PT Tokopedia adalah bagian dari ekosistem GoTo, ekosistem digital terintegrasi terbesar di Indonesia.",
+    tags: ["SQL", "Tableau", "GoTo", "E-commerce"]
+  },
+  {
+    id: "job_shopee_backend",
+    title: "Backend Software Engineer (Golang / Microservices)",
+    company: "Shopee Indonesia",
+    logo: logo("SP", "EE4D2D"),
     location: "Jakarta Selatan",
     type: ["Full-time", "Remote"],
     category: "Teknologi",
-    salary: { min: 8000000, max: 15000000 },
-    posted: "2026-06-11",
-    description: makeDescription({
-      role: "Frontend Developer",
-      company: "PT Teknologi Maju",
-      domain: "platform web",
-      product: "dashboard operasional untuk pelanggan enterprise",
-      focus: "membangun komponen UI, menjaga performa halaman, memperbaiki aksesibilitas, dan merapikan integrasi API"
-    }),
+    salary: { min: 20000000, max: 35000000 },
+    posted: "2026-10-31",
+    description: "Mengembangkan sistem payment gateway dan voucher engine skala jutaan QPS. Membutuhkan pemahaman mendalam tentang Golang, Redis caching, Kafka message queue, dan database optimasi PostgreSQL.",
     requirements: [
-      "Min. S1 semua jurusan atau pengalaman setara.",
-      "Pengalaman 2 tahun membangun aplikasi web produksi.",
-      "Menguasai JavaScript modern, HTML semantik, CSS responsif, dan debugging browser.",
-      "Paham aksesibilitas, performa web, dan kolaborasi dengan designer."
+      "Min. 3 tahun pengalaman backend development dengan Golang atau Java.",
+      "Paham sistem terdistribusi, event-driven architecture, dan Kafka.",
+      "Berpengalaman dengan query optimization dan sharding pada PostgreSQL/MySQL.",
+      "Fasih berbahasa Inggris untuk kolaborasi regional."
     ],
-    about_company: "PT Teknologi Maju adalah perusahaan software B2B yang membantu tim operasional mengelola proses kerja harian dengan produk yang stabil, aman, dan mudah dipakai.",
-    tags: ["JavaScript", "CSS", "Aksesibilitas"]
+    about_company: "Shopee adalah platform e-commerce terdepan di Asia Tenggara dan Taiwan yang menghubungkan jutaan pembeli dan penjual.",
+    tags: ["Golang", "Microservices", "Shopee", "High-Scale"]
   },
   {
-    id: "job_002",
-    title: "Product Manager",
-    company: "Nusantara Digital Hub",
-    logo: logo("ND", "0F766E"),
+    id: "job_tiket_uiux",
+    title: "UI/UX Product Designer",
+    company: "Tiket.com (PT Global Tiket Network)",
+    logo: logo("TK", "0064D2"),
+    location: "Jakarta Barat",
+    type: ["Full-time", "Remote"],
+    category: "Desain",
+    salary: { min: 14000000, max: 22000000 },
+    posted: "2026-10-29",
+    description: "Bertanggung jawab atas user journey pemesanan akomodasi dan penerbangan. Menjalankan usability testing, wireframing di Figma, serta berkolaborasi aktif dengan Design System team.",
+    requirements: [
+      "Portofolio desain UI/UX aplikasi mobile & web yang terbukti sukses.",
+      "Mahir Figma, design tokens, interactive prototyping, dan usability testing.",
+      "Mampu menerjemahkan data analitik kuantitatif ke dalam solusi antarmuka intuitif.",
+      "Pengalaman kerja minimal 3 tahun di industri travel atau digital products."
+    ],
+    about_company: "Tiket.com adalah pioneer online travel agent (OTA) di Indonesia yang menyediakan kemudahan pemesanan tiket pesawat, hotel, dan aktivitas rekreasi.",
+    tags: ["Figma", "UI/UX", "Tiket.com", "Travel"]
+  },
+  {
+    id: "job_telkom_devops",
+    title: "Lead DevOps & Cloud Infrastructure",
+    company: "PT Telkom Indonesia (Persero) Tbk",
+    logo: logo("TL", "D32F2F"),
     location: "Bandung",
+    type: ["Full-time", "Hybrid"],
+    category: "Teknologi",
+    salary: { min: 25000000, max: 38000000 },
+    posted: "2026-10-28",
+    description: "Memimpin transformasi arsitektur cloud nasional Telkom. Mengelola Kubernetes clusters, Terraform infrastructure-as-code, CI/CD pipelines GitLab, dan observability berbasis Prometheus & Grafana.",
+    requirements: [
+      "Pengalaman 5+ tahun mengelola cloud infrastructure skala besar (AWS, GCP, atau Private Cloud).",
+      "Sertifikasi Kubernetes (CKA) atau AWS Solutions Architect bernilai tambah tinggi.",
+      "Mahir Terraform, Ansible, GitLab CI, dan arsitektur zero-trust security.",
+      "Kepemimpinan teknis membimbing tim DevOps junior."
+    ],
+    about_company: "PT Telkom Indonesia adalah BUMN telekomunikasi dan digital terkemuka yang memegang infrastruktur serat optik dan jaringan komunikasi nasional.",
+    tags: ["Kubernetes", "DevOps", "Telkom", "BUMN"]
+  },
+  {
+    id: "job_blibli_marketing",
+    title: "Digital Performance Marketing Specialist",
+    company: "PT Blibli.com (Global Digital Niaga)",
+    logo: logo("BL", "0095DA"),
+    location: "Jakarta Pusat",
     type: ["Full-time"],
+    category: "Marketing",
+    salary: { min: 10000000, max: 16000000 },
+    posted: "2026-10-30",
+    description: "Mengelola campaign berbayar skala besar di Google Ads, Meta Ads, dan TikTok Ads. Melakukan analisis ROAS, conversion rate optimization (CRO), dan A/B testing copy iklan.",
+    requirements: [
+      "Min. 2 tahun pengalaman mengelola budget paid ads minimal Rp 100jt/bulan.",
+      "Sertifikasi Google Ads dan Meta Certified Media Buyer.",
+      "Keahlian analitik mendalam dengan Google Analytics 4 (GA4) dan MMP (AppsFlyer).",
+      "Fokus kuat pada efisiensi acquisition cost (CAC) dan ROAS."
+    ],
+    about_company: "Blibli adalah e-commerce omnichannel buatan Indonesia pelopor ekosistem belanja terpercaya dengan layanan pelanggan 24/7.",
+    tags: ["Google Ads", "Meta Ads", "Blibli", "Marketing"]
+  },
+  {
+    id: "job_astra_fullstack",
+    title: "Junior Full Stack Web Developer",
+    company: "Astra International Digital Hub",
+    logo: logo("AS", "0D47A1"),
+    location: "Jakarta Utara",
+    type: ["Full-time"],
+    category: "Teknologi",
+    salary: { min: 8000000, max: 13000000 },
+    posted: "2026-10-31",
+    description: "Peluang karir untuk lulusan baru bertalenta di ekosistem digital Astra. Mengembangkan aplikasi web internal dengan Node.js, React, dan MySQL. Mentoring langsung dari Principal Engineer.",
+    requirements: [
+      "Fresh Graduate S1 Ilmu Komputer, Teknik Informatika, Sistem Informasi, atau bootcamp terakreditasi.",
+      "Memahami dasar pemrograman JavaScript/TypeScript modern.",
+      "Familiar dengan database SQL (MySQL / PostgreSQL).",
+      "Memiliki kemauan belajar tinggi dan semangat kolaborasi yang baik."
+    ],
+    about_company: "PT Astra International Tbk adalah salah satu konglomerasi terbesar di Indonesia dengan portofolio otomotif, jasa keuangan, alat berat, dan inovasi teknologi digital.",
+    tags: ["Fresh Graduate", "React", "Node.js", "Astra"]
+  },
+  {
+    id: "job_mandiri_security",
+    title: "Cyber Security Analyst & Penetration Tester",
+    company: "PT Bank Mandiri (Persero) Tbk",
+    logo: logo("BM", "F57C00"),
+    location: "Jakarta Selatan",
+    type: ["Full-time"],
+    category: "Teknologi",
+    salary: { min: 17000000, max: 26000000 },
+    posted: "2026-10-27",
+    description: "Melakukan vulnerability assessment, penetration testing berkala pada web dan mobile app perbankan, serta merancang mitigasi insiden siber sesuai standar OJK dan ISO 27001.",
+    requirements: [
+      "Min. 3 tahun pengalaman di cyber security, ethical hacking, atau SOC analyst.",
+      "Sertifikasi OSCP, CEH, atau CompTIA Security+ diutamakan.",
+      "Mahir tool security seperti Burp Suite Professional, Nessus, Wireshark, dan Kali Linux.",
+      "Paham regulasi perbankan OJK dan framework MITRE ATT&CK."
+    ],
+    about_company: "PT Bank Mandiri (Persero) Tbk adalah salah satu bank BUMN terbesar di Indonesia yang menyediakan solusi keuangan menyeluruh bagi nasabah korporat maupun ritel.",
+    tags: ["Security", "PenTest", "Bank Mandiri", "Fintech"]
+  },
+  {
+    id: "job_kalbe_bi",
+    title: "Business Intelligence & Reporting Specialist",
+    company: "PT Kalbe Farma Tbk",
+    logo: logo("KF", "388E3C"),
+    location: "Jakarta Timur",
+    type: ["Full-time", "Hybrid"],
+    category: "Data",
+    salary: { min: 11000000, max: 17000000 },
+    posted: "2026-10-29",
+    description: "Membangun dashboard monitoring rantai pasok dan distribusi farmasi menggunakan Power BI, SQL Server, dan data warehouse. Menghasilkan laporan mingguan untuk jajaran direksi.",
+    requirements: [
+      "Pengalaman 2-4 tahun di bidang Business Intelligence atau Data Warehouse.",
+      "Mahir Power BI (DAX, Power Query) dan advanced SQL Server modeling.",
+      "Kemampuan komunikasi analitis menyederhanakan data kompleks menjadi actionable insight.",
+      "Pengalaman industri farmasi atau FMCG menjadi nilai tambah."
+    ],
+    about_company: "PT Kalbe Farma Tbk adalah perusahaan farmasi dan produk kesehatan terbesar di Asia Tenggara yang berkomitmen meningkatkan kesehatan masyarakat Indonesia.",
+    tags: ["Power BI", "SQL", "Kalbe", "Kesehatan"]
+  },
+  {
+    id: "job_bri_android",
+    title: "Mobile Android Engineer (Kotlin / Compose)",
+    company: "PT Bank Rakyat Indonesia (Persero) Tbk",
+    logo: logo("BR", "0288D1"),
+    location: "Jakarta Pusat",
+    type: ["Full-time", "Hybrid"],
+    category: "Teknologi",
+    salary: { min: 16000000, max: 25000000 },
+    posted: "2026-10-31",
+    description: "Mengembangkan fitur inovatif pada aplikasi perbankan BRImo dengan puluhan juta pengguna harian. Menerapkan Clean Architecture, Jetpack Compose, Unit Testing, dan biometric authentication.",
+    requirements: [
+      "Min. 3 tahun pengalaman pengembangan aplikasi Android native dengan Kotlin.",
+      "Paham arsitektur MVVM, MVI, Jetpack Compose, Coroutines, dan Flow.",
+      "Pengalaman implementasi security perbankan (root detection, certificate pinning, biometric).",
+      "Terbiasa menulis automated UI testing dan unit testing."
+    ],
+    about_company: "PT Bank Rakyat Indonesia (Persero) Tbk (BRI) adalah bank BUMN dengan jaringan terluas di Indonesia, pelopor inklusi keuangan hingga ke pelosok nusantara.",
+    tags: ["Android", "Kotlin", "BRI", "Fintech"]
+  },
+  {
+    id: "job_telkomsel_data",
+    title: "Senior Data Engineer (Spark / Airflow)",
+    company: "Telkomsel (PT Telekomunikasi Selular)",
+    logo: logo("TS", "C62828"),
+    location: "Jakarta Selatan",
+    type: ["Full-time", "Remote"],
+    category: "Data",
+    salary: { min: 22000000, max: 34000000 },
+    posted: "2026-10-30",
+    description: "Merancang data pipeline terdistribusi skala petabyte menggunakan Apache Spark, Airflow, Kafka, dan Google Cloud BigQuery untuk analitik jaringan telekomunikasi nasional.",
+    requirements: [
+      "Min. 4 tahun pengalaman membangun data pipeline skala besar.",
+      "Keahlian mendalam dalam Apache Spark (PySpark/Scala), Apache Airflow, dan Kafka.",
+      "Familiar dengan Google Cloud Platform (BigQuery, Dataproc, Pub/Sub) atau AWS.",
+      "Paham konsep data governance, data lineage, dan data lakehouse."
+    ],
+    about_company: "Telkomsel adalah operator seluler terbesar di Indonesia yang melayani lebih dari 160 juta pelanggan di seluruh penjuru Indonesia.",
+    tags: ["Data Engineer", "Spark", "Telkomsel", "BigData"]
+  },
+  {
+    id: "job_dana_frontend",
+    title: "Frontend Engineer (React / TypeScript)",
+    company: "DANA Indonesia (PT Espay Debit Indonesia)",
+    logo: logo("DN", "118EEA"),
+    location: "Jakarta Selatan",
+    type: ["Full-time", "Remote"],
+    category: "Teknologi",
+    salary: { min: 15000000, max: 24000000 },
+    posted: "2026-10-31",
+    description: "Membangun ekosistem web portal merchant dan payment checkout DANA. Fokus pada web performance, security standards, dan micro-frontend interoperability.",
+    requirements: [
+      "Min. 3 tahun pengalaman frontend dengan React, TypeScript, dan CSS-in-JS.",
+      "Pengalaman integrasi Web SDK, Payment APIs, dan Progressive Web Apps (PWA).",
+      "Paham web vitals optimization (LCP, FID, CLS) dan cross-browser compatibility.",
+      "Terbiasa bekerja dalam lingkungan agile sprint cepat."
+    ],
+    about_company: "DANA adalah dompet digital Indonesia yang didesain untuk menjadikan setiap transaksi non-tunai dan non-kartu berjalan cepat, praktis, dan terjamin keamanannya.",
+    tags: ["React", "TypeScript", "DANA", "Fintech"]
+  },
+  {
+    id: "job_halodoc_golang",
+    title: "Golang Backend Developer",
+    company: "Halodoc (PT Media Dokter Investama)",
+    logo: logo("HD", "E91E63"),
+    location: "Jakarta Selatan",
+    type: ["Full-time", "Remote"],
+    category: "Teknologi",
+    salary: { min: 18000000, max: 30000000 },
+    posted: "2026-10-28",
+    description: "Mengembangkan layanan telemedisin konsultasi dokter online dan pengiriman resep obat instan. Memanfaatkan Golang, gRPC, PostgreSQL, AWS ECS, dan Redis.",
+    requirements: [
+      "Min. 3 tahun pengalaman backend development dengan Golang.",
+      "Berpengalaman dengan arsitektur microservices dan komunikasi gRPC / REST.",
+      "Familiar dengan deployment container AWS (ECS, EKS, Lambda, SQS).",
+      "Passion tinggi dalam memajukan akses kesehatan digital di Indonesia."
+    ],
+    about_company: "Halodoc adalah platform layanan kesehatan digital terlengkap di Indonesia yang menghubungkan pengguna dengan ribuan dokter berlisensi dan apotek resmi.",
+    tags: ["Golang", "AWS", "Halodoc", "HealthTech"]
+  },
+  {
+    id: "job_bukalapak_qa",
+    title: "QA Automation Engineer (Playwright / Cypress)",
+    company: "PT Bukalapak.com Tbk",
+    logo: logo("BL", "E31E52"),
+    location: "Jakarta Selatan",
+    type: ["Full-time", "Remote"],
+    category: "Teknologi",
+    salary: { min: 13000000, max: 21000000 },
+    posted: "2026-10-29",
+    description: "Membuat end-to-end automated test suites menggunakan TypeScript, Playwright, dan Appium untuk menjamin kualitas rilis e-commerce dan mitra Bukalapak.",
+    requirements: [
+      "Min. 2-3 tahun pengalaman dalam test automation (Web & Mobile).",
+      "Mahir TypeScript/JavaScript dengan framework Playwright, Cypress, atau Selenium.",
+      "Pengalaman integrasi CI/CD test automation di GitHub Actions atau GitLab CI.",
+      "Paham exploratory testing, security testing, dan performance testing dasar."
+    ],
+    about_company: "PT Bukalapak.com Tbk adalah perusahaan teknologi all-commerce Indonesia yang melayani jutaan UMKM dan konsumen digital.",
+    tags: ["QA Automation", "Playwright", "Bukalapak", "E-commerce"]
+  },
+  {
+    id: "job_gojek_apm",
+    title: "Associate Product Manager",
+    company: "Gojek (GoTo Financial)",
+    logo: logo("GJ", "00880C"),
+    location: "Jakarta Selatan",
+    type: ["Full-time", "Hybrid"],
     category: "Produk",
-    salary: { min: 12000000, max: 22000000 },
-    posted: "2026-06-10",
-    description: makeDescription({
-      role: "Product Manager",
-      company: "Nusantara Digital Hub",
-      domain: "produk konsumen",
-      product: "fitur transaksi dan loyalti untuk aplikasi mobile",
-      focus: "menyusun roadmap, menulis requirement, memvalidasi asumsi, dan membaca metrik adopsi"
-    }),
+    salary: { min: 15000000, max: 23000000 },
+    posted: "2026-10-31",
+    description: "Berkontribusi pada ekosistem GoPay dan GoPay Merchant. Menjalankan user interviews, perumusan requirement MVP, sprint planning, dan tracking metrik retensi.",
     requirements: [
-      "Pengalaman 3 tahun di product management, business analysis, atau peran sejenis.",
-      "Mampu membuat PRD, user story, dan prioritas berbasis impact.",
-      "Terbiasa menggunakan data produk untuk mengambil keputusan.",
-      "Komunikasi kuat dengan engineering, desain, sales, dan leadership."
+      "Min. 1-2 tahun pengalaman sebagai Product Manager atau Associate PM di produk digital.",
+      "Kemampuan analisis data kuantitatif yang kuat (SQL dasar, Google Analytics/Mixpanel).",
+      "Keahlian komunikasi yang baik dan empati tinggi terhadap kebutuhan merchant.",
+      "Gelar S1 dari universitas terkemuka di bidang Teknik, Bisnis, atau Desain."
     ],
-    about_company: "Nusantara Digital Hub membangun produk digital untuk membantu merchant lokal menjual, melayani, dan memahami pelanggan dengan lebih baik.",
-    tags: ["Roadmap", "Analytics", "PRD"]
+    about_company: "Gojek adalah platform on-demand dan pembayaran terkemuka di Asia Tenggara yang menghubungkan konsumen dengan mitra driver dan merchant makanan.",
+    tags: ["Product Manager", "GoTo", "GoPay", "Fintech"]
   },
   {
-    id: "job_003",
-    title: "Digital Marketing Specialist",
-    company: "Sagara Commerce",
-    logo: logo("SC", "B45309"),
-    location: "Surabaya",
-    type: ["Full-time", "Contract"],
-    category: "Marketing",
-    salary: { min: 7000000, max: 12000000 },
-    posted: "2026-06-09",
-    description: makeDescription({
-      role: "Digital Marketing Specialist",
-      company: "Sagara Commerce",
-      domain: "growth marketing",
-      product: "kampanye akuisisi pelanggan untuk marketplace niche",
-      focus: "mengelola paid ads, eksperimen landing page, segmentasi audiens, dan laporan performa mingguan"
-    }),
+    id: "job_traveloka_backend",
+    title: "Software Backend Engineer (Central Tech)",
+    company: "Traveloka",
+    logo: logo("TV", "1BA0E2"),
+    location: "Tangerang",
+    type: ["Full-time", "Hybrid"],
+    category: "Teknologi",
+    salary: { min: 20000000, max: 32000000 },
+    posted: "2026-10-30",
+    description: "Mengembangkan core payment and inventory platform Traveloka untuk menangani jutaan transaksi pemesanan tiket penerbangan dan akomodasi di seluruh Asia Tenggara.",
     requirements: [
-      "Pengalaman menjalankan kampanye Meta Ads, Google Ads, atau TikTok Ads.",
-      "Paham funnel marketing, tracking conversion, dan A/B testing.",
-      "Mampu menulis copy iklan yang jelas dan terukur.",
-      "Nyaman bekerja dengan target, budget, dan eksperimen cepat."
+      "Min. 3 tahun pengalaman backend dengan Java, Kotlin, atau Go.",
+      "Paham distributed caching, high concurrency, and database transaction isolation.",
+      "Berpengalaman dengan cloud computing AWS / GCP.",
+      "Kemampuan komunikasi bahasa Inggris yang lancar."
     ],
-    about_company: "Sagara Commerce adalah perusahaan e-commerce yang membantu brand lokal mengembangkan kanal penjualan digital dan pengalaman pelanggan yang konsisten.",
-    tags: ["Paid Ads", "Growth", "Copywriting"]
+    about_company: "Traveloka adalah lifestyle superapp terkemuka di Asia Tenggara yang menyediakan akses untuk menemukan dan membeli berbagai produk perjalanan dan finansial.",
+    tags: ["Java", "Golang", "Traveloka", "Fintech"]
   },
   {
-    id: "job_004",
-    title: "Finance Analyst",
-    company: "Artha Finansial",
-    logo: logo("AF", "4C1D95"),
+    id: "job_grab_senior_swe",
+    title: "Senior Software Engineer (Backend / Distributed Systems)",
+    company: "Grab Indonesia",
+    logo: logo("GB", "00B14F"),
     location: "Jakarta Selatan",
-    type: ["Full-time"],
-    category: "Keuangan",
-    salary: { min: 9000000, max: 16000000 },
-    posted: "2026-06-13",
-    description: makeDescription({
-      role: "Finance Analyst",
-      company: "Artha Finansial",
-      domain: "perencanaan keuangan",
-      product: "model anggaran, forecast, dan analisis profitabilitas bisnis",
-      focus: "membangun laporan manajemen, memantau biaya, menganalisis variance, dan menyiapkan insight untuk keputusan investasi"
-    }),
-    requirements: [
-      "Min. S1 Akuntansi, Keuangan, Ekonomi, atau jurusan relevan.",
-      "Menguasai Excel atau spreadsheet tingkat lanjut.",
-      "Paham laporan keuangan, budgeting, forecasting, dan analisis variance.",
-      "Teliti, analitis, dan mampu menjelaskan angka dengan sederhana."
-    ],
-    about_company: "Artha Finansial menyediakan layanan perencanaan dan operasional keuangan untuk perusahaan berkembang yang membutuhkan kontrol biaya lebih disiplin.",
-    tags: ["Forecasting", "Excel", "Budgeting"]
-  },
-  {
-    id: "job_005",
-    title: "Operations Coordinator",
-    company: "Bali Experience Co",
-    logo: logo("BE", "15803D"),
-    location: "Bali",
-    type: ["Full-time", "Part-time"],
-    category: "Operasional",
-    salary: { min: 5500000, max: 9500000 },
-    posted: "2026-06-08",
-    description: makeDescription({
-      role: "Operations Coordinator",
-      company: "Bali Experience Co",
-      domain: "operasional layanan",
-      product: "pengalaman perjalanan dan aktivitas lokal untuk wisatawan",
-      focus: "menjadwalkan vendor, menjaga kualitas layanan, menyelesaikan eskalasi, dan menyusun checklist operasional"
-    }),
-    requirements: [
-      "Pengalaman 1 tahun di operasional, hospitality, travel, atau customer service.",
-      "Rapi dalam koordinasi jadwal dan dokumentasi.",
-      "Mampu menangani masalah pelanggan dengan tenang.",
-      "Bersedia bekerja dengan jadwal fleksibel saat musim ramai."
-    ],
-    about_company: "Bali Experience Co menghubungkan wisatawan dengan aktivitas lokal yang terkurasi, aman, dan dijalankan bersama mitra komunitas.",
-    tags: ["Hospitality", "Vendor", "Customer"]
-  },
-  {
-    id: "job_006",
-    title: "Backend Engineer",
-    company: "Karya Cloud Systems",
-    logo: logo("KC", "1D4ED8"),
-    location: "Remote",
-    type: ["Full-time", "Remote"],
+    type: ["Full-time", "Hybrid"],
     category: "Teknologi",
-    salary: { min: 14000000, max: 28000000 },
-    posted: "2026-06-12",
-    description: makeDescription({
-      role: "Backend Engineer",
-      company: "Karya Cloud Systems",
-      domain: "infrastruktur aplikasi",
-      product: "layanan API, pipeline data, dan sistem notifikasi real-time",
-      focus: "merancang endpoint, menjaga reliability, menulis pengujian, dan meningkatkan observability layanan"
-    }),
+    salary: { min: 24000000, max: 38000000 },
+    posted: "2026-10-31",
+    description: "Membangun layanan realtime matching algoritma untuk pengantaran makanan dan mobilitas kota dengan latensi rendah di bawah 50 milidetik.",
     requirements: [
-      "Pengalaman 3 tahun membangun backend service produksi.",
-      "Menguasai REST API, database relasional, caching, dan background job.",
-      "Paham testing, logging, monitoring, dan keamanan aplikasi.",
-      "Terbiasa melakukan code review dan dokumentasi teknis."
+      "Pengalaman 4+ tahun dalam perancangan distributed systems skala besar.",
+      "Mahir Golang atau C++, Kafka, Redis, dan PostgreSQL.",
+      "Pemahaman kuat mengenai distributed consensus, replication, dan fault tolerance.",
+      "S1/S2 Ilmu Komputer atau pengalaman industri setara."
     ],
-    about_company: "Karya Cloud Systems membantu perusahaan SaaS mempercepat pengembangan platform dengan layanan cloud-native yang scalable.",
-    tags: ["API", "Database", "Observability"]
+    about_company: "Grab adalah superapp terkemuka di Asia Tenggara yang menyediakan layanan mobilitas harian, pengantaran makanan, dan pembayaran digital.",
+    tags: ["Golang", "Distributed Systems", "Grab", "High-Scale"]
   },
   {
-    id: "job_007",
-    title: "UX Researcher",
-    company: "Ruang Produk",
-    logo: logo("RP", "BE185D"),
-    location: "Yogyakarta",
-    type: ["Contract", "Remote"],
-    category: "Produk",
-    salary: { min: 8000000, max: 14000000 },
-    posted: "2026-06-07",
-    description: makeDescription({
-      role: "UX Researcher",
-      company: "Ruang Produk",
-      domain: "riset pengguna",
-      product: "produk edukasi dan alat belajar mandiri",
-      focus: "merancang interview, menjalankan usability test, mensintesis temuan, dan memberi rekomendasi prioritas"
-    }),
-    requirements: [
-      "Pengalaman menjalankan riset kualitatif dan kuantitatif dasar.",
-      "Mampu membuat research plan, guide interview, dan laporan insight.",
-      "Peka terhadap bias riset dan kualitas sample.",
-      "Portofolio riset produk menjadi nilai tambah."
-    ],
-    about_company: "Ruang Produk adalah studio produk yang membantu startup memvalidasi ide, memperbaiki pengalaman pengguna, dan mengurangi risiko build.",
-    tags: ["Research", "Usability", "Synthesis"]
-  },
-  {
-    id: "job_008",
-    title: "SEO Content Strategist",
-    company: "Growline Media",
-    logo: logo("GM", "7C2D12"),
-    location: "Bandung",
-    type: ["Part-time", "Remote"],
-    category: "Marketing",
-    salary: { min: 5000000, max: 9000000 },
-    posted: "2026-06-06",
-    description: makeDescription({
-      role: "SEO Content Strategist",
-      company: "Growline Media",
-      domain: "konten organik",
-      product: "program akuisisi traffic dan edukasi pelanggan untuk brand digital",
-      focus: "melakukan riset keyword, membuat brief artikel, mengukur ranking, dan memperbaiki struktur konten"
-    }),
-    requirements: [
-      "Pengalaman 2 tahun mengelola strategi SEO atau content marketing.",
-      "Paham riset keyword, search intent, internal linking, dan basic technical SEO.",
-      "Mampu menulis brief yang mudah dieksekusi writer.",
-      "Terbiasa membaca Google Search Console atau alat SEO sejenis."
-    ],
-    about_company: "Growline Media membantu perusahaan teknologi dan layanan profesional membangun mesin akuisisi organik yang tahan lama.",
-    tags: ["SEO", "Content", "Analytics"]
-  },
-  {
-    id: "job_009",
-    title: "Accounting Staff",
-    company: "Sentra Retailindo",
-    logo: logo("SR", "365314"),
-    location: "Surabaya",
-    type: ["Full-time"],
-    category: "Keuangan",
-    salary: { min: 5500000, max: 8500000 },
-    posted: "2026-06-04",
-    description: makeDescription({
-      role: "Accounting Staff",
-      company: "Sentra Retailindo",
-      domain: "akuntansi operasional",
-      product: "pencatatan transaksi, rekonsiliasi, dan tutup buku cabang retail",
-      focus: "memproses jurnal, mencocokkan transaksi bank, mengarsipkan dokumen, dan mendukung audit internal"
-    }),
-    requirements: [
-      "Min. D3 Akuntansi atau pengalaman setara.",
-      "Paham jurnal, rekonsiliasi bank, dan dasar perpajakan.",
-      "Teliti dalam pengelolaan dokumen dan deadline bulanan.",
-      "Pengalaman software akuntansi menjadi nilai tambah."
-    ],
-    about_company: "Sentra Retailindo mengelola jaringan toko kebutuhan harian dengan fokus pada efisiensi operasional dan layanan pelanggan yang konsisten.",
-    tags: ["Accounting", "Reconciliation", "Tax"]
-  },
-  {
-    id: "job_010",
-    title: "Customer Operations Lead",
-    company: "SapaCare",
-    logo: logo("SC", "0891B2"),
-    location: "Remote",
-    type: ["Full-time", "Remote"],
-    category: "Operasional",
-    salary: { min: 10000000, max: 18000000 },
-    posted: "2026-06-05",
-    description: makeDescription({
-      role: "Customer Operations Lead",
-      company: "SapaCare",
-      domain: "customer operations",
-      product: "layanan dukungan pelanggan untuk platform kesehatan digital",
-      focus: "mendesain SOP, memonitor SLA, melatih agent, dan memperbaiki proses eskalasi"
-    }),
-    requirements: [
-      "Pengalaman memimpin tim customer support atau operations.",
-      "Paham SLA, quality monitoring, knowledge base, dan pelaporan performa.",
-      "Mampu coaching anggota tim dengan data dan contoh konkret.",
-      "Nyaman menangani isu sensitif dengan empati dan ketelitian."
-    ],
-    about_company: "SapaCare membangun platform kesehatan digital yang menghubungkan pasien dengan layanan konsultasi, pemesanan, dan tindak lanjut perawatan.",
-    tags: ["SLA", "Support", "SOP"]
-  },
-  {
-    id: "job_011",
-    title: "Mobile Engineer",
-    company: "Lintas Mobilitas",
-    logo: logo("LM", "4338CA"),
+    id: "job_kredivo_backend",
+    title: "Backend Engineer - Golang (SDE II)",
+    company: "Kredivo Group",
+    logo: logo("KD", "FF6E00"),
     location: "Jakarta Selatan",
-    type: ["Full-time", "Contract"],
-    category: "Teknologi",
-    salary: { min: 13000000, max: 24000000 },
-    posted: "2026-06-03",
-    description: makeDescription({
-      role: "Mobile Engineer",
-      company: "Lintas Mobilitas",
-      domain: "aplikasi mobile",
-      product: "fitur perjalanan, pembayaran, dan notifikasi untuk pengguna harian",
-      focus: "mengembangkan fitur mobile, mengurangi crash, mempercepat waktu loading, dan menjaga konsistensi UI"
-    }),
-    requirements: [
-      "Pengalaman 2 tahun membangun aplikasi Android, iOS, Flutter, atau React Native.",
-      "Paham lifecycle mobile, state management, API integration, dan app store release.",
-      "Terbiasa membaca crash report dan analytics.",
-      "Mampu bekerja dekat dengan QA dan product designer."
-    ],
-    about_company: "Lintas Mobilitas membuat produk transportasi dan mobilitas perkotaan yang membantu pengguna merencanakan perjalanan dengan lebih efisien.",
-    tags: ["Mobile", "Performance", "Release"]
-  },
-  {
-    id: "job_012",
-    title: "Product Designer",
-    company: "Studio Akar",
-    logo: logo("SA", "0E7490"),
-    location: "Yogyakarta",
-    type: ["Full-time", "Remote"],
-    category: "Produk",
-    salary: { min: 9500000, max: 17000000 },
-    posted: "2026-06-02",
-    description: makeDescription({
-      role: "Product Designer",
-      company: "Studio Akar",
-      domain: "desain produk",
-      product: "sistem desain, flow onboarding, dan dashboard analitik untuk klien SaaS",
-      focus: "membuat wireframe, prototipe, design system, handoff, dan validasi solusi bersama pengguna"
-    }),
-    requirements: [
-      "Pengalaman 2 tahun mendesain produk digital end-to-end.",
-      "Menguasai Figma, prototyping, design system, dan dokumentasi handoff.",
-      "Paham prinsip usability, aksesibilitas, dan visual hierarchy.",
-      "Portofolio yang menjelaskan proses berpikir menjadi syarat utama."
-    ],
-    about_company: "Studio Akar adalah studio desain produk yang membantu perusahaan membangun pengalaman digital yang rapi, mudah dipahami, dan siap dikembangkan.",
-    tags: ["Figma", "Design System", "Prototype"]
-  },
-  {
-    id: "job_013",
-    title: "Brand Marketing Executive",
-    company: "Kopi Timur",
-    logo: logo("KT", "92400E"),
-    location: "Bali",
-    type: ["Full-time"],
-    category: "Marketing",
-    salary: { min: 6500000, max: 11000000 },
-    posted: "2026-06-01",
-    description: makeDescription({
-      role: "Brand Marketing Executive",
-      company: "Kopi Timur",
-      domain: "brand marketing",
-      product: "kampanye brand, event komunitas, dan peluncuran produk minuman",
-      focus: "menyusun kalender kampanye, mengelola partner, menjaga tone komunikasi, dan membaca respons pelanggan"
-    }),
-    requirements: [
-      "Pengalaman 1-3 tahun di brand marketing, event, atau community.",
-      "Mampu menulis brief kreatif dan mengelola timeline kampanye.",
-      "Peka terhadap tren konsumen dan identitas brand.",
-      "Bersedia turun ke lokasi event atau outlet jika dibutuhkan."
-    ],
-    about_company: "Kopi Timur mengembangkan jaringan kedai kopi lokal dengan produk minuman yang mudah diakses dan pengalaman komunitas yang kuat.",
-    tags: ["Brand", "Event", "Community"]
-  },
-  {
-    id: "job_014",
-    title: "Risk Analyst",
-    company: "Dana Amanah",
-    logo: logo("DA", "7F1D1D"),
-    location: "Bandung",
-    type: ["Full-time"],
-    category: "Keuangan",
-    salary: { min: 10000000, max: 19000000 },
-    posted: "2026-05-31",
-    description: makeDescription({
-      role: "Risk Analyst",
-      company: "Dana Amanah",
-      domain: "manajemen risiko",
-      product: "kebijakan kredit, monitoring portofolio, dan kontrol fraud",
-      focus: "menganalisis exposure, membuat dashboard risiko, meninjau aturan approval, dan memberi rekomendasi mitigasi"
-    }),
-    requirements: [
-      "Pengalaman 2 tahun di risk, credit analysis, fraud, atau analytics.",
-      "Menguasai spreadsheet, SQL dasar, atau alat analisis data.",
-      "Paham konsep probability, loss, exposure, dan kontrol risiko.",
-      "Teliti, objektif, dan nyaman berdebat dengan data."
-    ],
-    about_company: "Dana Amanah menyediakan layanan pembiayaan digital dengan fokus pada keputusan kredit yang bertanggung jawab dan transparan.",
-    tags: ["Risk", "SQL", "Credit"]
-  },
-  {
-    id: "job_015",
-    title: "Warehouse Planner",
-    company: "Gudang Pintar",
-    logo: logo("GP", "1F2937"),
-    location: "Surabaya",
-    type: ["Full-time", "Contract"],
-    category: "Operasional",
-    salary: { min: 7000000, max: 12000000 },
-    posted: "2026-05-30",
-    description: makeDescription({
-      role: "Warehouse Planner",
-      company: "Gudang Pintar",
-      domain: "supply chain",
-      product: "perencanaan kapasitas gudang, inbound, outbound, dan stok barang",
-      focus: "membuat jadwal operasional, memantau inventory, mengurangi bottleneck, dan memperbaiki akurasi picking"
-    }),
-    requirements: [
-      "Pengalaman di warehouse, logistics, supply chain, atau planning.",
-      "Mampu membaca data stok, forecast, dan kapasitas tim.",
-      "Teliti terhadap SOP, keselamatan kerja, dan kualitas pengiriman.",
-      "Bersedia bekerja onsite di area gudang."
-    ],
-    about_company: "Gudang Pintar menyediakan layanan fulfillment untuk brand dan merchant yang membutuhkan proses gudang cepat, akurat, dan transparan.",
-    tags: ["Warehouse", "Inventory", "Planning"]
-  },
-  {
-    id: "job_016",
-    title: "Data Analyst",
-    company: "Insight Nusantara",
-    logo: logo("IN", "0F766E"),
-    location: "Remote",
     type: ["Full-time", "Remote"],
     category: "Teknologi",
-    salary: { min: 11000000, max: 21000000 },
-    posted: "2026-05-29",
-    description: makeDescription({
-      role: "Data Analyst",
-      company: "Insight Nusantara",
-      domain: "analytics produk",
-      product: "dashboard KPI, segmentasi pengguna, dan laporan eksperimen",
-      focus: "menulis query, memvalidasi definisi metrik, membangun visualisasi, dan menjelaskan driver perubahan"
-    }),
+    salary: { min: 18000000, max: 28000000 },
+    posted: "2026-10-29",
+    description: "Mengembangkan scoring credit engine AI dan sistem pembayaran buy-now-pay-later (BNPL) dengan tingkat ketersediaan tinggi dan standar keamanan finansial.",
     requirements: [
-      "Pengalaman 2 tahun sebagai data analyst atau business analyst.",
-      "Menguasai SQL, spreadsheet, dan visualisasi data.",
-      "Paham statistik dasar, funnel, cohort, dan quality check data.",
-      "Mampu menyampaikan insight yang mengarah pada keputusan."
+      "Min. 3 tahun pengalaman backend engineering dengan Golang.",
+      "Paham microservices, Redis caching, MySQL optimization, dan Docker containerization.",
+      "Pengalaman di fintech atau payment gateway adalah nilai tambah besar.",
+      "Komunikasi solid dan kemampuan pemecahan masalah analitis."
     ],
-    about_company: "Insight Nusantara membantu perusahaan digital membangun praktik analytics yang akurat, mudah dipahami, dan relevan untuk keputusan bisnis.",
-    tags: ["SQL", "Dashboard", "Metrics"]
+    about_company: "Kredivo Group adalah perusahaan fintech lending digital terkemuka di Asia Tenggara yang memberikan akses kredit instan yang cepat, mudah, dan terjangkau.",
+    tags: ["Golang", "Fintech", "Kredivo", "BNPL"]
   },
   {
-    id: "job_017",
-    title: "Community Manager",
-    company: "Belajar Bareng",
-    logo: logo("BB", "A21CAF"),
-    location: "Yogyakarta",
-    type: ["Part-time", "Remote"],
-    category: "Marketing",
-    salary: { min: 4500000, max: 8000000 },
-    posted: "2026-05-28",
-    description: makeDescription({
-      role: "Community Manager",
-      company: "Belajar Bareng",
-      domain: "komunitas edukasi",
-      product: "program belajar, diskusi online, dan event anggota komunitas",
-      focus: "mengelola kalender komunitas, memantik diskusi, menjaga kualitas forum, dan mengukur engagement"
-    }),
-    requirements: [
-      "Pengalaman mengelola komunitas, event, atau social media.",
-      "Mampu menulis komunikasi yang hangat, jelas, dan tepat konteks.",
-      "Paham metrik engagement dan feedback loop anggota.",
-      "Nyaman menjadi moderator diskusi online."
-    ],
-    about_company: "Belajar Bareng membangun komunitas belajar praktis untuk profesional muda yang ingin meningkatkan skill secara konsisten.",
-    tags: ["Community", "Events", "Engagement"]
-  },
-  {
-    id: "job_018",
-    title: "Payroll Specialist",
-    company: "Talenta Karya",
-    logo: logo("TK", "155E75"),
-    location: "Jakarta Selatan",
+    id: "job_schneider_automation",
+    title: "Service Representative - Automation & Power",
+    company: "Schneider Electric",
+    logo: logo("SE", "3DCD58"),
+    location: "Cikarang",
     type: ["Full-time"],
-    category: "Keuangan",
-    salary: { min: 7500000, max: 13000000 },
-    posted: "2026-05-27",
-    description: makeDescription({
-      role: "Payroll Specialist",
-      company: "Talenta Karya",
-      domain: "payroll dan benefit",
-      product: "perhitungan gaji, pajak, BPJS, dan laporan karyawan bulanan",
-      focus: "memproses payroll, memeriksa komponen gaji, menjaga kerahasiaan data, dan menjawab pertanyaan karyawan"
-    }),
-    requirements: [
-      "Pengalaman 2 tahun mengelola payroll atau HR operations.",
-      "Paham PPh 21, BPJS, komponen benefit, dan administrasi karyawan.",
-      "Sangat teliti dengan angka dan data pribadi.",
-      "Mampu bekerja dengan deadline bulanan yang ketat."
-    ],
-    about_company: "Talenta Karya menyediakan layanan HR operations untuk perusahaan yang ingin proses karyawan berjalan lebih tertib dan transparan.",
-    tags: ["Payroll", "PPh21", "HR Ops"]
-  },
-  {
-    id: "job_019",
-    title: "QA Engineer",
-    company: "Cipta Solusi",
-    logo: logo("CS", "1E40AF"),
-    location: "Bandung",
-    type: ["Contract", "Remote"],
     category: "Teknologi",
-    salary: { min: 8500000, max: 15000000 },
-    posted: "2026-05-26",
-    description: makeDescription({
-      role: "QA Engineer",
-      company: "Cipta Solusi",
-      domain: "quality engineering",
-      product: "aplikasi web internal, integrasi API, dan workflow otomatisasi",
-      focus: "menulis test case, menjalankan regression test, melaporkan bug, dan membangun automasi prioritas"
-    }),
+    salary: { min: 10000000, max: 16000000 },
+    posted: "2026-10-28",
+    description: "Melakukan commissioning sistem otomasi industri, PLC, SCADA, dan pemeliharaan panel distribusi daya pintar di fasilitas manufaktur tier-1 Schneider Electric.",
     requirements: [
-      "Pengalaman 2 tahun di QA manual atau automation.",
-      "Paham test case, exploratory testing, API testing, dan bug reporting.",
-      "Pengalaman Playwright, Cypress, Postman, atau alat sejenis menjadi nilai tambah.",
-      "Teliti dan mampu berkomunikasi jelas dengan engineer."
+      "Min. D3/S1 Teknik Elektro, Otomasi Industri, atau Mekatronika.",
+      "Pengalaman 2 tahun di bidang commissioning PLC, inverter, dan SCADA.",
+      "Bersedia melakukan perjalanan dinas lapangan ke customer site.",
+      "Memiliki pemahaman standar K3 kelistrikan yang baik."
     ],
-    about_company: "Cipta Solusi membangun aplikasi operasional untuk perusahaan menengah dengan fokus pada kualitas, efisiensi, dan implementasi cepat.",
-    tags: ["QA", "Automation", "Regression"]
+    about_company: "Schneider Electric adalah pemimpin global dalam transformasi digital manajemen energi dan otomasi di rumah, gedung, data center, dan industri.",
+    tags: ["Otomasi", "SCADA", "Schneider", "Industri"]
   },
   {
-    id: "job_020",
-    title: "People Operations Associate",
-    company: "Mitra Talenta",
-    logo: logo("MT", "047857"),
-    location: "Bali",
-    type: ["Full-time"],
-    category: "Operasional",
-    salary: { min: 6000000, max: 10000000 },
-    posted: "2026-05-25",
-    description: makeDescription({
-      role: "People Operations Associate",
-      company: "Mitra Talenta",
-      domain: "people operations",
-      product: "onboarding, administrasi karyawan, dan program engagement internal",
-      focus: "mengelola dokumen, mendukung proses rekrutmen, menjalankan onboarding, dan membantu survei kepuasan karyawan"
-    }),
+    id: "job_paragon_seo",
+    title: "SEO & Content Marketing Specialist",
+    company: "Paragon Technology and Innovation (Wardah)",
+    logo: logo("PG", "00838F"),
+    location: "Tangerang",
+    type: ["Full-time", "Hybrid"],
+    category: "Marketing",
+    salary: { min: 9000000, max: 15000000 },
+    posted: "2026-10-30",
+    description: "Meningkatkan visibilitas organik merek kosmetik Paragon (Wardah, Make Over, Emina, Kahf) melalui strategi SEO on-page, off-page, technical audit, dan content marketing.",
     requirements: [
-      "Pengalaman 1 tahun di HR, recruitment, administration, atau operations.",
-      "Rapi dalam dokumentasi dan komunikasi dengan banyak stakeholder.",
-      "Paham dasar administrasi karyawan dan employee lifecycle.",
-      "Mampu menjaga kerahasiaan dan menyelesaikan pekerjaan dengan teliti."
+      "Min. 2 tahun pengalaman sebagai SEO Specialist atau Technical Content Strategist.",
+      "Mahir tool SEO seperti Ahrefs, SEMrush, Google Search Console, dan Screaming Frog.",
+      "Pemahaman kuat mengenai search intent konsumen beauty dan personal care.",
+      "Mampu berkoordinasi dengan tim copywriter, digital designer, dan web developer."
     ],
-    about_company: "Mitra Talenta membantu perusahaan hospitality dan layanan membangun sistem people operations yang rapi, manusiawi, dan mudah dipantau.",
-    tags: ["HR", "Onboarding", "Administration"]
+    about_company: "PT Paragon Technology and Innovation adalah perusahaan manufaktur kosmetik nasional terbesar di Indonesia yang menaungi brand ternama Wardah, Make Over, Emina, dan Kahf.",
+    tags: ["SEO", "Content Marketing", "Paragon", "FMCG"]
   }
 ];
 

@@ -62,7 +62,11 @@ export function removeBookmark(jobId) {
 }
 
 export function escapeHtml(value) {
-  return String(value)
+  if (value === null || value === undefined) return "";
+  const str = String(value);
+  const lower = str.trim().toLowerCase();
+  if (lower === "nan" || lower === "null" || lower === "undefined") return "";
+  return str
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
@@ -83,8 +87,11 @@ export function highlightText(value, query = "") {
 }
 
 function truncate(value, maxLength = 150) {
-  if (value.length <= maxLength) return value;
-  return `${value.slice(0, maxLength).trim()}...`;
+  if (!value) return "";
+  const str = String(value);
+  if (str.trim().toLowerCase() === "nan") return "";
+  if (str.length <= maxLength) return str;
+  return `${str.slice(0, maxLength).trim()}...`;
 }
 
 function cssEscape(value) {
@@ -560,6 +567,24 @@ async function initDetailPage() {
     }
   }
 
+  const rawDesc = String(job.description || "").trim();
+  const detailDescription = (rawDesc && rawDesc.toLowerCase() !== "nan" && rawDesc.toLowerCase() !== "null")
+    ? rawDesc
+    : `Perusahaan ${job.company || "Terkait"} membuka lowongan resmi untuk posisi ${job.title || "ini"} di ${job.location || "Indonesia"}. Silakan klik tombol 'Lamar Sekarang' di atas untuk melihat rincian kualifikasi dan mengajukan lamaran langsung di portal resmi penyedia.`;
+
+  const rawAboutCo = String(job.about_company || "").trim();
+  const detailAboutCompany = (rawAboutCo && rawAboutCo.toLowerCase() !== "nan" && rawAboutCo.toLowerCase() !== "null")
+    ? rawAboutCo
+    : `${job.company || "Perusahaan ini"} membuka kesempatan berkarir resmi untuk talenta profesional di bidang ${job.category || "terkait"}.`;
+
+  const detailRequirements = (Array.isArray(job.requirements) && job.requirements.length > 0)
+    ? job.requirements.filter((r) => r && String(r).trim().toLowerCase() !== "nan")
+    : [
+        `Pengalaman profesional yang relevan di bidang ${job.category || "terkait"}.`,
+        `Keahlian teknis dan komunikasi kerja yang handal.`,
+        `Informasi kualifikasi selengkapnya dapat diakses langsung pada portal resmi penyedia lowongan.`
+      ];
+
   root.innerHTML = `
     <section class="detail-hero" aria-labelledby="detail-title">
       <div class="detail-hero__top">
@@ -618,13 +643,13 @@ async function initDetailPage() {
 
     <section class="content-block" aria-labelledby="about-job-title">
       <h2 id="about-job-title">Tentang Pekerjaan</h2>
-      <p>${escapeHtml(job.description)}</p>
+      <p>${escapeHtml(detailDescription)}</p>
     </section>
 
     <section class="content-block" aria-labelledby="requirements-title">
       <h2 id="requirements-title">Persyaratan</h2>
       <ul class="requirement-list">
-        ${job.requirements.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        ${detailRequirements.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
       </ul>
     </section>
 
@@ -634,10 +659,10 @@ async function initDetailPage() {
         ${renderCompanyAvatar(job.company, "company-strip__logo")}
         <div>
           <strong>${escapeHtml(job.company)}</strong>
-          <p class="body-medium">${escapeHtml(job.category)} . 51-200 karyawan</p>
+          <p class="body-medium">${escapeHtml(job.category || "Teknologi")} · ${escapeHtml(job.location || "Indonesia")}</p>
         </div>
       </div>
-      <p>${escapeHtml(job.about_company)}</p>
+      <p>${escapeHtml(detailAboutCompany)}</p>
     </section>
 
     ${sourceBlock}

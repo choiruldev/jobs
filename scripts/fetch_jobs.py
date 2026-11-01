@@ -29,12 +29,25 @@ INDONESIA_CITIES = [
 def get_iso_now():
     return datetime.datetime.now(datetime.timezone.utc).isoformat()
 
+def is_null_or_nan(val):
+    if val is None:
+        return True
+    try:
+        import math
+        if isinstance(val, float) and math.isnan(val):
+            return True
+    except Exception:
+        pass
+    s = str(val).strip().lower()
+    return s in ("", "nan", "null", "none", "<na>")
+
 def clean_html(raw_html):
-    if not raw_html:
+    if is_null_or_nan(raw_html):
         return ""
-    cleaner = re.compile('<.*?>')
+    cleaner = re.compile(r'<.*?>')
     cleaned = re.sub(cleaner, ' ', str(raw_html))
-    return re.sub(r'\s+', ' ', cleaned).strip()
+    res = re.sub(r'\s+', ' ', cleaned).strip()
+    return "" if is_null_or_nan(res) else res
 
 def detect_tier(location, text=""):
     comb = f"{location} {text}".lower()
@@ -166,19 +179,25 @@ def fetch_from_jobspy():
                 )
                 if scraped is not None and not scraped.empty:
                     for _, row in scraped.iterrows():
-                        title = str(row.get("title") or "")
-                        company = str(row.get("company") or "")
-                        url = str(row.get("job_url") or "#")
+                        title = str(row.get("title") or "").strip()
+                        company = str(row.get("company") or "").strip()
+                        url = str(row.get("job_url") or "#").strip()
                         site_raw = str(row.get("site") or "linkedin").lower()
                         platform = "LinkedIn" if "linkedin" in site_raw else ("Indeed" if "indeed" in site_raw else "LinkedIn")
-                        location = str(row.get("location") or "Indonesia")
-                        desc = str(row.get("description") or "")
+                        location = str(row.get("location") or "Indonesia").strip()
+
+                        raw_desc = row.get("description")
+                        if is_null_or_nan(raw_desc):
+                            desc = f"Perusahaan {company} membuka lowongan resmi untuk posisi {title} di {location}. Kunjungi tautan resmi {platform} untuk melihat rincian kualifikasi dan mengajukan lamaran."
+                        else:
+                            desc = str(raw_desc).strip()
+
                         job_id = make_stable_id(site_raw, f"{company}-{title}-{url}")
 
                         min_val = to_int_safe(row.get("min_amount"))
                         max_val = to_int_safe(row.get("max_amount"))
                         raw_curr = row.get("currency")
-                        curr = "IDR" if pd.isna(raw_curr) or not str(raw_curr).strip() or str(raw_curr).lower() == "nan" else str(raw_curr).strip().upper()
+                        curr = "IDR" if is_null_or_nan(raw_curr) else str(raw_curr).strip().upper()
                         display_salary = "Gaji kompetitif"
                         if min_val and max_val:
                             display_salary = f"{curr} {min_val:,} - {max_val:,}/bln".replace(",", ".")
@@ -186,6 +205,25 @@ def fetch_from_jobspy():
                             display_salary = f"{curr} {min_val:,}/bln".replace(",", ".")
 
                         is_remote = "remote" in location.lower() or "remote" in title.lower() or "remote" in desc.lower()
+
+                        raw_date = row.get("date_posted")
+                        posted_iso = get_iso_now()
+                        if not is_null_or_nan(raw_date):
+                            try:
+                                if isinstance(raw_date, (datetime.date, datetime.datetime)):
+                                    posted_iso = raw_date.isoformat()
+                                    if len(posted_iso) == 10:
+                                        posted_iso += "T00:00:00Z"
+                                else:
+                                    s_date = str(raw_date).strip()
+                                    if s_date and not is_null_or_nan(s_date):
+                                        posted_iso = s_date
+                            except Exception:
+                                posted_iso = get_iso_now()
+
+                        cleaned_desc = clean_html(desc)
+                        final_desc_text = cleaned_desc if cleaned_desc else f"Lowongan {title} di {company} melalui {platform}."
+                        final_desc_html = desc if ("<p>" in desc or "<br" in desc) else f"<p>{final_desc_text}</p>"
 
                         jobs.append({
                             "id": job_id,
@@ -205,9 +243,9 @@ def fetch_from_jobspy():
                             },
                             "applyUrl": url,
                             "sourcePlatform": platform,
-                            "postedAt": get_iso_now(),
-                            "descriptionHtml": desc,
-                            "descriptionText": clean_html(desc) or f"Lowongan {title} di {company} melalui {platform}.",
+                            "postedAt": posted_iso,
+                            "descriptionHtml": final_desc_html,
+                            "descriptionText": final_desc_text,
                             "tags": [platform, detect_category(title, desc), "Indonesia", "Remote" if is_remote else "Hybrid"]
                         })
             except Exception as q_err:
@@ -430,23 +468,29 @@ def get_jobstreet_indonesia_jobs():
 def fetch_from_apis():
     all_jobs = []
     print("[+] Mengambil data Remotive & Arbeitnow...")
-    
+
     # Remotive
     remotive_data = fetch_json("https://remotive.com/api/remote-jobs?limit=50")
     if remotive_data and "jobs" in remotive_data:
         for item in remotive_data["jobs"][:35]:
             title = item.get("title", "")
             location = item.get("candidate_required_location", "Remote Global")
+            pub_date = item.get("publication_date")
+            posted_at = pub_date if (pub_date and not is_null_or_nan(pub_date)) else get_iso_now()
+            raw_desc = item.get("description", "")
+            desc_text = clean_html(raw_desc) or f"Lowongan {title} di {item.get('company_name', 'Global Tech')}."
+            desc_html = raw_desc if ("<p>" in raw_desc or "<br" in raw_desc) else f"<p>{desc_text}</p>"
+
             all_jobs.append({
                 "id": f"remotive-{item.get('id')}",
                 "title": title,
                 "company": item.get("company_name", "Global Tech"),
                 "logo": item.get("company_logo", ""),
                 "location": location,
-                "remoteTier": detect_tier(location, item.get("description", "")),
+                "remoteTier": detect_tier(location, desc_text),
                 "workplaceType": "remote",
-                "experienceLevel": detect_experience(title, item.get("description", "")),
-                "category": detect_category(title, item.get("description", "")),
+                "experienceLevel": detect_experience(title, desc_text),
+                "category": detect_category(title, desc_text),
                 "salary": {
                     "min": None,
                     "max": None,
@@ -456,9 +500,9 @@ def fetch_from_apis():
                 },
                 "applyUrl": item.get("url", "#"),
                 "sourcePlatform": "Remotive",
-                "postedAt": item.get("publication_date", get_iso_now()),
-                "descriptionHtml": item.get("description", ""),
-                "descriptionText": clean_html(item.get("description", "")),
+                "postedAt": posted_at,
+                "descriptionHtml": desc_html,
+                "descriptionText": desc_text,
                 "tags": ["Remotive", "Remote Global", detect_category(title)]
             })
 
@@ -468,21 +512,34 @@ def fetch_from_apis():
         for item in arbeitnow_data["data"][:25]:
             title = item.get("title", "")
             location = item.get("location", "Remote")
+            raw_created = item.get("created_at")
+            if isinstance(raw_created, (int, float)) and raw_created > 0:
+                try:
+                    posted_at = datetime.datetime.fromtimestamp(raw_created, datetime.timezone.utc).isoformat()
+                except Exception:
+                    posted_at = get_iso_now()
+            else:
+                posted_at = get_iso_now()
+
+            raw_desc = item.get("description", "")
+            desc_text = clean_html(raw_desc) or f"Lowongan {title} di {item.get('company_name', 'Arbeitnow Partner')}."
+            desc_html = raw_desc if ("<p>" in raw_desc or "<br" in raw_desc) else f"<p>{desc_text}</p>"
+
             all_jobs.append({
                 "id": f"arbeitnow-{item.get('slug', hash(item.get('url', '')))}",
                 "title": title,
                 "company": item.get("company_name", "Arbeitnow Partner"),
                 "location": location,
-                "remoteTier": detect_tier(location, item.get("description", "")),
+                "remoteTier": detect_tier(location, desc_text),
                 "workplaceType": "remote",
-                "experienceLevel": detect_experience(title, item.get("description", "")),
-                "category": detect_category(title, item.get("description", "")),
+                "experienceLevel": detect_experience(title, desc_text),
+                "category": detect_category(title, desc_text),
                 "salary": {"min": None, "max": None, "currency": "EUR", "period": "yearly", "display": "EUR €60.000 - €90.000/thn"},
                 "applyUrl": item.get("url", "#"),
                 "sourcePlatform": "Arbeitnow",
-                "postedAt": get_iso_now(),
-                "descriptionHtml": item.get("description", ""),
-                "descriptionText": clean_html(item.get("description", "")),
+                "postedAt": posted_at,
+                "descriptionHtml": desc_html,
+                "descriptionText": desc_text,
                 "tags": ["Arbeitnow", "Remote", detect_category(title)]
             })
 

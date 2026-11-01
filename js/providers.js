@@ -592,6 +592,17 @@ async function fetchFreshLocalFeed() {
       const isHybrid = j.workplaceType === "hybrid" || (j.location && j.location.toLowerCase().includes("hybrid"));
       const wpLabel = isRemote ? "Remote" : (isHybrid ? "Hybrid" : "On-site");
       const isId = j.remoteTier === "indonesia" || isIndonesiaScope(j);
+      const rawDescText = String(j.descriptionText || "").trim();
+      const rawDescHtml = String(j.descriptionHtml || "").trim();
+      const fallbackDesc = `Perusahaan ${j.company} membuka lowongan resmi untuk posisi ${j.title} di ${j.location}. Kunjungi tautan resmi ${j.sourcePlatform || 'portal rekrutmen'} untuk membaca kualifikasi lengkap dan melamar langsung.`;
+
+      const safeDescText = (rawDescText && rawDescText.toLowerCase() !== "nan" && rawDescText.toLowerCase() !== "null")
+        ? rawDescText
+        : fallbackDesc;
+      const safeDescHtml = (rawDescHtml && rawDescHtml.toLowerCase() !== "nan" && rawDescHtml.toLowerCase() !== "<p>nan</p>" && rawDescHtml.toLowerCase() !== "null")
+        ? rawDescHtml
+        : `<p>${safeDescText}</p>`;
+
       return {
         id: j.id,
         title: j.title,
@@ -619,8 +630,8 @@ async function fetchFreshLocalFeed() {
           name: j.sourcePlatform || "Portal Resmi",
           url: j.applyUrl
         },
-        description: j.descriptionText || j.descriptionHtml || "",
-        descriptionHtml: j.descriptionHtml || `<p>${j.descriptionText || j.title}</p>`,
+        description: safeDescText,
+        descriptionHtml: safeDescHtml,
         requirements: j.requirements && j.requirements.length ? j.requirements : [
           `Pengalaman relevan dalam bidang ${j.category || 'terkait'}.`,
           `Menguasai keahlian teknis dan komunikasi profesional.`,
