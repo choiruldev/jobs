@@ -567,25 +567,50 @@ export function formatSalary(salary) {
 
   const normalized = formatNormalizedSalary(salary);
   if (normalized) return normalized;
-  if (salary?.label) return salary.label;
+  if (salary?.label && String(salary.label).toUpperCase() !== "NAN") return salary.label;
 
-  const format = (value) => `Rp ${new Intl.NumberFormat("id-ID", {
-    maximumFractionDigits: 1
-  }).format(value / 1000000)}jt`;
-  return `${format(salary.min)} - ${format(salary.max)} / bulan`;
+  const min = Number(salary.min);
+  const max = Number(salary.max);
+
+  if (isNaN(min) && isNaN(max)) return "Gaji kompetitif";
+  if (!isNaN(min) && (isNaN(max) || min === max)) return `${formatMillion(min)} / bulan`;
+  if (isNaN(min) && !isNaN(max)) return `${formatMillion(max)} / bulan`;
+
+  return `${formatMillion(min)} - ${formatMillion(max)} / bulan`;
 }
 
 export function formatPostedDate(posted) {
-  const today = new Date();
-  const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-  const date = new Date(`${posted}T00:00:00`);
-  const diff = Math.max(0, Math.round((todayStart - date) / MS_PER_DAY));
+  if (!posted) return "Baru saja";
 
-  if (diff === 0) return "Hari ini";
-  if (diff === 1) return "1 hari lalu";
-  if (diff < 30) return `${diff} hari lalu`;
+  let date;
+  if (posted instanceof Date) {
+    date = posted;
+  } else if (typeof posted === "string") {
+    const trimmed = posted.trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+      date = new Date(`${trimmed}T00:00:00`);
+    } else {
+      date = new Date(trimmed);
+    }
+  } else {
+    date = new Date(posted);
+  }
 
-  const months = Math.floor(diff / 30);
+  if (isNaN(date.getTime())) {
+    return "Baru saja";
+  }
+
+  const now = Date.now();
+  const diffMs = Math.max(0, now - date.getTime());
+  const diffHours = Math.floor(diffMs / (1000 * 3600));
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffHours < 1) return "Baru saja";
+  if (diffHours < 24) return `${diffHours} jam lalu`;
+  if (diffDays === 1) return "1 hari lalu";
+  if (diffDays < 30) return `${diffDays} hari lalu`;
+
+  const months = Math.floor(diffDays / 30);
   if (months < 12) return `${months} bulan lalu`;
 
   const years = Math.floor(months / 12);
@@ -593,17 +618,22 @@ export function formatPostedDate(posted) {
 }
 
 export function formatDateLong(value) {
+  if (!value) return "-";
+  const date = new Date(value);
+  if (isNaN(date.getTime())) return String(value);
   return new Intl.DateTimeFormat("id-ID", {
     day: "2-digit",
     month: "short",
     year: "numeric"
-  }).format(new Date(value));
+  }).format(date);
 }
 
 function formatMillion(value) {
+  const num = Number(value);
+  if (isNaN(num) || num <= 0) return "Rp 0";
   const formatted = new Intl.NumberFormat("id-ID", {
-    maximumFractionDigits: value >= 100000000 ? 0 : 1
-  }).format(value / 1000000);
+    maximumFractionDigits: num >= 100000000 ? 0 : 1
+  }).format(num / 1000000);
   return `Rp ${formatted}jt`;
 }
 

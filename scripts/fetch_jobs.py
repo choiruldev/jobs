@@ -177,7 +177,8 @@ def fetch_from_jobspy():
 
                         min_val = to_int_safe(row.get("min_amount"))
                         max_val = to_int_safe(row.get("max_amount"))
-                        curr = str(row.get("currency") or "IDR").upper()
+                        raw_curr = row.get("currency")
+                        curr = "IDR" if pd.isna(raw_curr) or not str(raw_curr).strip() or str(raw_curr).lower() == "nan" else str(raw_curr).strip().upper()
                         display_salary = "Gaji kompetitif"
                         if min_val and max_val:
                             display_salary = f"{curr} {min_val:,} - {max_val:,}/bln".replace(",", ".")

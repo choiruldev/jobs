@@ -598,10 +598,10 @@ async function fetchFreshLocalFeed() {
         company: j.company,
         location: j.location,
         salary: {
-          min: Number(j.salary?.min || 0),
-          max: Number(j.salary?.max || 0),
-          label: j.salary?.display || "Gaji kompetitif",
-          currency: j.salary?.currency || "IDR",
+          min: isNaN(Number(j.salary?.min)) ? 0 : Number(j.salary?.min || 0),
+          max: isNaN(Number(j.salary?.max)) ? 0 : Number(j.salary?.max || 0),
+          label: (j.salary?.display && String(j.salary.display).toUpperCase() !== "NAN") ? j.salary.display : "Gaji kompetitif",
+          currency: (j.salary?.currency && String(j.salary.currency).toUpperCase() !== "NAN") ? j.salary.currency : "IDR",
           period: j.salary?.period || "monthly"
         },
         type: [
