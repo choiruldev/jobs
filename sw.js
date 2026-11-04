@@ -3,7 +3,7 @@
  * Advanced caching, offline fallback screen, and instant update lifecycle.
  */
 
-const CACHE_NAME = "jobsearch-cache-v10";
+const CACHE_NAME = "jobsearch-cache-v11";
 
 const STATIC_ASSETS = [
   "./",

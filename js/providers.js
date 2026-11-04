@@ -5,7 +5,10 @@ import {
 } from "./data.js?v=20260616z";
 import { dbSaveJobs, dbGetAllJobs } from "./storage-db.js?v=20260616z";
 
-const EXTERNAL_CACHE_KEY = "jsa_external_jobs_cache_v11";
+const EXTERNAL_CACHE_KEY = "jsa_external_jobs_cache_v12";
+try {
+  ["jsa_external_jobs_v1", "jsa_external_jobs_v2", "jsa_external_jobs_v3", "jsa_external_jobs_cache_v10", "jsa_external_jobs_cache_v11"].forEach((k) => localStorage.removeItem(k));
+} catch (_) {}
 const CACHE_TTL_MS = 30 * 60 * 1000;
 const REQUEST_TIMEOUT_MS = 4000;
 const FIELD_LABEL_PATTERN = "(?:Job\\s+Title|Title|Position|Location|Reports?\\s+To|Department|Employment\\s+Type|Workplace|Compensation|Salary)";

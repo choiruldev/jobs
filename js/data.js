@@ -1,8 +1,13 @@
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
-const JOB_REGISTRY_KEY = "jsa_job_registry_v4";
+const JOB_REGISTRY_KEY = "jsa_job_registry_v5";
 const MAX_REGISTRY_JOBS = 360;
 const USD_TO_IDR = 16000;
 const MONTHLY_WORK_HOURS = 160;
+
+// Bersihkan cache lokal usang agar data gaji selalu akurat
+try {
+  ["jsa_job_registry_v1", "jsa_job_registry_v2", "jsa_job_registry_v3", "jsa_job_registry_v4"].forEach((k) => localStorage.removeItem(k));
+} catch (_) {}
 
 function makeDescription({ role, company, domain, focus, product }) {
   return `${company} membuka posisi ${role} untuk memperkuat tim ${domain} yang sedang mengembangkan ${product}. Peran ini terlibat dari discovery, perencanaan, eksekusi, sampai evaluasi dampak bisnis. Kamu akan bekerja dekat dengan produk, desain, data, dan operasi untuk memahami kebutuhan pengguna, memecah masalah menjadi prioritas yang jelas, lalu mengirim solusi yang stabil. Fokus utama pekerjaan meliputi ${focus}, dokumentasi keputusan, eksperimen terukur, serta peningkatan proses harian. Kandidat ideal nyaman berkomunikasi lintas fungsi, mampu menjelaskan alasan teknis atau bisnis secara sederhana, dan teliti terhadap kualitas. Lingkungan kerja kami menghargai inisiatif, ownership, feedback yang jujur, dan keputusan berbasis data, sehingga setiap orang punya ruang untuk mengusulkan perbaikan yang berdampak langsung bagi pelanggan.`;
@@ -442,21 +447,86 @@ export function getFilterOptions(jobs = []) {
   };
 }
 
+export function getSalaryDisplayInfo(salary) {
+  if (!salary || (!salary.min && !salary.max && !salary.label && !salary.display)) {
+    return {
+      primary: "Gaji belum tersedia",
+      conversion: "",
+      isMissing: true
+    };
+  }
+
+  const rawLabel = String(salary.label || salary.display || "").trim();
+  const isNanLabel = !rawLabel || rawLabel.toLowerCase() === "nan" || rawLabel.toLowerCase() === "null";
+  const curr = String(salary.currency || "").toUpperCase();
+
+  // 1. Cek konversi kurs jika mata uang asing (USD atau EUR)
+  const estimate = getSalaryEstimate(salary);
+  let conversionText = "";
+
+  if (estimate && (/\$|usd/i.test(rawLabel) || curr === "USD")) {
+    if (estimate.min && estimate.max) {
+      const minJt = formatMillion(estimate.min);
+      const maxJt = formatMillion(estimate.max);
+      conversionText = estimate.min === estimate.max
+        ? `≈ ${minJt} / bln (kurs $1 = Rp 16.000)`
+        : `≈ ${minJt} - ${maxJt} / bln (kurs $1 = Rp 16.000)`;
+    }
+  } else if (estimate && (/€|eur/i.test(rawLabel) || curr === "EUR")) {
+    if (estimate.min && estimate.max) {
+      const eurToIdr = 17000 / USD_TO_IDR;
+      const minJt = formatMillion(Math.round(estimate.min * eurToIdr));
+      const maxJt = formatMillion(Math.round(estimate.max * eurToIdr));
+      conversionText = estimate.min === estimate.max
+        ? `≈ ${minJt} / bln (kurs €1 = Rp 17.000)`
+        : `≈ ${minJt} - ${maxJt} / bln (kurs €1 = Rp 17.000)`;
+    }
+  }
+
+  // 2. Tentukan primary label (HARGA ASLI SUMBER DATA)
+  let primaryText = "";
+  if (!isNanLabel && rawLabel !== "Gaji kompetitif") {
+    primaryText = rawLabel;
+  } else if (salary.min || salary.max) {
+    const min = Number(salary.min || 0);
+    const max = Number(salary.max || 0);
+    if (curr === "IDR" || !curr) {
+      if (min > 0 && max > 0 && min !== max) {
+        primaryText = `${formatMillion(min)} - ${formatMillion(max)} / bln`;
+      } else if (min > 0) {
+        primaryText = `${formatMillion(min)} / bln`;
+      } else if (max > 0) {
+        primaryText = `${formatMillion(max)} / bln`;
+      }
+    } else {
+      const p = salary.period === "yearly" ? "thn" : (salary.period === "monthly" ? "bln" : "thn");
+      if (min > 0 && max > 0 && min !== max) {
+        primaryText = `${curr} ${min.toLocaleString("en-US")} - ${max.toLocaleString("en-US")} / ${p}`;
+      } else if (min > 0) {
+        primaryText = `${curr} ${min.toLocaleString("en-US")} / ${p}`;
+      } else if (max > 0) {
+        primaryText = `${curr} ${max.toLocaleString("en-US")} / ${p}`;
+      }
+    }
+  }
+
+  if (!primaryText) {
+    primaryText = (!isNanLabel && rawLabel) ? rawLabel : "Gaji kompetitif";
+  }
+
+  return {
+    primary: primaryText,
+    conversion: conversionText,
+    isMissing: primaryText === "Gaji belum tersedia"
+  };
+}
+
 export function formatSalary(salary) {
-  if (!salary || (!salary.min && !salary.max && !salary.label)) return "Gaji belum tersedia";
+  return getSalaryDisplayInfo(salary).primary;
+}
 
-  const normalized = formatNormalizedSalary(salary);
-  if (normalized) return normalized;
-  if (salary?.label && String(salary.label).toUpperCase() !== "NAN") return salary.label;
-
-  const min = Number(salary.min);
-  const max = Number(salary.max);
-
-  if (isNaN(min) && isNaN(max)) return "Gaji kompetitif";
-  if (!isNaN(min) && (isNaN(max) || min === max)) return `${formatMillion(min)} / bulan`;
-  if (isNaN(min) && !isNaN(max)) return `${formatMillion(max)} / bulan`;
-
-  return `${formatMillion(min)} - ${formatMillion(max)} / bulan`;
+export function formatSalaryOriginal(salary) {
+  return getSalaryDisplayInfo(salary).conversion;
 }
 
 export function formatPostedDate(posted) {
@@ -584,14 +654,6 @@ export function salaryAverage(job) {
   const estimate = getSalaryEstimate(job.salary);
   if (!estimate) return 0;
   return ((estimate.min || 0) + (estimate.max || 0)) / 2;
-}
-
-export function formatSalaryOriginal(salary) {
-  const estimate = getSalaryEstimate(salary);
-  if (!estimate?.original) return "";
-  if (salary?.label && estimate.original !== salary.label) return salary.label;
-  if (salary?.label && /rp\s|\$|usd/i.test(salary.label)) return salary.label;
-  return "";
 }
 
 export function formatNormalizedSalary(salary) {

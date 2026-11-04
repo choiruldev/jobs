@@ -218,7 +218,7 @@ export function renderJobCard(job, options = {}) {
         <div class="job-card__quality">${renderQualitySignals(job)}</div>
         <div>
           <div class="${salaryClass}">${escapeHtml(salaryText)}</div>
-          ${salaryOriginal ? `<div class="job-card__salary-note">Asli: ${escapeHtml(salaryOriginal)}</div>` : ""}
+          ${salaryOriginal ? `<div class="job-card__salary-note" style="color:var(--md-sys-color-primary);font-weight:600;font-size:12px;margin-top:2px;">${escapeHtml(salaryOriginal)}</div>` : ""}
         </div>
       </a>
       <button
@@ -614,7 +614,7 @@ async function initDetailPage() {
 
       <div>
         <div class="job-card__salary">${escapeHtml(formatSalary(job.salary))}</div>
-        ${salaryOriginal ? `<div class="job-card__salary-note">Asli: ${escapeHtml(salaryOriginal)}</div>` : ""}
+        ${salaryOriginal ? `<div class="job-card__salary-note" style="color:var(--md-sys-color-primary);font-weight:700;font-size:14px;margin-top:4px;">${escapeHtml(salaryOriginal)}</div>` : ""}
         ${salaryTakeHomeHtml}
       </div>
       <div class="job-card__quality">${renderQualitySignals(job)}</div>
