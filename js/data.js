@@ -511,6 +511,9 @@ export function formatDateLong(value) {
 function formatMillion(value) {
   const num = Number(value);
   if (isNaN(num) || num <= 0) return "Rp 0";
+  if (num < 1000000) {
+    return `Rp ${num.toLocaleString("id-ID")}`;
+  }
   const formatted = new Intl.NumberFormat("id-ID", {
     maximumFractionDigits: num >= 100000000 ? 0 : 1
   }).format(num / 1000000);
@@ -521,11 +524,21 @@ function parseUsdSalaryLabel(label = "") {
   const text = String(label || "");
   if (!text || !/\$|usd/i.test(text)) return null;
 
-  const numbers = [...text.matchAll(/(?:\$|usd\s*)\s*([0-9]+(?:[.,][0-9]+)?)\s*(k)?/gi)]
+  const numbers = [...text.matchAll(/(?:\$|usd\s*)\s*([0-9]+(?:[.,][0-9]{3})*|[0-9]+(?:[.,][0-9]+)?)\s*(k)?/gi)]
     .map((match) => {
-      const raw = Number(String(match[1]).replace(",", "."));
+      let s = String(match[1] || "").trim();
+      const hasK = Boolean(match[2]);
+      if (/^\d{1,3}[.,]\d{3}$/.test(s)) {
+        return Number(s.replace(/[.,]/g, ""));
+      }
+      if (/^\d{1,3}[.,]\d{3}[.,]\d{3}$/.test(s)) {
+        return Number(s.replace(/[.,]/g, ""));
+      }
+      let raw = Number(s.replace(",", "."));
       if (!Number.isFinite(raw) || raw <= 0) return 0;
-      return match[2] ? raw * 1000 : raw;
+      if (hasK) raw *= 1000;
+      else if (raw < 500 && /thn|tahun|yearly|year/i.test(text)) raw *= 1000;
+      return raw;
     })
     .filter(Boolean);
 

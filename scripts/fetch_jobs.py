@@ -163,10 +163,17 @@ def fetch_from_jobspy():
             ("Software Engineer", "Indonesia"),
             ("Frontend Developer", "Indonesia"),
             ("Backend Engineer", "Indonesia"),
+            ("Full Stack Developer", "Indonesia"),
+            ("Mobile Developer", "Indonesia"),
+            ("DevOps Engineer", "Indonesia"),
             ("Data Analyst", "Indonesia"),
+            ("Data Engineer", "Indonesia"),
             ("Product Manager", "Indonesia"),
             ("UI UX Designer", "Indonesia"),
-            ("Digital Marketing", "Indonesia")
+            ("Digital Marketing", "Indonesia"),
+            ("QA Automation", "Indonesia"),
+            ("Account Executive", "Indonesia"),
+            ("Human Resources", "Indonesia")
         ]
         for term, loc in queries:
             try:
@@ -174,7 +181,7 @@ def fetch_from_jobspy():
                     site_name=["linkedin", "indeed"],
                     search_term=term,
                     location=loc,
-                    results_wanted=6,
+                    results_wanted=12,
                     country_indeed="indonesia"
                 )
                 if scraped is not None and not scraped.empty:
@@ -198,6 +205,14 @@ def fetch_from_jobspy():
                         max_val = to_int_safe(row.get("max_amount"))
                         raw_curr = row.get("currency")
                         curr = "IDR" if is_null_or_nan(raw_curr) else str(raw_curr).strip().upper()
+
+                        # Guard against hourly rate in IDR mistyped as monthly (e.g. 80.000 / jam)
+                        if curr == "IDR" and min_val and min_val < 500000:
+                            if min_val <= 200000:
+                                min_val = min_val * 160
+                                if max_val and max_val < 500000:
+                                    max_val = max_val * 160
+
                         display_salary = "Gaji kompetitif"
                         if min_val and max_val:
                             display_salary = f"{curr} {min_val:,} - {max_val:,}/bln".replace(",", ".")
