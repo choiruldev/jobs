@@ -1,12 +1,12 @@
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
-const JOB_REGISTRY_KEY = "jsa_job_registry_v5";
-const MAX_REGISTRY_JOBS = 360;
+const JOB_REGISTRY_KEY = "jsa_job_registry_v6";
+const MAX_REGISTRY_JOBS = 500;
 const USD_TO_IDR = 16000;
 const MONTHLY_WORK_HOURS = 160;
 
 // Bersihkan cache lokal usang agar data gaji selalu akurat
 try {
-  ["jsa_job_registry_v1", "jsa_job_registry_v2", "jsa_job_registry_v3", "jsa_job_registry_v4"].forEach((k) => localStorage.removeItem(k));
+  ["jsa_job_registry_v1", "jsa_job_registry_v2", "jsa_job_registry_v3", "jsa_job_registry_v4", "jsa_job_registry_v5"].forEach((k) => localStorage.removeItem(k));
 } catch (_) {}
 
 function makeDescription({ role, company, domain, focus, product }) {
@@ -461,26 +461,17 @@ export function getSalaryDisplayInfo(salary) {
   const curr = String(salary.currency || "").toUpperCase();
 
   // 1. Cek konversi kurs jika mata uang asing (USD atau EUR)
-  const estimate = getSalaryEstimate(salary);
+  const foreignEstimate = parseForeignSalary(rawLabel, curr);
   let conversionText = "";
 
-  if (estimate && (/\$|usd/i.test(rawLabel) || curr === "USD")) {
-    if (estimate.min && estimate.max) {
-      const minJt = formatMillion(estimate.min);
-      const maxJt = formatMillion(estimate.max);
-      conversionText = estimate.min === estimate.max
-        ? `≈ ${minJt} / bln (kurs $1 = Rp 16.000)`
-        : `≈ ${minJt} - ${maxJt} / bln (kurs $1 = Rp 16.000)`;
-    }
-  } else if (estimate && (/€|eur/i.test(rawLabel) || curr === "EUR")) {
-    if (estimate.min && estimate.max) {
-      const eurToIdr = 17000 / USD_TO_IDR;
-      const minJt = formatMillion(Math.round(estimate.min * eurToIdr));
-      const maxJt = formatMillion(Math.round(estimate.max * eurToIdr));
-      conversionText = estimate.min === estimate.max
-        ? `≈ ${minJt} / bln (kurs €1 = Rp 17.000)`
-        : `≈ ${minJt} - ${maxJt} / bln (kurs €1 = Rp 17.000)`;
-    }
+  if (foreignEstimate) {
+    const minJt = formatMillion(foreignEstimate.min);
+    const maxJt = formatMillion(foreignEstimate.max);
+    const currSym = foreignEstimate.currency === "EUR" ? "€1 = Rp 17.000" : "$1 = Rp 16.000";
+    const p = foreignEstimate.period === "tugas" ? "tugas" : "bln";
+    conversionText = foreignEstimate.min === foreignEstimate.max
+      ? `≈ ${minJt} / ${p} (kurs ${currSym})`
+      : `≈ ${minJt} - ${maxJt} / ${p} (kurs ${currSym})`;
   }
 
   // 2. Tentukan primary label (HARGA ASLI SUMBER DATA)
@@ -590,47 +581,61 @@ function formatMillion(value) {
   return `Rp ${formatted}jt`;
 }
 
-function parseUsdSalaryLabel(label = "") {
-  const text = String(label || "");
-  if (!text || !/\$|usd/i.test(text)) return null;
+function parseForeignSalary(label = "", currencyHint = "") {
+  const text = String(label || "").trim();
+  if (!text || text.toLowerCase() === "nan") return null;
 
-  const numbers = [...text.matchAll(/(?:\$|usd\s*)\s*([0-9]+(?:[.,][0-9]{3})*|[0-9]+(?:[.,][0-9]+)?)\s*(k)?/gi)]
-    .map((match) => {
-      let s = String(match[1] || "").trim();
-      const hasK = Boolean(match[2]);
-      if (/^\d{1,3}[.,]\d{3}$/.test(s)) {
-        return Number(s.replace(/[.,]/g, ""));
+  const isEur = /€|eur/i.test(text) || String(currencyHint).toUpperCase() === "EUR";
+  const isUsd = /\$|usd/i.test(text) || (!isEur && (String(currencyHint).toUpperCase() === "USD" || /\bk\b/i.test(text)));
+  if (!isEur && !isUsd) return null;
+
+  const rate = isEur ? 17000 : USD_TO_IDR;
+
+  const regex = /(?:[\$€]|usd\s*|eur\s*|ote\s*)?\s*([0-9]+(?:[.,][0-9]+)?)\s*(k)?/gi;
+  const numbers = [];
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    let numStr = match[1];
+    let hasK = Boolean(match[2]);
+    if (!numStr) continue;
+
+    if (/^\d{1,3}[.,]\d{3}$/.test(numStr) || /^\d{1,3}[.,]\d{3}[.,]\d{3}$/.test(numStr)) {
+      numbers.push(Number(numStr.replace(/[.,]/g, "")));
+    } else {
+      let val = Number(numStr.replace(",", "."));
+      if (Number.isFinite(val) && val > 0) {
+        if (hasK) val *= 1000;
+        else if (val < 500 && (/thn|tahun|yearly|year/i.test(text) || (!/hour|jam|month|bulan|task|tugas/i.test(text) && val >= 20))) {
+          val *= 1000;
+        }
+        numbers.push(val);
       }
-      if (/^\d{1,3}[.,]\d{3}[.,]\d{3}$/.test(s)) {
-        return Number(s.replace(/[.,]/g, ""));
-      }
-      let raw = Number(s.replace(",", "."));
-      if (!Number.isFinite(raw) || raw <= 0) return 0;
-      if (hasK) raw *= 1000;
-      else if (raw < 500 && /thn|tahun|yearly|year/i.test(text)) raw *= 1000;
-      return raw;
-    })
-    .filter(Boolean);
+    }
+  }
 
   if (!numbers.length) return null;
 
-  const period = /hour|jam/i.test(text)
-    ? "hourly"
-    : /month|bulan/i.test(text)
-      ? "monthly"
-      : "yearly";
-  const toMonthlyIdr = (value) => {
-    if (period === "hourly") return value * MONTHLY_WORK_HOURS * USD_TO_IDR;
-    if (period === "monthly") return value * USD_TO_IDR;
-    return (value * USD_TO_IDR) / 12;
+  const isHourly = /hour|jam/i.test(text);
+  const isMonthly = /month|bulan/i.test(text);
+  const isPerTask = /task|tugas/i.test(text);
+
+  const toMonthlyIdr = (val) => {
+    if (isHourly) return val * MONTHLY_WORK_HOURS * rate;
+    if (isMonthly) return val * rate;
+    if (isPerTask) return val * rate;
+    return (val * rate) / 12;
   };
+
   const min = toMonthlyIdr(numbers[0]);
-  const max = toMonthlyIdr(numbers[1] || numbers[0]);
+  const max = toMonthlyIdr(numbers[numbers.length > 1 ? 1 : 0]);
 
   return {
     min: Math.min(min, max),
     max: Math.max(min, max),
-    original: text
+    original: text,
+    currency: isEur ? "EUR" : "USD",
+    rate,
+    period: isHourly ? "jam" : (isMonthly ? "bln" : (isPerTask ? "tugas" : "bln"))
   };
 }
 
@@ -643,11 +648,11 @@ export function getSalaryEstimate(salary) {
       return {
         min: Math.min(min, max),
         max: Math.max(min, max),
-        original: salary.label || ""
+        original: salary.label || salary.display || ""
       };
     }
   }
-  return parseUsdSalaryLabel(salary.label);
+  return parseForeignSalary(salary.label || salary.display, salary.currency);
 }
 
 export function salaryAverage(job) {
