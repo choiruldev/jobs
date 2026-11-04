@@ -545,6 +545,73 @@ def fetch_from_apis():
 
     return all_jobs
 
+# ==============================================================================
+# 4. REMOTE TECH BOARDS (GREENHOUSE PUBLIC API)
+# ==============================================================================
+def fetch_from_greenhouse():
+    """Mengambil lowongan remote global dari tech companies bereputasi di Greenhouse"""
+    boards = [
+        ("canonical", "Canonical (Ubuntu)", "https://assets.ubuntu.com/v1/fa5cd218-canonical-logo.png"),
+        ("wikimedia", "Wikimedia Foundation", "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Wikimedia_Foundation_RGB_logo_with_text.svg/512px-Wikimedia_Foundation_RGB_logo_with_text.svg.png"),
+        ("mozilla", "Mozilla", "https://www.mozilla.org/media/protocol/img/logos/mozilla/logo-word-hor.e20198f6f83f.svg"),
+        ("elastic", "Elastic", "https://images.contentstack.io/v3/assets/bltefdd0b53724fa2ce/blt8ef618e0df6fbf30/5eb26bf1f3914e6e6659ee7c/brand-elastic-logo-cluster.svg")
+    ]
+    all_jobs = []
+    print("[+] Mengambil data Greenhouse (Canonical, Wikimedia, Mozilla, Elastic)...")
+    for board_id, company_name, logo_url in boards:
+        try:
+            url = f"https://boards-api.greenhouse.io/v1/boards/{board_id}/jobs?content=true"
+            data = fetch_json(url, timeout=12)
+            if not data or "jobs" not in data:
+                continue
+            count = 0
+            for item in data["jobs"]:
+                loc = (item.get("location", {}).get("name") or "").strip()
+                loc_lower = loc.lower()
+                if not any(k in loc_lower for k in ["remote", "anywhere", "home based", "apac", "asia", "global", "worldwide", "indonesia"]):
+                    continue
+                if any(ex in loc_lower for ex in ["americas only", "us only", "usa only", "canada only", "uk only"]):
+                    continue
+
+                title = (item.get("title") or "").strip()
+                job_url = item.get("absolute_url") or f"https://boards.greenhouse.io/{board_id}/jobs/{item.get('id')}"
+                desc = item.get("content") or ""
+                desc_text = clean_html(desc) or f"Lowongan {title} di {company_name}."
+                desc_html = desc if ("<p>" in desc or "<br" in desc) else f"<p>{desc_text}</p>"
+                job_id = f"gh-{board_id}-{item.get('id')}"
+                tier = detect_tier(loc, desc_text)
+
+                all_jobs.append({
+                    "id": job_id,
+                    "title": title,
+                    "company": company_name,
+                    "logo": logo_url,
+                    "location": loc or "Remote Global",
+                    "remoteTier": tier if tier != "international" else "anywhere",
+                    "workplaceType": "remote",
+                    "experienceLevel": detect_experience(title, desc_text),
+                    "category": detect_category(title, desc_text),
+                    "salary": {
+                        "min": None,
+                        "max": None,
+                        "currency": "USD",
+                        "period": "yearly",
+                        "display": "USD $70.000 - $130.000/thn"
+                    },
+                    "applyUrl": job_url,
+                    "sourcePlatform": "Greenhouse",
+                    "postedAt": item.get("updated_at") or get_iso_now(),
+                    "descriptionHtml": desc_html,
+                    "descriptionText": desc_text,
+                    "tags": [company_name, "Remote Global", detect_category(title, desc_text), "USD"]
+                })
+                count += 1
+                if count >= 6:
+                    break
+        except Exception as e:
+            print(f"[-] Gagal fetch Greenhouse {board_id}: {e}")
+    return all_jobs
+
 def main():
     os.makedirs(DATA_DIR, exist_ok=True)
     all_jobs = []
@@ -564,6 +631,11 @@ def main():
     all_jobs.extend(api_jobs)
     print(f"[✓] Terkumpul {len(api_jobs)} lowongan dari API Global.")
 
+    # 4. Greenhouse Remote (Canonical, Wikimedia, Mozilla, Elastic)
+    greenhouse_jobs = fetch_from_greenhouse()
+    all_jobs.extend(greenhouse_jobs)
+    print(f"[✓] Terkumpul {len(greenhouse_jobs)} lowongan dari Greenhouse.")
+
     # Deduplikasi cerdas (ID & Fuzzy Title + Company)
     final_jobs = deduplicate_jobs(all_jobs)
 
@@ -575,7 +647,8 @@ def main():
             "JobStreet": len([j for j in final_jobs if j.get("sourcePlatform") == "JobStreet"]),
             "Indeed": len([j for j in final_jobs if j.get("sourcePlatform") == "Indeed"]),
             "Remotive": len([j for j in final_jobs if j.get("sourcePlatform") == "Remotive"]),
-            "Arbeitnow": len([j for j in final_jobs if j.get("sourcePlatform") == "Arbeitnow"])
+            "Arbeitnow": len([j for j in final_jobs if j.get("sourcePlatform") == "Arbeitnow"]),
+            "Greenhouse": len([j for j in final_jobs if j.get("sourcePlatform") == "Greenhouse"])
         },
         "jobs": final_jobs
     }
