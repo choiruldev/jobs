@@ -728,6 +728,12 @@ function initSearchPage() {
     });
   }
 
+  window.addEventListener("forex:updated", () => {
+    if (visibleJobs.length) {
+      render();
+    }
+  });
+
   profileForm?.addEventListener("submit", (event) => {
     event.preventDefault();
     const formData = new FormData(profileForm);

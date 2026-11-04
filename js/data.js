@@ -1,8 +1,14 @@
+import { getLiveExchangeRates, fetchLiveExchangeRates } from "./salary-calculator.js";
+
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 const JOB_REGISTRY_KEY = "jsa_job_registry_v7";
 const MAX_REGISTRY_JOBS = 500;
-const USD_TO_IDR = 16000;
 const MONTHLY_WORK_HOURS = 160;
+
+// Sinkronisasi kurs live latar belakang (gratis via open.er-api.com & currency-api)
+if (typeof window !== "undefined") {
+  fetchLiveExchangeRates().catch(() => {});
+}
 
 // Bersihkan cache lokal usang agar data gaji selalu akurat
 try {
@@ -591,8 +597,11 @@ function parseForeignSalary(label = "", currencyHint = "") {
   const isUsd = /\$|usd|cad/i.test(text) || (!isGbp && !isEur && (String(currencyHint).toUpperCase() === "USD" || /[0-9]k\b/i.test(text)));
   if (!isGbp && !isEur && !isUsd) return null;
 
-  const rate = isGbp ? 20000 : (isEur ? 17000 : USD_TO_IDR);
-  const currSym = isGbp ? "£1 = Rp 20.000" : (isEur ? "€1 = Rp 17.000" : "$1 = Rp 16.000");
+  const rates = getLiveExchangeRates();
+  const rate = isGbp ? (rates.GBP || 24300) : (isEur ? (rates.EUR || 20300) : (rates.USD || 18140));
+  const currSym = isGbp
+    ? `£1 = Rp ${(rates.GBP || 24300).toLocaleString("id-ID")}`
+    : (isEur ? `€1 = Rp ${(rates.EUR || 20300).toLocaleString("id-ID")}` : `$1 = Rp ${(rates.USD || 18140).toLocaleString("id-ID")}`);
 
   const regex = /(?:[\$£€]|usd\s*|eur\s*|gbp\s*|ote\s*)?\s*([0-9]+(?:[.,][0-9]+)?)\s*(k)?/gi;
   const numbers = [];
