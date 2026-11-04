@@ -16,6 +16,7 @@ import datetime
 import urllib.request
 import urllib.error
 import hashlib
+import html
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "data")
 OUTPUT_FILE = os.path.join(DATA_DIR, "jobs.json")
@@ -477,6 +478,56 @@ def get_jobstreet_indonesia_jobs():
         })
     return jobs
 
+def extract_salary_arbeitnow(desc):
+    if not desc:
+        return "Gaji kompetitif"
+    raw = html.unescape(desc)
+    text = re.sub(r"<[^>]+>", " ", raw)
+    text = re.sub(r"&nbsp;|\s+", " ", text)
+    
+    m1 = re.search(r"Gehalt\s+zwischen\s+([\d.]+)\s*€?\s*und\s*([\d.]+)\s*€?", text, re.I)
+    if m1:
+        return f"EUR €{m1.group(1)} - €{m1.group(2)}/thn"
+
+    m2 = re.search(r"(?:€\s*([\d.]+)\s*(?:-|bis|–)\s*€?\s*([\d.]+)|([\d.]+)\s*€\s*(?:-|bis|–)\s*([\d.]+)\s*€)", text)
+    if m2:
+        v1 = m2.group(1) or m2.group(3)
+        v2 = m2.group(2) or m2.group(4)
+        return f"EUR €{v1} - €{v2}/thn"
+
+    m3 = re.search(r"([\d.,]+)\s*€\s*(?:je|pro|\/)\s*Stunde", text, re.I)
+    if m3:
+        return f"EUR €{m3.group(1)} / jam"
+
+    return "Gaji kompetitif"
+
+def extract_salary_greenhouse(content):
+    if not content:
+        return "Gaji kompetitif"
+    raw = html.unescape(content)
+    
+    # 1. Greenhouse pay-range structured HTML (Elastic, Mozilla)
+    pay_matches = re.findall(r"class=[\"\x27]pay-range[\"\x27][^>]*>\s*<span[^>]*>([^<]+)</span>\s*<span[^>]*>[^<]*</span>\s*<span[^>]*>([^<]+)</span>", raw, re.I)
+    if pay_matches:
+        min_v = re.sub(r"\s+", " ", pay_matches[0][0].strip())
+        max_v = re.sub(r"\s+", " ", pay_matches[0][1].strip())
+        return f"{min_v} - {max_v}"
+
+    # 2. Textual statements like Wikimedia
+    text = re.sub(r"<[^>]+>", " ", raw)
+    text = re.sub(r"&nbsp;|\s+", " ", text)
+    m = re.search(r"(?:pay range|salary range)[^.\n]*?(?:is\s+)?((?:US\$|\$|£|€)\s*[\d,]+(?:\.\d+)?)\s*(?:to|-|—|–)\s*((?:US\$|\$|£|€)?\s*[\d,]+(?:\.\d+)?)", text, re.I)
+    if m:
+        min_v = m.group(1).strip()
+        max_v = m.group(2).strip()
+        if not re.search(r"[\$£€]", max_v):
+            currency_prefix = re.match(r"^(?:US\$|\$|£|€)", min_v)
+            if currency_prefix:
+                max_v = f"{currency_prefix.group(0)}{max_v}"
+        return f"{min_v} - {max_v} / thn"
+
+    return "Gaji kompetitif"
+
 # ==============================================================================
 # 3. REMOTE GLOBAL (REMOTIVE & ARBEITNOW)
 # ==============================================================================
@@ -496,6 +547,14 @@ def fetch_from_apis():
             desc_text = clean_html(raw_desc) or f"Lowongan {title} di {item.get('company_name', 'Global Tech')}."
             desc_html = raw_desc if ("<p>" in raw_desc or "<br" in raw_desc) else f"<p>{desc_text}</p>"
 
+            raw_sal = item.get("salary")
+            if raw_sal and not is_null_or_nan(raw_sal) and raw_sal.lower() != "nan" and raw_sal.strip():
+                sal_display = raw_sal.strip()
+                sal_curr = "USD"
+            else:
+                sal_display = "Gaji kompetitif"
+                sal_curr = None
+
             all_jobs.append({
                 "id": f"remotive-{item.get('id')}",
                 "title": title,
@@ -509,9 +568,9 @@ def fetch_from_apis():
                 "salary": {
                     "min": None,
                     "max": None,
-                    "currency": "USD",
+                    "currency": sal_curr,
                     "period": "yearly",
-                    "display": item.get("salary") or "USD $70.000 - $110.000/thn"
+                    "display": sal_display
                 },
                 "applyUrl": item.get("url", "#"),
                 "sourcePlatform": "Remotive",
@@ -540,6 +599,9 @@ def fetch_from_apis():
             desc_text = clean_html(raw_desc) or f"Lowongan {title} di {item.get('company_name', 'Arbeitnow Partner')}."
             desc_html = raw_desc if ("<p>" in raw_desc or "<br" in raw_desc) else f"<p>{desc_text}</p>"
 
+            sal_display = extract_salary_arbeitnow(raw_desc)
+            sal_curr = "EUR" if ("€" in sal_display or "EUR" in sal_display) else None
+
             all_jobs.append({
                 "id": f"arbeitnow-{item.get('slug', hash(item.get('url', '')))}",
                 "title": title,
@@ -549,7 +611,7 @@ def fetch_from_apis():
                 "workplaceType": "remote",
                 "experienceLevel": detect_experience(title, desc_text),
                 "category": detect_category(title, desc_text),
-                "salary": {"min": None, "max": None, "currency": "EUR", "period": "yearly", "display": "EUR €60.000 - €90.000/thn"},
+                "salary": {"min": None, "max": None, "currency": sal_curr, "period": "yearly", "display": sal_display},
                 "applyUrl": item.get("url", "#"),
                 "sourcePlatform": "Arbeitnow",
                 "postedAt": posted_at,
@@ -596,6 +658,16 @@ def fetch_from_greenhouse():
                 job_id = f"gh-{board_id}-{item.get('id')}"
                 tier = detect_tier(loc, desc_text)
 
+                sal_display = extract_salary_greenhouse(desc)
+                if "£" in sal_display or "GBP" in sal_display:
+                    sal_curr = "GBP"
+                elif "€" in sal_display or "EUR" in sal_display:
+                    sal_curr = "EUR"
+                elif "$" in sal_display or "USD" in sal_display or "CAD" in sal_display:
+                    sal_curr = "USD"
+                else:
+                    sal_curr = None
+
                 all_jobs.append({
                     "id": job_id,
                     "title": title,
@@ -609,16 +681,16 @@ def fetch_from_greenhouse():
                     "salary": {
                         "min": None,
                         "max": None,
-                        "currency": "USD",
+                        "currency": sal_curr,
                         "period": "yearly",
-                        "display": "USD $70.000 - $130.000/thn"
+                        "display": sal_display
                     },
                     "applyUrl": job_url,
                     "sourcePlatform": "Greenhouse",
                     "postedAt": item.get("updated_at") or get_iso_now(),
                     "descriptionHtml": desc_html,
                     "descriptionText": desc_text,
-                    "tags": [company_name, "Remote Global", detect_category(title, desc_text), "USD"]
+                    "tags": [company_name, "Remote Global", detect_category(title, desc_text)]
                 })
                 count += 1
                 if count >= 6:

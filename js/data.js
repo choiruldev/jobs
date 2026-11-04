@@ -1,12 +1,12 @@
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
-const JOB_REGISTRY_KEY = "jsa_job_registry_v6";
+const JOB_REGISTRY_KEY = "jsa_job_registry_v7";
 const MAX_REGISTRY_JOBS = 500;
 const USD_TO_IDR = 16000;
 const MONTHLY_WORK_HOURS = 160;
 
 // Bersihkan cache lokal usang agar data gaji selalu akurat
 try {
-  ["jsa_job_registry_v1", "jsa_job_registry_v2", "jsa_job_registry_v3", "jsa_job_registry_v4", "jsa_job_registry_v5"].forEach((k) => localStorage.removeItem(k));
+  ["jsa_job_registry_v1", "jsa_job_registry_v2", "jsa_job_registry_v3", "jsa_job_registry_v4", "jsa_job_registry_v5", "jsa_job_registry_v6"].forEach((k) => localStorage.removeItem(k));
 } catch (_) {}
 
 function makeDescription({ role, company, domain, focus, product }) {
@@ -460,14 +460,14 @@ export function getSalaryDisplayInfo(salary) {
   const isNanLabel = !rawLabel || rawLabel.toLowerCase() === "nan" || rawLabel.toLowerCase() === "null";
   const curr = String(salary.currency || "").toUpperCase();
 
-  // 1. Cek konversi kurs jika mata uang asing (USD atau EUR)
+  // 1. Cek konversi kurs jika mata uang asing (USD, EUR, GBP)
   const foreignEstimate = parseForeignSalary(rawLabel, curr);
   let conversionText = "";
 
   if (foreignEstimate) {
     const minJt = formatMillion(foreignEstimate.min);
     const maxJt = formatMillion(foreignEstimate.max);
-    const currSym = foreignEstimate.currency === "EUR" ? "€1 = Rp 17.000" : "$1 = Rp 16.000";
+    const currSym = foreignEstimate.currSym || "$1 = Rp 16.000";
     const p = foreignEstimate.period === "tugas" ? "tugas" : "bln";
     conversionText = foreignEstimate.min === foreignEstimate.max
       ? `≈ ${minJt} / ${p} (kurs ${currSym})`
@@ -583,15 +583,18 @@ function formatMillion(value) {
 
 function parseForeignSalary(label = "", currencyHint = "") {
   const text = String(label || "").trim();
-  if (!text || text.toLowerCase() === "nan") return null;
+  if (!text || text.toLowerCase() === "nan" || text.toLowerCase() === "null") return null;
+  if (/gaji\s*(?:kompetitif|belum|tidak)/i.test(text)) return null;
 
+  const isGbp = /£|gbp/i.test(text) || String(currencyHint).toUpperCase() === "GBP";
   const isEur = /€|eur/i.test(text) || String(currencyHint).toUpperCase() === "EUR";
-  const isUsd = /\$|usd/i.test(text) || (!isEur && (String(currencyHint).toUpperCase() === "USD" || /\bk\b/i.test(text)));
-  if (!isEur && !isUsd) return null;
+  const isUsd = /\$|usd|cad/i.test(text) || (!isGbp && !isEur && (String(currencyHint).toUpperCase() === "USD" || /[0-9]k\b/i.test(text)));
+  if (!isGbp && !isEur && !isUsd) return null;
 
-  const rate = isEur ? 17000 : USD_TO_IDR;
+  const rate = isGbp ? 20000 : (isEur ? 17000 : USD_TO_IDR);
+  const currSym = isGbp ? "£1 = Rp 20.000" : (isEur ? "€1 = Rp 17.000" : "$1 = Rp 16.000");
 
-  const regex = /(?:[\$€]|usd\s*|eur\s*|ote\s*)?\s*([0-9]+(?:[.,][0-9]+)?)\s*(k)?/gi;
+  const regex = /(?:[\$£€]|usd\s*|eur\s*|gbp\s*|ote\s*)?\s*([0-9]+(?:[.,][0-9]+)?)\s*(k)?/gi;
   const numbers = [];
   let match;
   while ((match = regex.exec(text)) !== null) {
@@ -633,9 +636,10 @@ function parseForeignSalary(label = "", currencyHint = "") {
     min: Math.min(min, max),
     max: Math.max(min, max),
     original: text,
-    currency: isEur ? "EUR" : "USD",
+    currency: isGbp ? "GBP" : (isEur ? "EUR" : "USD"),
+    currSym,
     rate,
-    period: isHourly ? "jam" : (isMonthly ? "bln" : (isPerTask ? "tugas" : "bln"))
+    period: isPerTask ? "tugas" : "bln"
   };
 }
 
