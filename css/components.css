@@ -12,6 +12,7 @@
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
   background: color-mix(in srgb, var(--md-sys-color-surface-container) 96%, transparent);
   backdrop-filter: blur(16px);
+  transition: left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .top-app-bar__brand,
@@ -454,6 +455,129 @@
   padding: 0 var(--space-3);
   background: var(--md-sys-color-surface-container);
   color: var(--md-sys-color-on-surface);
+}
+
+/* Portal Filter Pills Bar */
+.portal-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  overflow-x: auto;
+  padding: 2px 2px 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.portal-pills-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.portal-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  background: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.portal-pill:hover {
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  border-color: var(--md-sys-color-outline);
+}
+
+.portal-pill.is-active {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border-color: var(--md-sys-color-primary);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.portal-pill .badge-icon {
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* Secondary Search Bar (Dropdowns + Tools Toggle) */
+.search-secondary-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.search-selects-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.search-actions-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.search-secondary-bar .sort-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 38px;
+  padding: 0 8px 0 10px;
+  border-radius: 12px;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  background: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.search-secondary-bar .sort-control select {
+  height: 100%;
+  border: none;
+  background: transparent;
+  padding: 0 4px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: var(--md-sys-color-on-surface);
+  outline: none;
+  cursor: pointer;
+}
+
+.search-status-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-top: calc(var(--space-1) * -1);
+}
+
+.search-tools-wrapper {
+  animation: slideDown 0.2s cubic-bezier(0, 0, 0.2, 1);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .search-meta {
@@ -1698,6 +1822,15 @@ mark {
     border-right: 1px solid var(--md-sys-color-outline-variant);
     background: var(--md-sys-color-surface-container);
     padding: var(--space-6) var(--space-4);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .app-layout.sidebar-collapsed .side-nav {
+    transform: translateX(-100%);
+  }
+
+  .app-layout.sidebar-collapsed .top-app-bar {
+    left: 0;
   }
 
   .side-nav__links {
@@ -1728,16 +1861,17 @@ mark {
   }
 
   .search-panel__inner {
-    grid-template-columns: minmax(320px, 1fr) auto auto;
-    align-items: start;
+    display: flex;
+    flex-direction: column;
     gap: var(--space-3);
   }
 
   .filter-row,
   .search-tools,
+  .search-tools-wrapper,
   .source-status,
   .source-credit {
-    grid-column: 1 / -1;
+    width: 100%;
   }
 
   .snackbar {
@@ -1745,6 +1879,51 @@ mark {
     left: auto;
     bottom: var(--space-8);
     width: min(420px, calc(100vw - var(--side-nav-width) - 64px));
+  }
+
+  .app-layout.sidebar-collapsed .snackbar {
+    width: min(420px, calc(100vw - 64px));
+  }
+}
+
+/* Mobile & Tablet Drawer (< 960px) */
+@media (max-width: 959px) {
+  .side-nav {
+    position: fixed;
+    z-index: 50;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    width: min(300px, 84vw);
+    flex-direction: column;
+    gap: var(--space-4);
+    border-right: 1px solid var(--md-sys-color-outline-variant);
+    background: var(--md-sys-color-surface-container);
+    padding: var(--space-5) var(--space-4);
+    box-shadow: var(--md-sys-elevation-level3);
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .app-layout.sidebar-open-mobile .side-nav {
+    transform: translateX(0);
+  }
+
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 45;
+    background: var(--md-sys-color-scrim);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    backdrop-filter: blur(3px);
+  }
+
+  .app-layout.sidebar-open-mobile .sidebar-backdrop {
+    opacity: 1;
+    pointer-events: auto;
   }
 }
 
@@ -1974,6 +2153,36 @@ mark {
   border: 1px solid #b2dfdb;
 }
 
+.source-badge--greenhouse {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.badge-fresh {
+  display: inline-flex;
+  align-items: center;
+  background: #e8f5e9;
+  color: #1b5e20;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+  border: 1px solid #c8e6c9;
+}
+
+.badge-stale {
+  display: inline-flex;
+  align-items: center;
+  background: #fff3e0;
+  color: #e65100;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+  border: 1px solid #ffe0b2;
+}
+
 /* Kanban Workspace Layout Fix for Desktop */
 .tracker-workspace--kanban .tracker-workspace__grid {
   grid-template-columns: 1fr !important;
@@ -2112,6 +2321,164 @@ mark {
 [data-theme="dark"] .chip--outline {
   border-color: var(--md-sys-color-outline-variant);
   color: var(--md-sys-color-on-surface);
+}
+
+[data-theme="dark"] .portal-pill {
+  background: var(--md-sys-color-surface-container-high);
+  border-color: var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+[data-theme="dark"] .portal-pill:hover {
+  background: #32353c;
+  color: var(--md-sys-color-on-surface);
+}
+
+[data-theme="dark"] .portal-pill.is-active {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border-color: var(--md-sys-color-primary);
+}
+
+[data-theme="dark"] .search-secondary-bar .sort-control {
+  background: var(--md-sys-color-surface-container-high);
+  border-color: var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+[data-theme="dark"] .search-secondary-bar .sort-control select {
+  color: var(--md-sys-color-on-surface);
+}
+
+[data-theme="dark"] .sort-control select {
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  border-color: var(--md-sys-color-outline-variant);
+}
+
+[data-theme="dark"] .filter-chip {
+  background: var(--md-sys-color-surface-container-high);
+  border-color: var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+[data-theme="dark"] .filter-chip[aria-pressed="true"] {
+  background: var(--md-sys-color-primary-container);
+  border-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary-container);
+}
+
+[data-theme="dark"] .tool-panel {
+  background: var(--md-sys-color-surface-container-low);
+  border-color: var(--md-sys-color-outline-variant);
+}
+
+[data-theme="dark"] .compact-field input,
+[data-theme="dark"] .compact-field select,
+[data-theme="dark"] .compact-field textarea {
+  background: var(--md-sys-color-surface-container-high);
+  border-color: var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface);
+}
+
+[data-theme="dark"] .source-badge--linkedin {
+  background: rgba(0, 119, 181, 0.18);
+  color: #70b5f9;
+  border: 1px solid rgba(0, 119, 181, 0.4);
+}
+
+[data-theme="dark"] .source-badge--jobstreet {
+  background: rgba(103, 58, 183, 0.18);
+  color: #b39ddb;
+  border: 1px solid rgba(103, 58, 183, 0.4);
+}
+
+[data-theme="dark"] .source-badge--indeed {
+  background: rgba(25, 118, 210, 0.18);
+  color: #90caf9;
+  border: 1px solid rgba(25, 118, 210, 0.4);
+}
+
+[data-theme="dark"] .source-badge--remote {
+  background: rgba(0, 150, 136, 0.18);
+  color: #80cbc4;
+  border: 1px solid rgba(0, 150, 136, 0.4);
+}
+
+[data-theme="dark"] .source-badge--greenhouse {
+  background: rgba(46, 125, 50, 0.18);
+  color: #a5d6a7;
+  border: 1px solid rgba(46, 125, 50, 0.4);
+}
+
+[data-theme="dark"] .badge-fresh {
+  background: rgba(46, 125, 50, 0.2);
+  color: #a5d6a7;
+  border-color: rgba(46, 125, 50, 0.4);
+}
+
+[data-theme="dark"] .badge-stale {
+  background: rgba(230, 81, 0, 0.2);
+  color: #ffb74d;
+  border-color: rgba(230, 81, 0, 0.4);
+}
+
+[data-theme="dark"] .top-app-bar {
+  background: color-mix(in srgb, var(--md-sys-color-surface-container) 96%, transparent);
+  border-bottom-color: var(--md-sys-color-outline-variant);
+}
+
+[data-theme="dark"] .side-nav {
+  background: var(--md-sys-color-surface-container);
+  border-right-color: var(--md-sys-color-outline-variant);
+}
+
+[data-theme="dark"] .bottom-nav {
+  background: var(--md-sys-color-surface-container);
+  border-top-color: var(--md-sys-color-outline-variant);
+}
+
+[data-theme="dark"] .nav-link {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+[data-theme="dark"] .nav-link--active {
+  color: var(--md-sys-color-primary);
+}
+
+[data-theme="dark"] .job-card__chip {
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+[data-theme="dark"] .job-card__salary {
+  color: var(--md-sys-color-primary);
+}
+
+[data-theme="dark"] .job-card__salary--muted {
+  color: var(--md-sys-color-outline);
+}
+
+[data-theme="dark"] .job-card__company {
+  color: var(--md-sys-color-on-surface);
+}
+
+[data-theme="dark"] .job-card__title {
+  color: var(--md-sys-color-on-surface);
+}
+
+[data-theme="dark"] .job-card__description {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+[data-theme="dark"] .job-card__meta-item {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+[data-theme="dark"] .company-avatar {
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  border-color: var(--md-sys-color-outline-variant);
 }
 
 /* ==========================================================================

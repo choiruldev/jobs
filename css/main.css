@@ -264,9 +264,18 @@ a {
   }
 }
 
+/* Sidebar Responsive Transitions & Collapsed State */
+.app-layout {
+  transition: padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 @media (min-width: 960px) {
   .app-layout {
     padding-left: var(--side-nav-width);
+  }
+
+  .app-layout.sidebar-collapsed {
+    padding-left: 0;
   }
 
   .page {
@@ -279,6 +288,10 @@ a {
 
   .job-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .app-layout.sidebar-collapsed .job-grid {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   }
 }
 

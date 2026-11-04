@@ -17,6 +17,7 @@ import { generateJobPostingJsonLd, injectJsonLd } from "./routes.js?v=20260616z"
 import { recordPageView, trackEvent } from "./analytics.js?v=20260616z";
 import { toggleJobComparison, renderComparatorTrigger } from "./job-comparator.js?v=20260616z";
 import { shareJob } from "./share.js?v=20260616z";
+import { initThemeEngine } from "./theme-engine.js?v=20261104g";
 
 export const BOOKMARK_KEY = "jsa_bookmarks";
 
@@ -117,7 +118,10 @@ export function renderSourceBadge(job) {
   if (platform.includes("indeed")) {
     return `<span class="source-badge source-badge--indeed"><span class="badge-icon">ID</span> Indeed</span>`;
   }
-  if (platform.includes("remotive") || platform.includes("arbeitnow") || platform.includes("remote") || platform.includes("greenhouse")) {
+  if (platform.includes("greenhouse")) {
+    return `<span class="source-badge source-badge--greenhouse"><span class="badge-icon">🌿</span> Greenhouse</span>`;
+  }
+  if (platform.includes("remotive") || platform.includes("arbeitnow") || platform.includes("remote")) {
     const label = job.sourcePlatform || "Remote Global";
     return `<span class="source-badge source-badge--remote"><span class="badge-icon">🌐</span> ${escapeHtml(label)}</span>`;
   }
@@ -187,8 +191,8 @@ export function renderJobCard(job, options = {}) {
   const dateVal = job.postedAt || job.posted;
   const ageDays = dateVal ? Math.max(0, Math.floor((Date.now() - new Date(dateVal).getTime()) / 86400000)) : 99;
   const freshnessBadge = ageDays <= 3
-    ? `<span style="background:#e8f5e9;color:#2e7d32;font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;margin-left:4px;">Baru</span>`
-    : (ageDays > 30 ? `<span style="background:#fff3e0;color:#e65100;font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;margin-left:4px;">Loker Lama</span>` : "");
+    ? `<span class="badge-fresh" style="margin-left:4px;">Baru</span>`
+    : (ageDays > 30 ? `<span class="badge-stale" style="margin-left:4px;">Loker Lama</span>` : "");
 
   return `
     <article class="${classes}" data-job-id="${escapeHtml(job.id)}">
@@ -543,7 +547,7 @@ async function initDetailPage() {
                   Perkiraan gaji bersih bulanan setelah PPh 21 (Tarif Progresif UU HPP).
                 </p>
               </div>
-              <span class="badge" style="background:#e8f5e9;color:#2e7d32;font-weight:700;font-size:13px;padding:4px 8px;border-radius:8px;">${est.formatted.netMonthlyIdr}/bln</span>
+              <span class="badge badge-fresh" style="font-weight:700;font-size:13px;padding:4px 8px;border-radius:8px;">${est.formatted.netMonthlyIdr}/bln</span>
             </div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));gap:12px;margin-top:12px;font-size:13px;">
               <div>

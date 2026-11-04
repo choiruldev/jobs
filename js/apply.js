@@ -17,6 +17,7 @@ import { exportAllData, exportApplicationsCSV, importBackupData } from "./backup
 import { parseRecruiterEmail } from "./email-status-parser.js?v=20260616z";
 import { renderGoalBanner, recordApplicationActivity } from "./goal-tracker.js?v=20260616z";
 import { saveFeedbackLocally } from "./beta-feedback.js?v=20260616z";
+import { initThemeEngine } from "./theme-engine.js?v=20261104g";
 
 const APPLICATION_KEY = "jsa_applications";
 const MAX_CV_SIZE = 5 * 1024 * 1024;

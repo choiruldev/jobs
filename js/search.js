@@ -35,6 +35,7 @@ import {
   saveSearch
 } from "./saved-searches.js?v=20260616z";
 import { recordPageView, trackEvent } from "./analytics.js?v=20260616z";
+import { initThemeEngine } from "./theme-engine.js?v=20261104g";
 
 const LAST_SEARCH_KEY = "jsa_last_search";
 const FILTER_GROUPS_SINGLE = new Set(["location", "category", "salary"]);
@@ -525,6 +526,11 @@ function initSearchPage() {
   const savedSearchList = document.getElementById("saved-search-list");
   const savedSearchSummary = document.getElementById("saved-search-summary");
 
+  const portalPills = document.querySelectorAll(".portal-pill");
+  const toggleToolsBtn = document.getElementById("toggle-search-tools");
+  const toolsWrapper = document.getElementById("search-tools-wrapper");
+  const toolsButtonText = document.getElementById("tools-button-text");
+
   const known = getAllKnownJobs();
   let allJobs = known.length ? known.filter((j) => matchesScope(j, state.source)) : [];
   let visibleJobs = [];
@@ -541,10 +547,13 @@ function initSearchPage() {
   function syncControls() {
     sourceSelect.value = state.source;
     sortSelect.value = state.sort;
+    const selected = Array.from(state.filters.platform || [])[0] || "all";
     if (platformSelect) {
-      const selected = Array.from(state.filters.platform || [])[0] || "all";
       platformSelect.value = selected;
     }
+    portalPills.forEach((pill) => {
+      pill.classList.toggle("is-active", (pill.dataset.platform || "all") === selected);
+    });
   }
 
   function populateProfileForm(profile = {}) {
@@ -561,6 +570,10 @@ function initSearchPage() {
     if (!profileSummary) return;
     const summary = getProfileSummary(profile);
     profileSummary.textContent = summary || "Profil belum diisi.";
+    if (toolsButtonText) {
+      const hasSignal = profileHasSignal(profile);
+      toolsButtonText.textContent = hasSignal ? "Profil (Aktif) & Alert" : "Profil & Alert";
+    }
   }
 
   function jobsForSavedSearch(savedSearch) {
@@ -724,9 +737,40 @@ function initSearchPage() {
       if (platformSelect.value && platformSelect.value !== "all") {
         state.filters.platform.add(platformSelect.value);
       }
+      portalPills.forEach((p) => p.classList.toggle("is-active", (p.dataset.platform || "all") === platformSelect.value));
       render();
     });
   }
+
+  portalPills.forEach((pill) => {
+    pill.addEventListener("click", () => {
+      const platform = pill.dataset.platform || "all";
+      state.filters.platform.clear();
+      if (platform !== "all") {
+        state.filters.platform.add(platform);
+      }
+      if (platformSelect) {
+        platformSelect.value = platform;
+      }
+      portalPills.forEach((p) => p.classList.toggle("is-active", p === pill));
+      trackEvent("platform_pill_click", { platform, source: state.source });
+      render();
+    });
+  });
+
+  toggleToolsBtn?.addEventListener("click", () => {
+    if (!toolsWrapper) return;
+    const isHidden = toolsWrapper.hasAttribute("hidden");
+    if (isHidden) {
+      toolsWrapper.removeAttribute("hidden");
+      toggleToolsBtn.setAttribute("aria-expanded", "true");
+      toggleToolsBtn.querySelector(".js-expand-icon")?.style.setProperty("transform", "rotate(180deg)");
+    } else {
+      toolsWrapper.setAttribute("hidden", "");
+      toggleToolsBtn.setAttribute("aria-expanded", "false");
+      toggleToolsBtn.querySelector(".js-expand-icon")?.style.setProperty("transform", "rotate(0deg)");
+    }
+  });
 
   window.addEventListener("forex:updated", () => {
     if (visibleJobs.length) {
@@ -819,6 +863,7 @@ function initSearchPage() {
     resetFilters(state);
     input.value = "";
     sortSelect.value = "relevant";
+    portalPills.forEach((p) => p.classList.toggle("is-active", (p.dataset.platform || "all") === "all"));
     renderFilterChips(filterRow, state, allJobs);
     render();
   });
@@ -828,6 +873,7 @@ function initSearchPage() {
       resetFilters(state);
       state.query = chip.dataset.query || "";
       input.value = state.query;
+      portalPills.forEach((p) => p.classList.toggle("is-active", (p.dataset.platform || "all") === "all"));
       renderFilterChips(filterRow, state, allJobs);
       render();
     });
