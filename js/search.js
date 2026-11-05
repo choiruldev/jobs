@@ -199,12 +199,12 @@ function renderFilterChips(container, state, jobs) {
       <button
         class="filter-chip"
         type="button"
-        data-filter-group="${chip.group}"
-        data-filter-value="${chip.value}"
+        data-filter-group="${escapeHtml(chip.group)}"
+        data-filter-value="${escapeHtml(chip.value)}"
         aria-pressed="${String(active)}"
       >
-        <span class="material-symbols-outlined" aria-hidden="true">${chip.icon}</span>
-        ${chip.label}
+        <span class="material-symbols-outlined" aria-hidden="true">${escapeHtml(chip.icon)}</span>
+        ${escapeHtml(chip.label)}
       </button>
     `;
   }).join("");
@@ -603,7 +603,7 @@ function initSearchPage() {
       const newCount = sameSource ? countNewJobs(item, jobsForSavedSearch(item)) : 0;
       const scopeLabel = JOB_SOURCES[item.state.source] || "Scope";
       return `
-        <article class="saved-search-card" data-search-id="${item.id}">
+        <article class="saved-search-card" data-search-id="${escapeHtml(item.id)}">
           <div>
             <strong>${escapeHtml(item.label)}</strong>
             <span>Alert lokal . ${escapeHtml(scopeLabel)}${item.state.query ? ` . ${escapeHtml(item.state.query)}` : ""}</span>

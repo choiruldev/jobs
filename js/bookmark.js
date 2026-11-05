@@ -75,6 +75,18 @@ export function escapeHtml(value) {
     .replace(/'/g, "&#039;");
 }
 
+export function sanitizeUrl(url) {
+  if (!url || typeof url !== "string") return "#";
+  const trimmed = url.trim();
+  if (/^(?:https?:\/\/|\/|#|mailto:|tel:)/i.test(trimmed)) {
+    if (/javascript\s*:/i.test(trimmed) || /data\s*:/i.test(trimmed) || /vbscript\s*:/i.test(trimmed)) {
+      return "#";
+    }
+    return trimmed;
+  }
+  return "#";
+}
+
 function escapeRegExp(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -489,7 +501,7 @@ async function initDetailPage() {
   const sourceBlock = job.source?.name ? `
     <section class="content-block" aria-labelledby="source-title">
       <h2 id="source-title">Sumber Lowongan</h2>
-      <p>Data lowongan ini berasal dari <a class="text-link" href="${escapeHtml(job.source.url || job.applyUrl || "#")}" target="_blank" rel="noopener">${escapeHtml(job.source.name)}</a>. Ikuti instruksi apply di halaman sumber resmi.</p>
+      <p>Data lowongan ini berasal dari <a class="text-link" href="${escapeHtml(sanitizeUrl(job.source.url || job.applyUrl || "#"))}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.source.name)}</a>. Ikuti instruksi apply di halaman sumber resmi.</p>
     </section>
   ` : "";
 

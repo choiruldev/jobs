@@ -3,7 +3,7 @@
  * Fetches, filters, and displays curated remote-friendly tech companies.
  */
 
-import { escapeHtml } from "./bookmark.js?v=20260616z";
+import { escapeHtml, sanitizeUrl } from "./bookmark.js?v=20260616z";
 import { evaluateCompanyCulture } from "./company-radar.js?v=20260616z";
 
 let allCompanies = [];
@@ -99,7 +99,7 @@ export function renderCompanyDirectory(container, companies = allCompanies) {
               </div>
 
               <div>
-                <a class="button button--primary button--full" href="${escapeHtml(comp.website)}" target="_blank" rel="noopener">
+                <a class="button button--primary button--full" href="${escapeHtml(sanitizeUrl(comp.website))}" target="_blank" rel="noopener noreferrer">
                   <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
                   Karir Resmi di ${escapeHtml(comp.name)}
                 </a>

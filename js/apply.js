@@ -7,6 +7,7 @@ import {
 } from "./data.js?v=20260616z";
 import {
   escapeHtml,
+  sanitizeUrl,
   showSnackbar
 } from "./bookmark.js?v=20260616z";
 import { fetchJobById } from "./providers.js?v=20260616z";
@@ -334,7 +335,7 @@ function renderDetailAction(job) {
   const externalUrl = job.applyUrl || job.source?.url;
   if (externalUrl) {
     return `
-      <a class="button button--text tracker-open-action" href="${escapeHtml(externalUrl)}" target="_blank" rel="noopener">
+      <a class="button button--text tracker-open-action" href="${escapeHtml(sanitizeUrl(externalUrl))}" target="_blank" rel="noopener noreferrer">
         <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
         Open
       </a>
@@ -351,8 +352,8 @@ function renderDetailAction(job) {
 
 function renderTrackerTitleLink(job) {
   const externalUrl = job.applyUrl || job.source?.url;
-  const href = externalUrl || `detail.html?id=${encodeURIComponent(job.id)}`;
-  const attrs = externalUrl ? ` target="_blank" rel="noopener"` : "";
+  const href = externalUrl ? sanitizeUrl(externalUrl) : `detail.html?id=${encodeURIComponent(job.id)}`;
+  const attrs = externalUrl ? ` target="_blank" rel="noopener noreferrer"` : "";
   return `<a class="tracker-job-title-link" href="${escapeHtml(href)}"${attrs}>${escapeHtml(job.title)}</a>`;
 }
 
@@ -1600,7 +1601,7 @@ function renderExternalApply(root, job) {
           <h1 class="headline-medium" id="external-apply-title">${escapeHtml(job.title)} di ${escapeHtml(job.company)}</h1>
           <p class="body-medium">Lowongan ini berasal dari sumber resmi eksternal. Buka halaman apply resmi, lalu tandai di tracker agar proses follow up tetap rapi.</p>
         </div>
-        <a class="button button--primary button--full" href="${escapeHtml(job.applyUrl)}" target="_blank" rel="noopener" id="official-apply-link">
+        <a class="button button--primary button--full" href="${escapeHtml(sanitizeUrl(job.applyUrl))}" target="_blank" rel="noopener noreferrer" id="official-apply-link">
           <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
           Buka Halaman Apply Resmi
         </a>

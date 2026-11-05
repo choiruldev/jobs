@@ -78,16 +78,16 @@ export function openShareModal(job, payload) {
         </p>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <a class="button button--tonal" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:10px;background:#e8f5e9;color:#1b5e20;" href="https://api.whatsapp.com/send?text=${encodedText}" target="_blank" rel="noopener">
+          <a class="button button--tonal" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:10px;background:#e8f5e9;color:#1b5e20;" href="https://api.whatsapp.com/send?text=${encodedText}" target="_blank" rel="noopener noreferrer">
             <span>💬 WhatsApp</span>
           </a>
-          <a class="button button--tonal" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:10px;background:#e3f2fd;color:#0d47a1;" href="https://t.me/share/url?url=${encodedUrl}&text=${encodeURIComponent(job.title + ' - ' + job.company)}" target="_blank" rel="noopener">
+          <a class="button button--tonal" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:10px;background:#e3f2fd;color:#0d47a1;" href="https://t.me/share/url?url=${encodedUrl}&text=${encodeURIComponent(job.title + ' - ' + job.company)}" target="_blank" rel="noopener noreferrer">
             <span>✈️ Telegram</span>
           </a>
-          <a class="button button--tonal" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:10px;background:#e8eaf6;color:#1a237e;" href="https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}" target="_blank" rel="noopener">
+          <a class="button button--tonal" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:10px;background:#e8eaf6;color:#1a237e;" href="https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}" target="_blank" rel="noopener noreferrer">
             <span>💼 LinkedIn</span>
           </a>
-          <a class="button button--tonal" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:10px;background:#fce4ec;color:#880e4f;" href="https://twitter.com/intent/tweet?text=${encodeURIComponent('Info loker remote ' + job.title + ' di ' + job.company)}&url=${encodedUrl}" target="_blank" rel="noopener">
+          <a class="button button--tonal" style="text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:10px;background:#fce4ec;color:#880e4f;" href="https://twitter.com/intent/tweet?text=${encodeURIComponent('Info loker remote ' + job.title + ' di ' + job.company)}&url=${encodedUrl}" target="_blank" rel="noopener noreferrer">
             <span>🐦 X / Twitter</span>
           </a>
         </div>
