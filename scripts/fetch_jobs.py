@@ -580,45 +580,46 @@ def fetch_from_apis():
                 "tags": ["Remotive", "Remote Global", detect_category(title)]
             })
 
-    # Arbeitnow
-    arbeitnow_data = fetch_json("https://www.arbeitnow.com/api/job-board-api")
-    if arbeitnow_data and "data" in arbeitnow_data:
-        for item in arbeitnow_data["data"][:25]:
-            title = item.get("title", "")
-            location = item.get("location", "Remote")
-            raw_created = item.get("created_at")
-            if isinstance(raw_created, (int, float)) and raw_created > 0:
-                try:
-                    posted_at = datetime.datetime.fromtimestamp(raw_created, datetime.timezone.utc).isoformat()
-                except Exception:
+    # Arbeitnow (Fetch multi-page for high volume)
+    for page in (1, 2):
+        arbeitnow_data = fetch_json(f"https://www.arbeitnow.com/api/job-board-api?page={page}", timeout=15)
+        if arbeitnow_data and "data" in arbeitnow_data:
+            for item in arbeitnow_data["data"][:100]:
+                title = item.get("title", "")
+                location = item.get("location", "Remote")
+                raw_created = item.get("created_at")
+                if isinstance(raw_created, (int, float)) and raw_created > 0:
+                    try:
+                        posted_at = datetime.datetime.fromtimestamp(raw_created, datetime.timezone.utc).isoformat()
+                    except Exception:
+                        posted_at = get_iso_now()
+                else:
                     posted_at = get_iso_now()
-            else:
-                posted_at = get_iso_now()
 
-            raw_desc = item.get("description", "")
-            desc_text = clean_html(raw_desc) or f"Lowongan {title} di {item.get('company_name', 'Arbeitnow Partner')}."
-            desc_html = raw_desc if ("<p>" in raw_desc or "<br" in raw_desc) else f"<p>{desc_text}</p>"
+                raw_desc = item.get("description", "")
+                desc_text = clean_html(raw_desc) or f"Lowongan {title} di {item.get('company_name', 'Arbeitnow Partner')}."
+                desc_html = raw_desc if ("<p>" in raw_desc or "<br" in raw_desc) else f"<p>{desc_text}</p>"
 
-            sal_display = extract_salary_arbeitnow(raw_desc)
-            sal_curr = "EUR" if ("€" in sal_display or "EUR" in sal_display) else None
+                sal_display = extract_salary_arbeitnow(raw_desc)
+                sal_curr = "EUR" if ("€" in sal_display or "EUR" in sal_display) else None
 
-            all_jobs.append({
-                "id": f"arbeitnow-{item.get('slug', hash(item.get('url', '')))}",
-                "title": title,
-                "company": item.get("company_name", "Arbeitnow Partner"),
-                "location": location,
-                "remoteTier": detect_tier(location, desc_text),
-                "workplaceType": "remote",
-                "experienceLevel": detect_experience(title, desc_text),
-                "category": detect_category(title, desc_text),
-                "salary": {"min": None, "max": None, "currency": sal_curr, "period": "yearly", "display": sal_display},
-                "applyUrl": item.get("url", "#"),
-                "sourcePlatform": "Arbeitnow",
-                "postedAt": posted_at,
-                "descriptionHtml": desc_html,
-                "descriptionText": desc_text,
-                "tags": ["Arbeitnow", "Remote", detect_category(title)]
-            })
+                all_jobs.append({
+                    "id": f"arbeitnow-{item.get('slug', hash(item.get('url', '')))}",
+                    "title": title,
+                    "company": item.get("company_name", "Arbeitnow Partner"),
+                    "location": location,
+                    "remoteTier": detect_tier(location, desc_text),
+                    "workplaceType": "remote",
+                    "experienceLevel": detect_experience(title, desc_text),
+                    "category": detect_category(title, desc_text),
+                    "salary": {"min": None, "max": None, "currency": sal_curr, "period": "yearly", "display": sal_display},
+                    "applyUrl": item.get("url", "#"),
+                    "sourcePlatform": "Arbeitnow",
+                    "postedAt": posted_at,
+                    "descriptionHtml": desc_html,
+                    "descriptionText": desc_text,
+                    "tags": ["Arbeitnow", "Remote", detect_category(title)]
+                })
 
     return all_jobs
 
@@ -633,10 +634,13 @@ def fetch_from_greenhouse():
         ("mozilla", "Mozilla", "https://www.mozilla.org/media/protocol/img/logos/mozilla/logo-word-hor.e20198f6f83f.svg"),
         ("elastic", "Elastic", "https://images.contentstack.io/v3/assets/bltefdd0b53724fa2ce/blt8ef618e0df6fbf30/5eb26bf1f3914e6e6659ee7c/brand-elastic-logo-cluster.svg"),
         ("gitlab", "GitLab", "https://about.gitlab.com/images/press/logo/png/gitlab-icon-rgb.png"),
-        ("datadog", "Datadog", "https://imgix.datadoghq.com/img/about/press/datadog-logo-purple.png")
+        ("datadog", "Datadog", "https://imgix.datadoghq.com/img/about/press/datadog-logo-purple.png"),
+        ("stripe", "Stripe", "https://images.ctfassets.net/fzn2n1nzq965/3rQ4lFL4mNbPpFFiqPzIZ4/2b71cc7f7e9a8f4c0268ecf75968f9a2/stripe-logo.png"),
+        ("figma", "Figma", "https://cdn.sanity.io/images/599r6htc/localized/46a76c802176eb17b04e12108de7e7e0f3736dc6-1024x1024.png"),
+        ("cloudflare", "Cloudflare", "https://cf-assets.www.cloudflare.com/slt3lc6tev37/53qCYh8umBmReKTBaTYRwQ/6f8d83296765792997e742875ab93bb8/cloudflare-mark-color.svg")
     ]
     all_jobs = []
-    print("[+] Mengambil data Greenhouse (Canonical, Wikimedia, Mozilla, Elastic, GitLab, Datadog)...")
+    print("[+] Mengambil data Greenhouse (Canonical, Wikimedia, Mozilla, Elastic, GitLab, Datadog, Stripe, Figma, Cloudflare)...")
     for board_id, company_name, logo_url in boards:
         try:
             url = f"https://boards-api.greenhouse.io/v1/boards/{board_id}/jobs?content=true"
@@ -695,7 +699,7 @@ def fetch_from_greenhouse():
                     "tags": [company_name, "Remote Global", detect_category(title, desc_text)]
                 })
                 count += 1
-                if count >= 8:
+                if count >= 12:
                     break
         except Exception as e:
             print(f"[-] Gagal fetch Greenhouse {board_id}: {e}")
@@ -704,96 +708,98 @@ def fetch_from_greenhouse():
 # ==============================================================================
 # 5. HIMALAYAS REMOTE AGGREGATOR API
 # ==============================================================================
-def fetch_from_himalayas(limit=50):
-    """Mengambil lowongan remote autentik dari Himalayas API"""
+def fetch_from_himalayas(limit=60):
+    """Mengambil lowongan remote autentik dari Himalayas API dengan pagination"""
     jobs = []
-    print(f"[+] Mengambil data Himalayas Remote API (limit={limit})...")
-    url = f"https://himalayas.app/jobs/api?limit={limit}"
-    data = fetch_json(url, timeout=15)
-    if not data or "jobs" not in data:
-        return jobs
-
-    for item in data.get("jobs", []):
-        title = str(item.get("title") or "").strip()
-        company = str(item.get("companyName") or "Himalayas Partner").strip()
-        if not title or not company or is_null_or_nan(title) or is_null_or_nan(company):
+    print(f"[+] Mengambil data Himalayas Remote API (target={limit})...")
+    offsets = [0, 20, 40]
+    for offset in offsets:
+        url = f"https://himalayas.app/jobs/api?offset={offset}"
+        data = fetch_json(url, timeout=12)
+        if not data or "jobs" not in data:
             continue
 
-        loc_list = item.get("locationRestrictions") or []
-        if not loc_list:
-            location = "Remote (Worldwide)"
-        elif len(loc_list) == 1:
-            location = f"Remote ({loc_list[0]})"
-        elif len(loc_list) <= 3:
-            location = f"Remote ({', '.join(loc_list)})"
-        else:
-            location = f"Remote ({loc_list[0]}, {loc_list[1]} +{len(loc_list)-2} negara)"
+        for item in data.get("jobs", []):
+            title = str(item.get("title") or "").strip()
+            company = str(item.get("companyName") or "Himalayas Partner").strip()
+            if not title or not company or is_null_or_nan(title) or is_null_or_nan(company):
+                continue
 
-        desc_raw = item.get("description") or item.get("excerpt") or ""
-        desc_text = clean_html(desc_raw) or f"Lowongan {title} di {company}."
-        desc_html = desc_raw if ("<p>" in desc_raw or "<br" in desc_raw) else f"<p>{desc_text}</p>"
+            loc_list = item.get("locationRestrictions") or []
+            if not loc_list:
+                location = "Remote (Worldwide)"
+            elif len(loc_list) == 1:
+                location = f"Remote ({loc_list[0]})"
+            elif len(loc_list) <= 3:
+                location = f"Remote ({', '.join(loc_list)})"
+            else:
+                location = f"Remote ({loc_list[0]}, {loc_list[1]} +{len(loc_list)-2} negara)"
 
-        min_val = to_int_safe(item.get("minSalary"))
-        max_val = to_int_safe(item.get("maxSalary"))
-        raw_curr = item.get("currency")
-        curr = "USD" if is_null_or_nan(raw_curr) else str(raw_curr).strip().upper()
-        period_raw = str(item.get("salaryPeriod") or "annual").lower()
-        period = "monthly" if "month" in period_raw else "yearly"
-        period_suffix = "/bln" if period == "monthly" else "/thn"
+            desc_raw = item.get("description") or item.get("excerpt") or ""
+            desc_text = clean_html(desc_raw) or f"Lowongan {title} di {company}."
+            desc_html = desc_raw if ("<p>" in desc_raw or "<br" in desc_raw) else f"<p>{desc_text}</p>"
 
-        if min_val and max_val:
-            display_salary = f"{curr} {min_val:,} - {max_val:,} {period_suffix}".replace(",", ".")
-        elif min_val:
-            display_salary = f"{curr} {min_val:,} {period_suffix}".replace(",", ".")
-        else:
-            display_salary = "Gaji kompetitif"
+            min_val = to_int_safe(item.get("minSalary"))
+            max_val = to_int_safe(item.get("maxSalary"))
+            raw_curr = item.get("currency")
+            curr = "USD" if is_null_or_nan(raw_curr) else str(raw_curr).strip().upper()
+            period_raw = str(item.get("salaryPeriod") or "annual").lower()
+            period = "monthly" if "month" in period_raw else "yearly"
+            period_suffix = "/bln" if period == "monthly" else "/thn"
 
-        pub_date = item.get("pubDate")
-        posted_at = get_iso_now()
-        if pub_date:
-            try:
-                posted_at = datetime.datetime.fromtimestamp(int(pub_date), datetime.timezone.utc).isoformat()
-            except Exception:
-                posted_at = get_iso_now()
+            if min_val and max_val:
+                display_salary = f"{curr} {min_val:,} - {max_val:,} {period_suffix}".replace(",", ".")
+            elif min_val:
+                display_salary = f"{curr} {min_val:,} {period_suffix}".replace(",", ".")
+            else:
+                display_salary = "Gaji kompetitif"
 
-        apply_url = str(item.get("applicationLink") or item.get("guid") or "").strip()
-        if not apply_url or not apply_url.startswith("http"):
-            continue
+            pub_date = item.get("pubDate")
+            posted_at = get_iso_now()
+            if pub_date:
+                try:
+                    posted_at = datetime.datetime.fromtimestamp(int(pub_date), datetime.timezone.utc).isoformat()
+                except Exception:
+                    posted_at = get_iso_now()
 
-        job_id = make_stable_id("himalayas", item.get("guid") or f"{company}-{title}-{apply_url}")
-        tier = detect_tier(location, desc_text)
-        category = detect_category(title, desc_text)
-        exp = detect_experience(title, desc_text)
+            apply_url = str(item.get("applicationLink") or item.get("guid") or "").strip()
+            if not apply_url or not apply_url.startswith("http"):
+                continue
 
-        jobs.append({
-            "id": job_id,
-            "title": title,
-            "company": company,
-            "logo": item.get("companyLogo") or "",
-            "location": location,
-            "remoteTier": tier if tier != "international" else "anywhere",
-            "workplaceType": "remote",
-            "experienceLevel": exp,
-            "category": category,
-            "salary": {
-                "min": min_val,
-                "max": max_val,
-                "currency": curr if (min_val or max_val) else None,
-                "period": period,
-                "display": display_salary
-            },
-            "applyUrl": apply_url,
-            "sourcePlatform": "Himalayas",
-            "postedAt": posted_at,
-            "descriptionHtml": desc_html,
-            "descriptionText": desc_text,
-            "tags": ["Himalayas", "Remote Global", category]
-        })
+            job_id = make_stable_id("himalayas", item.get("guid") or f"{company}-{title}-{apply_url}")
+            tier = detect_tier(location, desc_text)
+            category = detect_category(title, desc_text)
+            exp = detect_experience(title, desc_text)
+
+            jobs.append({
+                "id": job_id,
+                "title": title,
+                "company": company,
+                "logo": item.get("companyLogo") or "",
+                "location": location,
+                "remoteTier": tier if tier != "international" else "anywhere",
+                "workplaceType": "remote",
+                "experienceLevel": exp,
+                "category": category,
+                "salary": {
+                    "min": min_val,
+                    "max": max_val,
+                    "currency": curr if (min_val or max_val) else None,
+                    "period": period,
+                    "display": display_salary
+                },
+                "applyUrl": apply_url,
+                "sourcePlatform": "Himalayas",
+                "postedAt": posted_at,
+                "descriptionHtml": desc_html,
+                "descriptionText": desc_text,
+                "tags": ["Himalayas", "Remote Global", category]
+            })
 
     return jobs
 
 # ==============================================================================
-# 6. ASHBY ATS CRAWLER (SUPABASE, LINEAR, ELEVENLABS, RAMP, SENTRY)
+# 6. ASHBY ATS CRAWLER (SUPABASE, LINEAR, ELEVENLABS, RAMP, SENTRY, POSTHOG, REPLIT, RESEND, RAILWAY, MODAL)
 # ==============================================================================
 def fetch_from_ashby():
     """Mengambil lowongan remote global dari Silicon Valley Tech Leaders di Ashby ATS"""
@@ -802,10 +808,15 @@ def fetch_from_ashby():
         ("linear", "Linear", "https://linear.app/static/apple-touch-icon.png"),
         ("elevenlabs", "ElevenLabs", "https://elevenlabs.io/favicon.ico"),
         ("ramp", "Ramp", "https://ramp.com/favicon.ico"),
-        ("sentry", "Sentry", "https://sentry-brand.storage.googleapis.com/sentry-glyph-black.png")
+        ("sentry", "Sentry", "https://sentry-brand.storage.googleapis.com/sentry-glyph-black.png"),
+        ("posthog", "PostHog", "https://posthog.com/brand/posthog-logo.svg"),
+        ("replit", "Replit", "https://replit.com/public/images/replit-logo-circle.png"),
+        ("resend", "Resend", "https://resend.com/static/brand/resend-icon-black.png"),
+        ("railway", "Railway", "https://railway.com/brand/logomark-light.png"),
+        ("modal", "Modal Labs", "https://modal.com/modal-logo-icon.png")
     ]
     jobs = []
-    print("[+] Mengambil data Ashby ATS (Supabase, Linear, ElevenLabs, Ramp, Sentry)...")
+    print("[+] Mengambil data Ashby ATS (Supabase, Linear, ElevenLabs, Ramp, Sentry, PostHog, Replit, Resend, Railway, Modal)...")
     for board_id, company_name, logo_url in boards:
         url = f"https://api.ashbyhq.com/posting-api/job-board/{board_id}"
         req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"})
@@ -860,7 +871,7 @@ def fetch_from_ashby():
                     "tags": [company_name, "Ashby", "Remote Global", category]
                 })
                 count += 1
-                if count >= 6:
+                if count >= 8:
                     break
         except Exception as e:
             print(f"[-] Gagal fetch Ashby {company_name}: {e}")
@@ -933,7 +944,7 @@ def fetch_from_lever():
                     "tags": [company_name, "Lever", "Remote Global", category]
                 })
                 count += 1
-                if count >= 6:
+                if count >= 8:
                     break
         except Exception as e:
             print(f"[-] Gagal fetch Lever {company_name}: {e}")
@@ -974,14 +985,18 @@ def sanitize_and_clean_jobs(jobs):
         # 3. Sanitasi teks deskripsi & Anti-XSS (Hapus script, iframe, event handlers berbahaya)
         desc_raw_html = str(j.get("descriptionHtml") or "")
         desc_safe_html = re.sub(r'<\s*(script|iframe|object|embed|applet)[^>]*>.*?<\s*/\s*\1\s*>', '', desc_raw_html, flags=re.I | re.S)
-        desc_safe_html = re.sub(r'\s+on\w+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)', '', desc_safe_html, flags=re.I)
+        desc_safe_html = re.sub(r'\s+on[a-z]+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)', '', desc_safe_html, flags=re.I)
         desc_safe_html = re.sub(r'javascript\s*:', '', desc_safe_html, flags=re.I)
+        if len(desc_safe_html) > 4000:
+            desc_safe_html = desc_safe_html[:4000] + "..."
         j["descriptionHtml"] = desc_safe_html
 
         desc_text = str(j.get("descriptionText") or "").strip()
         desc_text = re.sub(r'\b(NaN|nan|null|None)\b', '', desc_text).strip()
         if not desc_text:
             desc_text = f"Lowongan {title} di {company}."
+        if len(desc_text) > 1200:
+            desc_text = desc_text[:1200] + "..."
         j["descriptionText"] = desc_text
 
         # 4. Sanitasi display gaji
@@ -998,6 +1013,11 @@ def sanitize_and_clean_jobs(jobs):
             j["remoteTier"] = detect_tier(j.get("location", ""), desc_text)
 
         cleaned.append(j)
+
+    # 6. Batasi plafon aman gratisan (maksimal 12.000 loker teraktif & teranyar)
+    if len(cleaned) > 12000:
+        cleaned.sort(key=lambda x: str(x.get("postedAt") or ""), reverse=True)
+        cleaned = cleaned[:12000]
 
     return cleaned
 
