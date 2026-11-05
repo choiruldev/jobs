@@ -217,57 +217,49 @@ export function renderJobCard(job, options = {}) {
 
   return `
     <article class="${classes}" data-job-id="${escapeHtml(job.id)}">
-      <a class="job-card__body" href="${detailHref}" aria-label="Lihat detail ${escapeHtml(job.title)} di ${escapeHtml(job.company)}">
-        <div class="job-card__header">
-          ${renderCompanyAvatar(job.company)}
+      <div class="job-card__top-bar">
+        <div class="job-card__company-wrap">
+          ${renderCompanyAvatar(job.company, "job-card__logo")}
           <div class="job-card__identity">
-            <div class="job-card__company">${escapeHtml(job.company)}</div>
+            <span class="job-card__company">${escapeHtml(job.company)}</span>
             <div class="job-card__meta">
-              <span class="job-card__meta-item" title="${escapeHtml(job.location)}">
-                <span class="material-symbols-outlined" aria-hidden="true">location_on</span>
-                <span class="job-card__meta-text">${escapeHtml(job.location)}</span>
-              </span>
               <span class="job-card__meta-item">
-                <span class="material-symbols-outlined" aria-hidden="true">schedule</span>
-                <span class="job-card__meta-text">${escapeHtml(formatPostedDate(dateVal))}${freshnessBadge}</span>
+                <span class="material-symbols-outlined" aria-hidden="true" style="font-size:15px;">location_on</span>
+                <span>${escapeHtml(job.location)}</span>
               </span>
+              <span>·</span>
+              <span>${escapeHtml(formatPostedDate(dateVal))}</span>
+              ${freshnessBadge}
             </div>
           </div>
         </div>
-        <div class="job-card__main">
-          <h2 class="job-card__title">${highlightText(job.title, query)}</h2>
-          <p class="job-card__description">${highlightText(truncate(job.description), query)}</p>
+        <div class="job-card__actions">
+          <button
+            class="icon-button job-card__save js-bookmark-toggle"
+            type="button"
+            data-job-id="${escapeHtml(job.id)}"
+            ${removable ? 'data-remove-on-unsave="true"' : ""}
+            aria-label="${bookmarked ? "Hapus dari lowongan tersimpan" : "Simpan lowongan"}"
+            aria-pressed="${String(bookmarked)}"
+            title="${bookmarked ? "Hapus dari tersimpan" : "Simpan lowongan"}"
+          >
+            <span class="${iconClass}" aria-hidden="true">${bookmarked ? "bookmark" : "bookmark_border"}</span>
+          </button>
         </div>
-        ${renderMatchScore(job)}
-        <div class="job-card__chips">${renderChips(job.type)}${renderSourceBadge(job)}</div>
-        <div class="job-card__quality">${renderQualitySignals(job)}</div>
-        <div>
-          <div class="${salaryClass}">${escapeHtml(salaryText)}</div>
-          ${salaryOriginal ? `<div class="job-card__salary-note" style="color:var(--md-sys-color-primary);font-weight:600;font-size:12px;margin-top:2px;">${escapeHtml(salaryOriginal)}</div>` : ""}
+      </div>
+
+      <a class="job-card__link-wrap" href="${detailHref}" aria-label="Lihat detail ${escapeHtml(job.title)} di ${escapeHtml(job.company)}">
+        <h2 class="job-card__title">${highlightText(job.title, query)}</h2>
+        <div class="job-card__salary-badge">
+          <span class="material-symbols-outlined" aria-hidden="true" style="font-size:16px;">payments</span>
+          <span class="${salaryClass}">${escapeHtml(salaryText)}</span>
+          ${salaryOriginal ? `<span style="font-size:11px;opacity:0.85;">(${escapeHtml(salaryOriginal)})</span>` : ""}
+        </div>
+        <div class="job-card__tags-row">
+          ${renderChips(job.type)}
+          ${renderSourceBadge(job)}
         </div>
       </a>
-      <div class="job-card__actions">
-        <button
-          class="icon-button job-card__action-btn job-card__compare js-compare-toggle"
-          type="button"
-          data-job-id="${escapeHtml(job.id)}"
-          aria-label="Bandingkan lowongan"
-          title="Bandingkan lowongan"
-        >
-          <span class="material-symbols-outlined" aria-hidden="true" style="font-size:18px;">compare_arrows</span>
-        </button>
-        <button
-          class="icon-button job-card__action-btn job-card__save js-bookmark-toggle"
-          type="button"
-          data-job-id="${escapeHtml(job.id)}"
-          ${removable ? 'data-remove-on-unsave="true"' : ""}
-          aria-label="${bookmarked ? "Hapus dari lowongan tersimpan" : "Simpan lowongan"}"
-          aria-pressed="${String(bookmarked)}"
-          title="${bookmarked ? "Hapus dari tersimpan" : "Simpan lowongan"}"
-        >
-          <span class="${iconClass}" aria-hidden="true">${bookmarked ? "bookmark" : "bookmark_border"}</span>
-        </button>
-      </div>
     </article>
   `;
 }
@@ -276,6 +268,7 @@ function setBookmarkButtonState(button, bookmarked) {
   const icon = button.querySelector(".material-symbols-outlined");
   button.setAttribute("aria-pressed", String(bookmarked));
   button.setAttribute("aria-label", bookmarked ? "Hapus dari lowongan tersimpan" : "Simpan lowongan");
+  button.setAttribute("title", bookmarked ? "Hapus dari tersimpan" : "Simpan lowongan");
   if (icon) {
     icon.textContent = bookmarked ? "bookmark" : "bookmark_border";
     icon.classList.toggle("icon--filled", bookmarked);
@@ -745,19 +738,15 @@ async function initDetailPage() {
 
           <!-- Balanced Actions Grid -->
           <div class="detail-card-actions">
-            <a class="button button--primary" href="${escapeHtml(directApplyUrl)}" target="_blank" rel="noopener noreferrer" id="hero-direct-apply-btn" data-track-apply-intent="${escapeHtml(job.id)}">
-              <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
-              Lamar di Situs Resmi ↗
-            </a>
-            <a class="button button--tonal" href="${escapeHtml(trackerHref)}" id="hero-tracker-btn">
-              <span class="material-symbols-outlined" aria-hidden="true">assignment</span>
-              ${isTracked ? "Buka di Tracker" : "Catat ke Tracker"}
-            </a>
-            <button class="button button--outlined" type="button" id="generate-cover-letter-btn">
+            <button class="button button--primary button--large" type="button" id="hero-open-apply-modal-btn">
+              <span class="material-symbols-outlined" aria-hidden="true">send</span>
+              Lamar Lowongan Ini
+            </button>
+            <button class="button button--secondary" type="button" id="generate-cover-letter-btn">
               <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
               Draf Cover Letter AI
             </button>
-            <button class="button button--outlined" type="button" id="generate-outreach-btn">
+            <button class="button button--secondary" type="button" id="generate-outreach-btn">
               <span class="material-symbols-outlined" aria-hidden="true">alternate_email</span>
               Sapa Recruiter (DM)
             </button>
@@ -829,15 +818,11 @@ async function initDetailPage() {
               <div class="detail-sidebar-salary-amount">${escapeHtml(formatSalary(job.salary))}</div>
               ${salaryOriginal ? `<div class="detail-sidebar-salary-converted">${escapeHtml(salaryOriginal)}</div>` : ""}
             </div>
-            <a class="button button--primary button--large button--full" href="${escapeHtml(directApplyUrl)}" target="_blank" rel="noopener noreferrer" id="sidebar-direct-apply-btn" data-track-apply-intent="${escapeHtml(job.id)}">
-              <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
-              Lamar di Situs Resmi ↗
-            </a>
-            <a class="button button--tonal button--full" href="${escapeHtml(trackerHref)}" id="sidebar-tracker-btn">
-              <span class="material-symbols-outlined" aria-hidden="true">assignment</span>
-              ${isTracked ? "Buka di Tracker" : "Catat ke Tracker Lamaran"}
-            </a>
-            <div class="detail-sidebar-notice">
+            <button class="button button--primary button--large button--full" type="button" id="sidebar-open-apply-modal-btn">
+              <span class="material-symbols-outlined" aria-hidden="true">send</span>
+              Lamar Lowongan Ini
+            </button>
+            <div class="detail-sidebar-notice" style="margin-top:12px;">
               <span class="material-symbols-outlined" aria-hidden="true">shield</span>
               <span>Tautan langsung ke form pendaftaran resmi. Bebas biaya dan bebas penipuan.</span>
             </div>
@@ -850,6 +835,42 @@ async function initDetailPage() {
           ${salaryTakeHomeHtml}
         </div>
       </aside>
+    </div>
+
+    <!-- Detail Apply Modal Popup -->
+    <div class="apply-modal-backdrop" id="apply-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="apply-modal-title">
+      <div class="apply-modal-card stack">
+        <div class="apply-modal-header">
+          <div>
+            <span class="badge badge--active">${escapeHtml(job.source?.name || "Portal Resmi ATS")}</span>
+            <h2 class="headline-small" id="apply-modal-title" style="margin-top:6px;">Lamar Lowongan Ini</h2>
+            <p class="body-medium" style="margin-top:2px;font-size:14px;color:var(--md-sys-color-on-surface-variant);">${escapeHtml(job.title)} · <strong>${escapeHtml(job.company)}</strong></p>
+          </div>
+          <button class="icon-button apply-modal-close" id="apply-modal-close-btn" type="button" aria-label="Tutup Modal">
+            <span class="material-symbols-outlined" aria-hidden="true">close</span>
+          </button>
+        </div>
+
+        <p class="body-medium" style="font-size:14px;line-height:1.5;color:var(--md-sys-color-on-surface-variant);">
+          Pilih jalur pengajuan lamaran untuk lowongan ini:
+        </p>
+
+        <div class="apply-modal-actions stack" style="gap:12px;">
+          <a class="button button--primary button--large" href="${escapeHtml(directApplyUrl)}" target="_blank" rel="noopener noreferrer" id="modal-official-apply-btn">
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+            Lamar di Situs Resmi ↗
+          </a>
+          <a class="button button--tonal button--large" href="${escapeHtml(trackerHref)}" id="modal-tracker-apply-btn">
+            <span class="material-symbols-outlined" aria-hidden="true">assignment</span>
+            Buka di Tracker
+          </a>
+        </div>
+
+        <div class="detail-sidebar-notice" style="margin-top:4px;">
+          <span class="material-symbols-outlined" aria-hidden="true" style="color:var(--md-sys-color-primary);">shield</span>
+          <span>Tautan langsung ke form pendaftaran resmi. Bebas biaya dan bebas penipuan.</span>
+        </div>
+      </div>
     </div>
 
     <!-- Similar Jobs Section (Full Width Responsive Grid) -->
@@ -868,22 +889,42 @@ async function initDetailPage() {
     showSnackbar(bookmarked ? "Lowongan disimpan" : "Lowongan dihapus dari tersimpan");
   });
 
-  // Direct Apply handlers with auto-tracking
-  const handleDirectApply = (e) => {
-    trackEvent("apply_intent", { jobId: job.id, source: job.source?.key || "local" });
+  // Modal controls for applying
+  const modalBackdrop = root.querySelector("#apply-modal-backdrop");
+  const openApplyModal = () => {
+    if (modalBackdrop) {
+      modalBackdrop.classList.add("is-open");
+      document.body.style.overflow = "hidden";
+    }
+  };
+  const closeApplyModal = () => {
+    if (modalBackdrop) {
+      modalBackdrop.classList.remove("is-open");
+      document.body.style.overflow = "";
+    }
+  };
+
+  root.querySelector("#hero-open-apply-modal-btn")?.addEventListener("click", openApplyModal);
+  root.querySelector("#sidebar-open-apply-modal-btn")?.addEventListener("click", openApplyModal);
+  root.querySelector("#apply-modal-close-btn")?.addEventListener("click", closeApplyModal);
+  modalBackdrop?.addEventListener("click", (e) => {
+    if (e.target === modalBackdrop) closeApplyModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeApplyModal();
+  });
+
+  root.querySelector("#modal-official-apply-btn")?.addEventListener("click", () => {
+    trackEvent("apply_intent", { jobId: job.id, source: job.source?.name || "external" });
     autoTrackJob(job, "Applied");
-    showSnackbar("Membuka portal resmi... Lowongan otomatis dicatat ke Tracker Lamaran.");
-  };
+    showSnackbar("Membuka situs resmi... Status otomatis dicatat ke 'Dilamar'!");
+    closeApplyModal();
+  });
 
-  document.getElementById("hero-direct-apply-btn")?.addEventListener("click", handleDirectApply);
-  document.getElementById("sidebar-direct-apply-btn")?.addEventListener("click", handleDirectApply);
-
-  const handleTrackerClick = () => {
+  root.querySelector("#modal-tracker-apply-btn")?.addEventListener("click", () => {
     autoTrackJob(job, "Saved");
-  };
-
-  document.getElementById("hero-tracker-btn")?.addEventListener("click", handleTrackerClick);
-  document.getElementById("sidebar-tracker-btn")?.addEventListener("click", handleTrackerClick);
+    closeApplyModal();
+  });
 
   let clLanguage = "id";
   let clTone = "professional";

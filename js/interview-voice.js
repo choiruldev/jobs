@@ -11,24 +11,24 @@ export function createVoicePracticeWidget(container, questionId) {
   const MAX_SECONDS = 120; // 2 minutes STAR target
 
   container.innerHTML = `
-    <div class="voice-practice-widget" style="background:var(--md-sys-color-surface-container);border-radius:12px;padding:14px;margin-top:12px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <button type="button" class="button button--small button--primary js-record-btn" id="record-btn-${questionId}">
-            <span class="material-symbols-outlined" style="font-size:16px;">mic</span>
-            Mulai Bicara (2 Min)
+    <div class="voice-practice-widget" style="background:var(--md-sys-color-surface-container);border-radius:12px;padding:16px;margin-top:14px;border:1px solid var(--md-sys-color-outline-variant);">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <button type="button" class="voice-record-btn voice-record-btn--idle js-record-btn" id="record-btn-${questionId}">
+            <span class="material-symbols-outlined" style="font-size:18px;">mic</span>
+            <span>Mulai Bicara (2 Min)</span>
           </button>
-          <span class="js-timer-display" id="timer-${questionId}" style="font-family:monospace;font-size:14px;font-weight:700;color:var(--md-sys-color-primary);">00:00 / 02:00</span>
+          <span class="js-timer-display" id="timer-${questionId}" style="font-family:monospace;font-size:15px;font-weight:700;color:var(--md-sys-color-primary);">00:00 / 02:00</span>
         </div>
-        <span class="label-small js-speech-status" id="speech-status-${questionId}" style="color:var(--md-sys-color-outline);">Target: < 2 menit</span>
+        <span class="label-small js-speech-status" id="speech-status-${questionId}" style="color:var(--md-sys-color-outline);font-size:12px;">Target: < 2 menit</span>
       </div>
 
-      <div style="width:100%;height:4px;background:var(--md-sys-color-outline-variant);border-radius:2px;margin:10px 0;overflow:hidden;">
+      <div style="width:100%;height:6px;background:var(--md-sys-color-outline-variant);border-radius:999px;margin:12px 0;overflow:hidden;">
         <div class="js-speech-bar" id="bar-${questionId}" style="width:0%;height:100%;background:var(--md-sys-color-primary);transition:width 1s linear;"></div>
       </div>
 
-      <div class="js-audio-player-container" id="player-container-${questionId}" style="display:none;margin-top:8px;">
-        <audio class="js-audio-player" id="audio-${questionId}" controls style="width:100%;height:36px;"></audio>
+      <div class="js-audio-player-container" id="player-container-${questionId}" style="display:none;margin-top:10px;">
+        <audio class="js-audio-player" id="audio-${questionId}" controls style="width:100%;height:40px;"></audio>
       </div>
     </div>
   `;
@@ -66,11 +66,10 @@ export function createVoicePracticeWidget(container, questionId) {
 
       mediaRecorder.start();
       secondsElapsed = 0;
-      recordBtn.innerHTML = `<span class="material-symbols-outlined" style="font-size:16px;">stop</span> Selesai Bicara`;
-      recordBtn.classList.remove("button--primary");
-      recordBtn.classList.add("button--tonal");
+      recordBtn.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">stop</span> <span>Selesai Bicara</span>`;
+      recordBtn.className = "voice-record-btn voice-record-btn--recording js-record-btn";
       speechStatus.textContent = "Merekam suara...";
-      speechStatus.style.color = "#c62828";
+      speechStatus.style.color = "#dc2626";
 
       timerInterval = setInterval(() => {
         secondsElapsed++;
@@ -102,11 +101,10 @@ export function createVoicePracticeWidget(container, questionId) {
       mediaRecorder.stop();
     }
     clearInterval(timerInterval);
-    recordBtn.innerHTML = `<span class="material-symbols-outlined" style="font-size:16px;">mic</span> Rekam Ulang`;
-    recordBtn.classList.remove("button--tonal");
-    recordBtn.classList.add("button--primary");
+    recordBtn.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">mic</span> <span>Rekam Ulang</span>`;
+    recordBtn.className = "voice-record-btn voice-record-btn--idle js-record-btn";
     speechStatus.textContent = `Latihan selesai (${secondsElapsed}s). Dengarkan rekaman Anda di bawah:`;
-    speechStatus.style.color = "#2e7d32";
+    speechStatus.style.color = "#16a34a";
   }
 
   recordBtn.addEventListener("click", () => {

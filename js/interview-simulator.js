@@ -92,11 +92,11 @@ export function renderInterviewSimulator(container) {
 
   container.innerHTML = `
     <div class="stack" style="gap:var(--space-4);">
-      <div class="cluster" style="gap:8px;padding-bottom:4px;overflow-x:auto;" role="tablist" aria-label="Kategori Pertanyaan">
+      <div class="interview-tabs-bar" role="tablist" aria-label="Kategori Pertanyaan">
         ${categories.map(c => `
           <button
             type="button"
-            class="chip ${activeCategory === c.key ? "chip--active" : "chip--outline"}"
+            class="interview-tab-btn ${activeCategory === c.key ? "is-active" : ""}"
             data-interview-filter="${c.key}"
             role="tab"
             aria-selected="${activeCategory === c.key}"
