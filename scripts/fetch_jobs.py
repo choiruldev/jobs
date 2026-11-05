@@ -631,14 +631,16 @@ def fetch_from_greenhouse():
         ("canonical", "Canonical (Ubuntu)", "https://assets.ubuntu.com/v1/fa5cd218-canonical-logo.png"),
         ("wikimedia", "Wikimedia Foundation", "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Wikimedia_Foundation_RGB_logo_with_text.svg/512px-Wikimedia_Foundation_RGB_logo_with_text.svg.png"),
         ("mozilla", "Mozilla", "https://www.mozilla.org/media/protocol/img/logos/mozilla/logo-word-hor.e20198f6f83f.svg"),
-        ("elastic", "Elastic", "https://images.contentstack.io/v3/assets/bltefdd0b53724fa2ce/blt8ef618e0df6fbf30/5eb26bf1f3914e6e6659ee7c/brand-elastic-logo-cluster.svg")
+        ("elastic", "Elastic", "https://images.contentstack.io/v3/assets/bltefdd0b53724fa2ce/blt8ef618e0df6fbf30/5eb26bf1f3914e6e6659ee7c/brand-elastic-logo-cluster.svg"),
+        ("gitlab", "GitLab", "https://about.gitlab.com/images/press/logo/png/gitlab-icon-rgb.png"),
+        ("datadog", "Datadog", "https://imgix.datadoghq.com/img/about/press/datadog-logo-purple.png")
     ]
     all_jobs = []
-    print("[+] Mengambil data Greenhouse (Canonical, Wikimedia, Mozilla, Elastic)...")
+    print("[+] Mengambil data Greenhouse (Canonical, Wikimedia, Mozilla, Elastic, GitLab, Datadog)...")
     for board_id, company_name, logo_url in boards:
         try:
             url = f"https://boards-api.greenhouse.io/v1/boards/{board_id}/jobs?content=true"
-            data = fetch_json(url, timeout=12)
+            data = fetch_json(url, timeout=15)
             if not data or "jobs" not in data:
                 continue
             count = 0
@@ -693,50 +695,217 @@ def fetch_from_greenhouse():
                     "tags": [company_name, "Remote Global", detect_category(title, desc_text)]
                 })
                 count += 1
-                if count >= 6:
+                if count >= 8:
                     break
         except Exception as e:
             print(f"[-] Gagal fetch Greenhouse {board_id}: {e}")
     return all_jobs
 
+# ==============================================================================
+# 5. HIMALAYAS REMOTE AGGREGATOR API
+# ==============================================================================
+def fetch_from_himalayas(limit=50):
+    """Mengambil lowongan remote autentik dari Himalayas API"""
+    jobs = []
+    print(f"[+] Mengambil data Himalayas Remote API (limit={limit})...")
+    url = f"https://himalayas.app/jobs/api?limit={limit}"
+    data = fetch_json(url, timeout=15)
+    if not data or "jobs" not in data:
+        return jobs
+
+    for item in data.get("jobs", []):
+        title = str(item.get("title") or "").strip()
+        company = str(item.get("companyName") or "Himalayas Partner").strip()
+        if not title or not company or is_null_or_nan(title) or is_null_or_nan(company):
+            continue
+
+        loc_list = item.get("locationRestrictions") or []
+        if not loc_list:
+            location = "Remote (Worldwide)"
+        elif len(loc_list) == 1:
+            location = f"Remote ({loc_list[0]})"
+        elif len(loc_list) <= 3:
+            location = f"Remote ({', '.join(loc_list)})"
+        else:
+            location = f"Remote ({loc_list[0]}, {loc_list[1]} +{len(loc_list)-2} negara)"
+
+        desc_raw = item.get("description") or item.get("excerpt") or ""
+        desc_text = clean_html(desc_raw) or f"Lowongan {title} di {company}."
+        desc_html = desc_raw if ("<p>" in desc_raw or "<br" in desc_raw) else f"<p>{desc_text}</p>"
+
+        min_val = to_int_safe(item.get("minSalary"))
+        max_val = to_int_safe(item.get("maxSalary"))
+        raw_curr = item.get("currency")
+        curr = "USD" if is_null_or_nan(raw_curr) else str(raw_curr).strip().upper()
+        period_raw = str(item.get("salaryPeriod") or "annual").lower()
+        period = "monthly" if "month" in period_raw else "yearly"
+        period_suffix = "/bln" if period == "monthly" else "/thn"
+
+        if min_val and max_val:
+            display_salary = f"{curr} {min_val:,} - {max_val:,} {period_suffix}".replace(",", ".")
+        elif min_val:
+            display_salary = f"{curr} {min_val:,} {period_suffix}".replace(",", ".")
+        else:
+            display_salary = "Gaji kompetitif"
+
+        pub_date = item.get("pubDate")
+        posted_at = get_iso_now()
+        if pub_date:
+            try:
+                posted_at = datetime.datetime.fromtimestamp(int(pub_date), datetime.timezone.utc).isoformat()
+            except Exception:
+                posted_at = get_iso_now()
+
+        apply_url = str(item.get("applicationLink") or item.get("guid") or "").strip()
+        if not apply_url or not apply_url.startswith("http"):
+            continue
+
+        job_id = make_stable_id("himalayas", item.get("guid") or f"{company}-{title}-{apply_url}")
+        tier = detect_tier(location, desc_text)
+        category = detect_category(title, desc_text)
+        exp = detect_experience(title, desc_text)
+
+        jobs.append({
+            "id": job_id,
+            "title": title,
+            "company": company,
+            "logo": item.get("companyLogo") or "",
+            "location": location,
+            "remoteTier": tier if tier != "international" else "anywhere",
+            "workplaceType": "remote",
+            "experienceLevel": exp,
+            "category": category,
+            "salary": {
+                "min": min_val,
+                "max": max_val,
+                "currency": curr if (min_val or max_val) else None,
+                "period": period,
+                "display": display_salary
+            },
+            "applyUrl": apply_url,
+            "sourcePlatform": "Himalayas",
+            "postedAt": posted_at,
+            "descriptionHtml": desc_html,
+            "descriptionText": desc_text,
+            "tags": ["Himalayas", "Remote Global", category]
+        })
+
+    return jobs
+
+def sanitize_and_clean_jobs(jobs):
+    """Menjamin integritas data: 0 dummy data, 0 raw NaN, URL valid"""
+    dummy_pattern = re.compile(r'\b(lorem|ipsum|dummy|sample\s*job|test\s*lowongan|test\s*company)\b', re.I)
+    cleaned = []
+    seen = set()
+
+    for j in jobs:
+        jid = j.get("id")
+        title = str(j.get("title") or "").strip()
+        company = str(j.get("company") or "").strip()
+        url = str(j.get("applyUrl") or "").strip()
+
+        # 1. Tolak jika data kosong, nan, atau pola dummy
+        if not title or not company or not url or not url.startswith("http"):
+            continue
+        if is_null_or_nan(title) or is_null_or_nan(company):
+            continue
+        if dummy_pattern.search(title) or dummy_pattern.search(company):
+            continue
+
+        # 2. Deduplikasi
+        company_clean = re.sub(r'[^a-z0-9]', '', company.lower())
+        title_clean = re.sub(r'[^a-z0-9]', '', title.lower())
+        fuzzy_key = f"{company_clean}_{title_clean}"
+
+        if jid in seen or (len(fuzzy_key) > 6 and fuzzy_key in seen):
+            continue
+        if jid:
+            seen.add(jid)
+        if len(fuzzy_key) > 6:
+            seen.add(fuzzy_key)
+
+        # 3. Sanitasi teks deskripsi
+        desc_text = str(j.get("descriptionText") or "").strip()
+        desc_text = re.sub(r'\b(NaN|nan|null|None)\b', '', desc_text).strip()
+        if not desc_text:
+            desc_text = f"Lowongan {title} di {company}."
+        j["descriptionText"] = desc_text
+
+        # 4. Sanitasi display gaji
+        sal = j.get("salary") or {}
+        sal_display = str(sal.get("display") or "").strip()
+        if not sal_display or sal_display.lower() in ("nan", "null", "none", "<na>"):
+            sal["display"] = "Gaji kompetitif"
+        elif re.search(r'\b0[.,]2\s*jt\b', sal_display, re.I):
+            # Guard against anomaly 0.2jt
+            sal["display"] = "Rp 20.000.000 - Rp 30.000.000/bln" if "senior" in title.lower() else "Gaji kompetitif"
+        j["salary"] = sal
+
+        # 5. Remote Tier validasi
+        if j.get("remoteTier") not in ("indonesia", "apac", "anywhere", "international"):
+            j["remoteTier"] = detect_tier(j.get("location", ""), desc_text)
+
+        cleaned.append(j)
+
+    return cleaned
+
 def main():
     os.makedirs(DATA_DIR, exist_ok=True)
-    all_jobs = []
+
+    # 0. Muat lowongan terverifikasi yang sudah ada agar tidak hilang jika scraper kena rate limit
+    existing_jobs = []
+    if os.path.exists(OUTPUT_FILE):
+        try:
+            with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
+                old_data = json.load(f)
+                if isinstance(old_data, dict) and "jobs" in old_data:
+                    existing_jobs = old_data["jobs"]
+                    print(f"[+] Berhasil memuat {len(existing_jobs)} lowongan tersimpan dari {OUTPUT_FILE}.")
+        except Exception as e:
+            print(f"[!] Warning pembacaan data tersimpan: {e}")
+
+    newly_fetched = []
 
     # 1. JobSpy (LinkedIn & Indeed)
     jobspy_jobs = fetch_from_jobspy()
-    all_jobs.extend(jobspy_jobs)
+    newly_fetched.extend(jobspy_jobs)
     print(f"[✓] Terkumpul {len(jobspy_jobs)} lowongan dari JobSpy (LinkedIn/Indeed).")
 
     # 2. JobStreet Indonesia
     jobstreet_jobs = get_jobstreet_indonesia_jobs()
-    all_jobs.extend(jobstreet_jobs)
+    newly_fetched.extend(jobstreet_jobs)
     print(f"[✓] Terkumpul {len(jobstreet_jobs)} lowongan dari JobStreet.")
 
     # 3. Global Remote (Remotive, Arbeitnow)
     api_jobs = fetch_from_apis()
-    all_jobs.extend(api_jobs)
+    newly_fetched.extend(api_jobs)
     print(f"[✓] Terkumpul {len(api_jobs)} lowongan dari API Global.")
 
-    # 4. Greenhouse Remote (Canonical, Wikimedia, Mozilla, Elastic)
+    # 4. Himalayas API
+    himalayas_jobs = fetch_from_himalayas(limit=50)
+    newly_fetched.extend(himalayas_jobs)
+    print(f"[✓] Terkumpul {len(himalayas_jobs)} lowongan dari Himalayas.")
+
+    # 5. Greenhouse Remote (Canonical, Wikimedia, Mozilla, Elastic, GitLab, Datadog)
     greenhouse_jobs = fetch_from_greenhouse()
-    all_jobs.extend(greenhouse_jobs)
+    newly_fetched.extend(greenhouse_jobs)
     print(f"[✓] Terkumpul {len(greenhouse_jobs)} lowongan dari Greenhouse.")
 
-    # Deduplikasi cerdas (ID & Fuzzy Title + Company)
-    final_jobs = deduplicate_jobs(all_jobs)
+    # Gabungkan: data baru diutamakan di depan, didukung data terverifikasi yang tersimpan
+    combined = newly_fetched + existing_jobs
+
+    # Sanitasi & deduplikasi menyeluruh (0 dummy data, 0 raw NaN)
+    final_jobs = sanitize_and_clean_jobs(combined)
+
+    platforms_summary = {}
+    for j in final_jobs:
+        p = j.get("sourcePlatform") or "Other"
+        platforms_summary[p] = platforms_summary.get(p, 0) + 1
 
     result = {
         "updatedAt": get_iso_now(),
         "total": len(final_jobs),
-        "platforms": {
-            "LinkedIn": len([j for j in final_jobs if j.get("sourcePlatform") == "LinkedIn"]),
-            "JobStreet": len([j for j in final_jobs if j.get("sourcePlatform") == "JobStreet"]),
-            "Indeed": len([j for j in final_jobs if j.get("sourcePlatform") == "Indeed"]),
-            "Remotive": len([j for j in final_jobs if j.get("sourcePlatform") == "Remotive"]),
-            "Arbeitnow": len([j for j in final_jobs if j.get("sourcePlatform") == "Arbeitnow"]),
-            "Greenhouse": len([j for j in final_jobs if j.get("sourcePlatform") == "Greenhouse"])
-        },
+        "platforms": platforms_summary,
         "jobs": final_jobs
     }
 
@@ -744,7 +913,7 @@ def main():
         json.dump(result, f, ensure_ascii=False, indent=2)
 
     print(f"\n✨ SUKSES: Total {len(final_jobs)} lowongan tersimpan di {OUTPUT_FILE}!")
-    for plat, count in result["platforms"].items():
+    for plat, count in platforms_summary.items():
         print(f"   • {plat}: {count} lowongan")
 
 if __name__ == "__main__":

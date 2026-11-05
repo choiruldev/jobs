@@ -2241,6 +2241,12 @@ mark {
   border: 1px solid #c8e6c9;
 }
 
+.source-badge--himalayas {
+  background: #fce4ec;
+  color: #c2185b;
+  border: 1px solid #f8bbd0;
+}
+
 .badge-fresh {
   display: inline-flex;
   align-items: center;
@@ -2491,6 +2497,12 @@ mark {
   background: rgba(46, 125, 50, 0.18);
   color: #a5d6a7;
   border: 1px solid rgba(46, 125, 50, 0.4);
+}
+
+[data-theme="dark"] .source-badge--himalayas {
+  background: rgba(194, 24, 91, 0.18);
+  color: #f48fb1;
+  border: 1px solid rgba(194, 24, 91, 0.4);
 }
 
 [data-theme="dark"] .badge-fresh {

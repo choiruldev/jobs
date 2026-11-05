@@ -121,6 +121,9 @@ export function renderSourceBadge(job) {
   if (platform.includes("greenhouse")) {
     return `<span class="source-badge source-badge--greenhouse"><span class="badge-icon">🌿</span> Greenhouse</span>`;
   }
+  if (platform.includes("himalayas")) {
+    return `<span class="source-badge source-badge--himalayas"><span class="badge-icon">🏔️</span> Himalayas</span>`;
+  }
   if (platform.includes("remotive") || platform.includes("arbeitnow") || platform.includes("remote")) {
     const label = job.sourcePlatform || "Remote Global";
     return `<span class="source-badge source-badge--remote"><span class="badge-icon">🌐</span> ${escapeHtml(label)}</span>`;

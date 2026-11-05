@@ -360,7 +360,17 @@ function jobMatchesFilters(job, filters) {
     const p = String(job.sourcePlatform || job.source?.name || "").toLowerCase();
     let hasMatch = false;
     for (const plat of filters.platform) {
-      if (plat === "all" || p.includes(plat.toLowerCase())) {
+      const pl = plat.toLowerCase();
+      if (pl === "all") {
+        hasMatch = true;
+        break;
+      }
+      if (pl === "remotive" || pl === "remote") {
+        if (p.includes("remotive") || p.includes("arbeitnow") || p.includes("remote")) {
+          hasMatch = true;
+          break;
+        }
+      } else if (p.includes(pl)) {
         hasMatch = true;
         break;
       }
