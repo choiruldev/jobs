@@ -1,5 +1,6 @@
 import {
   JOBS,
+  getJobById,
   makeLogo,
   rememberJobs
 } from "./data.js?v=20260616z";

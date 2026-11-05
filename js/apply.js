@@ -10,7 +10,7 @@ import {
   sanitizeUrl,
   showSnackbar
 } from "./bookmark.js?v=20260616z";
-import { fetchJobById } from "./providers.js?v=20260616z";
+import { fetchJobById } from "./providers.js?v=20261105b";
 import { recordPageView, trackEvent } from "./analytics.js?v=20260616z";
 import { renderKanbanBoard, bindKanbanEvents } from "./apply-kanban.js?v=20260616z";
 import { downloadInterviewIcs, getPendingFollowUps } from "./apply-reminders.js?v=20260616z";
@@ -335,17 +335,17 @@ function renderDetailAction(job) {
   const externalUrl = job.applyUrl || job.source?.url;
   if (externalUrl) {
     return `
-      <a class="button button--text tracker-open-action" href="${escapeHtml(sanitizeUrl(externalUrl))}" target="_blank" rel="noopener noreferrer">
+      <a class="button button--tonal button--small tracker-open-action" href="${escapeHtml(sanitizeUrl(externalUrl))}" target="_blank" rel="noopener noreferrer">
         <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
-        Open
+        Situs Resmi
       </a>
     `;
   }
 
   return `
-    <a class="button button--text tracker-open-action" href="detail.html?id=${encodeURIComponent(job.id)}">
-      <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
-      Open
+    <a class="button button--tonal button--small tracker-open-action" href="detail.html?id=${encodeURIComponent(job.id)}">
+      <span class="material-symbols-outlined" aria-hidden="true">visibility</span>
+      Detail Lowongan
     </a>
   `;
 }
@@ -1420,7 +1420,13 @@ function bindValidation(form) {
 function renderForm(root, job) {
   root.innerHTML = `
     <section class="page__content page__content--narrow stack" aria-labelledby="apply-title">
-      ${renderDetailAction(job)}
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <a class="button button--text" href="detail.html?id=${encodeURIComponent(job.id)}">
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+          Kembali ke Detail
+        </a>
+        ${renderDetailAction(job)}
+      </div>
 
       <div>
         <h1 class="headline-medium" id="apply-title">${escapeHtml(job.title)} di ${escapeHtml(job.company)}</h1>
@@ -1558,7 +1564,13 @@ function renderDirectApplyUnavailable(root, job) {
 
   root.innerHTML = `
     <section class="page__content page__content--narrow stack" aria-labelledby="apply-unavailable-title">
-      ${renderDetailAction(job)}
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <a class="button button--text" href="detail.html?id=${encodeURIComponent(job.id)}">
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+          Kembali ke Detail
+        </a>
+        ${renderDetailAction(job)}
+      </div>
 
       <div class="tracker-panel stack">
         <div>
@@ -1585,49 +1597,15 @@ function renderDirectApplyUnavailable(root, job) {
 }
 
 function renderExternalApply(root, job) {
-  const existing = getApplication(job.id);
-  if (existing) {
-    renderTracker(root, job, existing);
-    return;
-  }
-
-  root.innerHTML = `
-    <section class="page__content page__content--narrow stack" aria-labelledby="external-apply-title">
-      ${renderDetailAction(job)}
-
-      <div class="tracker-panel stack">
-        <div>
-          <span class="badge">${escapeHtml(job.source?.name || "Sumber eksternal")}</span>
-          <h1 class="headline-medium" id="external-apply-title">${escapeHtml(job.title)} di ${escapeHtml(job.company)}</h1>
-          <p class="body-medium">Lowongan ini berasal dari sumber resmi eksternal. Buka halaman apply resmi, lalu tandai di tracker agar proses follow up tetap rapi.</p>
-        </div>
-        <a class="button button--primary button--full" href="${escapeHtml(sanitizeUrl(job.applyUrl))}" target="_blank" rel="noopener noreferrer" id="official-apply-link">
-          <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
-          Buka Halaman Apply Resmi
-        </a>
-        <button class="button button--tonal button--full" type="button" id="mark-applied">
-          <span class="material-symbols-outlined" aria-hidden="true">assignment_turned_in</span>
-          Tandai Sudah Dilamar
-        </button>
-      </div>
-    </section>
-  `;
-
-  root.querySelector("#official-apply-link")?.addEventListener("click", () => {
-    trackEvent("official_apply_click", {
-      jobId: job.id,
-      source: job.source?.key || "external"
-    });
-  });
-
-  root.querySelector("#mark-applied")?.addEventListener("click", () => {
-    const application = createTrackedApplication(job, "Applied", {
+  let existing = getApplication(job.id);
+  if (!existing) {
+    existing = createTrackedApplication(job, "Applied", {
       label: "Ditandai sudah apply di situs resmi"
     });
     trackEvent("tracker_mark_applied", { jobId: job.id, source: job.source?.key || "external" });
-    showSnackbar("Lowongan masuk Tracker Lamaran.");
-    renderTracker(root, job, application);
-  });
+  }
+
+  renderTracker(root, job, existing);
 }
 
 async function initApplyPage() {
@@ -1655,19 +1633,16 @@ async function initApplyPage() {
 
   document.title = `${job.title} | Tracker Lamaran`;
   recordPageView("apply", { jobId: job.id, source: job.source?.key || "local" });
-  if (job.applyUrl) {
-    renderExternalApply(root, job);
-    return;
+
+  let existing = getApplication(job.id);
+  if (!existing) {
+    existing = createTrackedApplication(job, "Applied", {
+      label: "Dicatat di Tracker Lamaran"
+    });
+    trackEvent("tracker_auto_enrolled", { jobId: job.id, source: job.source?.key || "external" });
   }
 
-  const existing = getApplication(job.id);
-  if (existing) {
-    renderTracker(root, job, existing);
-  } else if (job.acceptsSystemApply) {
-    renderForm(root, job);
-  } else {
-    renderDirectApplyUnavailable(root, job);
-  }
+  renderTracker(root, job, existing);
 }
 
 document.addEventListener("DOMContentLoaded", initApplyPage);

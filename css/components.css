@@ -930,6 +930,428 @@ mark {
   font-size: 60px;
 }
 
+/* ==========================================================================
+   DETAIL PAGE: MODERN TWO-COLUMN BALANCED ARCHITECTURE
+   ========================================================================== */
+.detail-page-container {
+  width: min(100%, 1240px);
+  margin: 0 auto;
+  padding: 0 var(--space-4) var(--space-10);
+}
+
+/* Breadcrumb Navigation Bar */
+.detail-breadcrumb-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  padding: var(--space-2) 0 var(--space-4);
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  flex-wrap: wrap;
+}
+
+.detail-breadcrumb-bar__left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--md-sys-color-on-surface-variant);
+  flex-wrap: wrap;
+}
+
+.detail-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--md-sys-color-surface-container-high);
+  transition: all 0.2s ease;
+}
+
+.detail-back-link:hover {
+  background: color-mix(in srgb, var(--md-sys-color-primary) 12%, var(--md-sys-color-surface-container-high));
+}
+
+.detail-breadcrumb-separator {
+  color: var(--md-sys-color-outline);
+  font-size: 0.8rem;
+}
+
+.detail-breadcrumb-item {
+  color: var(--md-sys-color-outline);
+  font-weight: 500;
+}
+
+.detail-breadcrumb-item--current {
+  color: var(--md-sys-color-on-surface);
+  font-weight: 700;
+}
+
+.detail-breadcrumb-bar__right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-breadcrumb-bar__right .icon-button {
+  background: var(--md-sys-color-surface-container);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+}
+
+/* 2-Column Responsive Grid */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .detail-grid {
+    grid-template-columns: minmax(0, 1.85fr) minmax(360px, 1.15fr);
+    gap: 32px;
+  }
+}
+
+.detail-grid__main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.detail-grid__sidebar {
+  min-width: 0;
+}
+
+.detail-sidebar-sticky {
+  position: sticky;
+  top: calc(var(--app-bar-height) + 20px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* Grounded Card Containers */
+.detail-card {
+  background: var(--md-sys-color-surface-container);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 20px;
+  padding: clamp(20px, 3vw, 32px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.detail-card--hero {
+  border: 1px solid var(--md-sys-color-outline-variant);
+  background: var(--md-sys-color-surface-container);
+}
+
+/* Header Row & Company Avatar */
+.detail-card__header-row {
+  display: grid;
+  grid-template-columns: 68px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.detail-card__logo {
+  width: 68px;
+  height: 68px;
+  border-radius: 18px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.detail-card__meta-top {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.detail-card__company {
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
+  font-size: 1.05rem;
+}
+
+.detail-card__dot {
+  color: var(--md-sys-color-outline);
+}
+
+.detail-card__location {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.detail-card__location .material-symbols-outlined {
+  font-size: 17px;
+  color: var(--md-sys-color-outline);
+}
+
+.detail-card__title {
+  font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+  font-weight: 800;
+  line-height: 1.22;
+  margin: 12px 0 14px;
+  color: var(--md-sys-color-on-surface);
+  letter-spacing: -0.02em;
+}
+
+.detail-card__pills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+/* Symmetrical Key Metrics Grid */
+.detail-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+  padding: 16px 18px;
+  background: var(--md-sys-color-surface-container-high);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 14px;
+}
+
+.detail-metric-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-metric-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--md-sys-color-outline);
+}
+
+.detail-metric-value {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--md-sys-color-on-surface);
+  line-height: 1.25;
+}
+
+.detail-metric-value--salary {
+  color: var(--md-sys-color-primary);
+}
+
+.detail-metric-sub {
+  font-size: 12px;
+  color: var(--md-sys-color-on-surface-variant);
+  font-weight: 500;
+}
+
+/* Trust Signals Row */
+.detail-trust-signals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.detail-trust-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--md-sys-color-primary) 8%, var(--md-sys-color-surface-container));
+  color: var(--md-sys-color-primary);
+  border: 1px solid color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent);
+}
+
+.detail-trust-pill .material-symbols-outlined {
+  font-size: 16px;
+}
+
+/* Action Buttons Symmetrical Grid */
+.detail-card-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+
+.detail-card-actions .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  font-weight: 700;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  padding: 0 16px;
+}
+
+/* Sidebar Components */
+.detail-sidebar-card {
+  background: var(--md-sys-color-surface-container);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.detail-sidebar-card--cta {
+  border: 2px solid color-mix(in srgb, var(--md-sys-color-primary) 50%, var(--md-sys-color-outline-variant));
+  background: var(--md-sys-color-surface-container-high);
+}
+
+.detail-sidebar-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.detail-sidebar-salary-box {
+  background: var(--md-sys-color-surface-container);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+
+.detail-sidebar-salary-amount {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--md-sys-color-primary);
+  margin-top: 2px;
+  line-height: 1.25;
+}
+
+.detail-sidebar-salary-converted {
+  font-size: 12px;
+  color: var(--md-sys-color-outline);
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.detail-sidebar-card .button {
+  margin-bottom: 10px;
+  min-height: 48px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.detail-sidebar-card .button:last-of-type {
+  margin-bottom: 0;
+}
+
+.detail-sidebar-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--md-sys-color-outline);
+}
+
+.detail-sidebar-notice .material-symbols-outlined {
+  font-size: 16px;
+  color: var(--md-sys-color-primary);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Section Title & Typography */
+.detail-card__section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 18px;
+  color: var(--md-sys-color-on-surface);
+}
+
+.detail-card__section-title .material-symbols-outlined {
+  color: var(--md-sys-color-primary);
+  font-size: 22px;
+}
+
+.detail-card__prose p {
+  font-size: 0.975rem;
+  line-height: 1.7;
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0 0 12px;
+}
+
+.detail-card__prose p:last-child {
+  margin-bottom: 0;
+}
+
+.detail-requirements-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-requirement-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--md-sys-color-on-surface);
+}
+
+.detail-requirement-icon {
+  font-size: 20px;
+  color: var(--md-sys-color-primary);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Similar Jobs Section */
+.detail-similar-section {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+/* Fix floating tracker open action */
+.tracker-open-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
 .detail-hero {
   display: grid;
   gap: var(--space-5);
@@ -2395,9 +2817,18 @@ mark {
 /* Dark Mode Overrides */
 [data-theme="dark"] .job-card,
 [data-theme="dark"] .content-block,
-[data-theme="dark"] .ats-scorecard {
+[data-theme="dark"] .ats-scorecard,
+[data-theme="dark"] .detail-card,
+[data-theme="dark"] .detail-sidebar-card,
+[data-theme="dark"] .detail-sidebar-salary-box {
   background: var(--md-sys-color-surface-container);
   color: var(--md-sys-color-on-surface);
+  border-color: var(--md-sys-color-outline-variant);
+}
+
+[data-theme="dark"] .detail-sidebar-card--cta,
+[data-theme="dark"] .detail-metrics-grid {
+  background: var(--md-sys-color-surface-container-high);
   border-color: var(--md-sys-color-outline-variant);
 }
 

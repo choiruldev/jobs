@@ -12,7 +12,7 @@ import {
   isIndonesiaScope,
   matchesScope,
   loadJobsForSource
-} from "./providers.js?v=20260616z";
+} from "./providers.js?v=20261105b";
 import {
   escapeHtml,
   initBookmarkButtons,

@@ -7,6 +7,7 @@
   --md-sys-color-surface: #f8f9ff;
   --md-sys-color-surface-container: #ffffff;
   --md-sys-color-surface-container-high: #eef3fb;
+  --md-sys-color-surface-container-low: #f8fafc;
   --md-sys-color-on-surface: #1a1c1e;
   --md-sys-color-on-surface-variant: #45464f;
   --md-sys-color-outline: #74777f;
@@ -30,7 +31,7 @@
   --app-bar-height: 64px;
   --bottom-nav-height: 80px;
   --side-nav-width: 272px;
-  --content-max: 1180px;
+  --content-max: 1240px;
 }
 
 [data-theme="dark"] {

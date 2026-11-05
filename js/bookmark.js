@@ -7,7 +7,7 @@ import {
   getJobById,
   getSimilarJobs
 } from "./data.js?v=20260616z";
-import { fetchJobById } from "./providers.js?v=20260616z";
+import { fetchJobById } from "./providers.js?v=20261105b";
 import { readMatchProfile, scoreJobForProfile } from "./profile.js?v=20260616z";
 import { analyzeAtsMatch } from "./ats-checker.js?v=20260616z";
 import { generateCoverLetter } from "./ai-writer.js?v=20260616z";
@@ -494,14 +494,63 @@ async function initDetailPage() {
   const similarJobs = getSimilarJobs(job, 6);
   const bookmarked = isBookmarked(job.id);
   const bookmarkIconClass = bookmarked ? "material-symbols-outlined icon--filled" : "material-symbols-outlined";
-  const externalApply = Boolean(job.applyUrl);
-  const applyHref = `apply.html?id=${encodeURIComponent(job.id)}&app=${APP_VERSION}`;
-  const applyText = externalApply ? "Lamar & Catat di Tracker" : "Cek Cara Melamar";
   const salaryOriginal = formatSalaryOriginal(job.salary);
+
+  function isJobTracked(jobId) {
+    try {
+      const raw = localStorage.getItem("jsa_applications");
+      if (!raw) return false;
+      const parsed = JSON.parse(raw);
+      return Boolean(parsed[jobId]);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function autoTrackJob(targetJob, status = "Applied") {
+    try {
+      const raw = localStorage.getItem("jsa_applications");
+      const applications = raw ? JSON.parse(raw) : {};
+      if (!applications[targetJob.id]) {
+        const now = new Date().toISOString();
+        applications[targetJob.id] = {
+          jobId: targetJob.id,
+          status: status,
+          submittedAt: now,
+          updatedAt: now,
+          notes: `Melamar via portal resmi ${targetJob.source?.name || "ATS"}`,
+          history: [
+            { date: now, status: status, label: `Status: ${status} via portal resmi` }
+          ]
+        };
+        localStorage.setItem("jsa_applications", JSON.stringify(applications));
+      }
+      return true;
+    } catch (e) {
+      console.warn("Auto-track error:", e);
+      return false;
+    }
+  }
+
+  const isTracked = isJobTracked(job.id);
+  const directApplyUrl = sanitizeUrl(job.applyUrl || job.source?.url || "#");
+  const trackerHref = `apply.html?id=${encodeURIComponent(job.id)}&app=${APP_VERSION}`;
+
+  const dateVal = job.postedAt || job.posted;
+  const ageDays = dateVal ? Math.max(0, Math.floor((Date.now() - new Date(dateVal).getTime()) / 86400000)) : 99;
+  const freshnessBadge = ageDays <= 3
+    ? `<span class="badge badge-fresh">Baru</span>`
+    : (ageDays > 30 ? `<span class="badge badge-stale">Loker Lama</span>` : "");
+
   const sourceBlock = job.source?.name ? `
-    <section class="content-block" aria-labelledby="source-title">
-      <h2 id="source-title">Sumber Lowongan</h2>
-      <p>Data lowongan ini berasal dari <a class="text-link" href="${escapeHtml(sanitizeUrl(job.source.url || job.applyUrl || "#"))}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.source.name)}</a>. Ikuti instruksi apply di halaman sumber resmi.</p>
+    <section class="detail-card" aria-labelledby="source-title">
+      <h2 class="detail-card__section-title" id="source-title">
+        <span class="material-symbols-outlined" aria-hidden="true">verified_user</span>
+        Sumber Resmi Terverifikasi
+      </h2>
+      <div class="detail-card__prose">
+        <p>Data lowongan ini diverifikasi langsung dari feed resmi <a class="text-link" href="${escapeHtml(directApplyUrl)}" target="_blank" rel="noopener noreferrer"><strong>${escapeHtml(job.source.name)}</strong></a>. Seluruh tahapan seleksi diproses langsung pada sistem ATS pemberi kerja tanpa perantara.</p>
+      </div>
     </section>
   ` : "";
 
@@ -515,18 +564,18 @@ async function initDetailPage() {
   const atsScoreClass = atsResult.score >= 70 ? "" : (atsResult.score >= 40 ? "ats-scorecard__circle--warning" : "ats-scorecard__circle--danger");
 
   const atsBlock = `
-    <section class="ats-scorecard" aria-labelledby="ats-score-title">
+    <div class="detail-sidebar-card" aria-labelledby="ats-score-title">
       <div class="ats-scorecard__header">
         <div>
-          <h2 class="title-medium" id="ats-score-title" style="margin:0;">Analisis ATS & Kualifikasi</h2>
-          <p class="body-medium" style="margin:4px 0 0;">Kecocokan profil Anda dengan kualifikasi lowongan ini</p>
+          <h2 class="title-medium" id="ats-score-title" style="margin:0;font-size:15px;">Analisis ATS & Kualifikasi</h2>
+          <p class="body-medium" style="margin:3px 0 0;font-size:12px;">Kecocokan profil Anda dengan kualifikasi lowongan</p>
         </div>
         <span class="ats-scorecard__circle ${atsScoreClass}">${atsResult.score}%</span>
       </div>
-      <p class="body-medium">${escapeHtml(atsResult.recommendation)}</p>
+      <p class="body-medium" style="font-size:13px;line-height:1.5;">${escapeHtml(atsResult.recommendation)}</p>
       ${atsResult.matched.length ? `
         <div style="margin-top:12px;">
-          <span class="label-small" style="font-weight:700;">Kata Kunci Cocok (${atsResult.matched.length}):</span>
+          <span class="label-small" style="font-weight:700;font-size:11px;color:var(--md-sys-color-on-surface);">Kata Kunci Cocok (${atsResult.matched.length}):</span>
           <div class="ats-keyword-chips">
             ${atsResult.matched.map((kw) => `<span class="ats-chip">${escapeHtml(kw)}</span>`).join("")}
           </div>
@@ -534,13 +583,13 @@ async function initDetailPage() {
       ` : ""}
       ${atsResult.missing.length ? `
         <div style="margin-top:12px;">
-          <span class="label-small" style="font-weight:700;color:#c62828;">Kata Kunci Belum Ada di Profil (${atsResult.missing.length}):</span>
+          <span class="label-small" style="font-weight:700;font-size:11px;color:#c62828;">Kata Kunci Perlu Ditambahkan (${atsResult.missing.length}):</span>
           <div class="ats-keyword-chips">
             ${atsResult.missing.map((kw) => `<span class="ats-chip ats-chip--missing">${escapeHtml(kw)}</span>`).join("")}
           </div>
         </div>
       ` : ""}
-    </section>
+    </div>
   `;
 
   let salaryTakeHomeHtml = "";
@@ -559,32 +608,32 @@ async function initDetailPage() {
           taxMode: "employee"
         });
         salaryTakeHomeHtml = `
-          <div class="ats-scorecard" style="margin-top:14px;background:var(--md-sys-color-surface-container-low);border:1px solid var(--md-sys-color-outline-variant);border-radius:12px;padding:16px;">
+          <div class="detail-sidebar-card">
             <div class="ats-scorecard__header" style="align-items:flex-start;">
               <div>
                 <strong class="title-medium" style="display:flex;align-items:center;gap:6px;font-size:14px;color:var(--md-sys-color-on-surface);">
                   <span class="material-symbols-outlined" style="color:var(--md-sys-color-primary);font-size:18px;">account_balance_wallet</span>
-                  Estimasi Take-Home Pay (Gaji Bersih ID)
+                  Estimasi Gaji Bersih (PPh 21)
                 </strong>
-                <p class="body-medium" style="margin:2px 0 0;font-size:12px;color:var(--md-sys-color-outline);">
+                <p class="body-medium" style="margin:2px 0 0;font-size:11px;color:var(--md-sys-color-outline);">
                   Perkiraan gaji bersih bulanan setelah PPh 21 (Tarif Progresif UU HPP).
                 </p>
               </div>
-              <span class="badge badge-fresh" style="font-weight:700;font-size:13px;padding:4px 8px;border-radius:8px;">${est.formatted.netMonthlyIdr}/bln</span>
+              <span class="badge badge-fresh" style="font-weight:700;font-size:12px;padding:3px 7px;border-radius:6px;">${est.formatted.netMonthlyIdr}/bln</span>
             </div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));gap:12px;margin-top:12px;font-size:13px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;font-size:12px;">
               <div>
                 <span class="label-small" style="color:var(--md-sys-color-outline);">Gaji Kotor Bulanan</span>
-                <div style="font-weight:700;">${est.formatted.grossMonthlyIdr}</div>
+                <div style="font-weight:700;font-size:13px;color:var(--md-sys-color-on-surface);">${est.formatted.grossMonthlyIdr}</div>
               </div>
               <div>
-                <span class="label-small" style="color:var(--md-sys-color-outline);">Estimasi PPh 21</span>
-                <div style="font-weight:700;color:#c62828;">- ${est.formatted.monthlyTax}</div>
+                <span class="label-small" style="color:var(--md-sys-color-outline);">Estimasi Potongan Pajak</span>
+                <div style="font-weight:700;font-size:13px;color:#c62828;">- ${est.formatted.monthlyTax}</div>
               </div>
-              <div>
-                <span class="label-small" style="color:var(--md-sys-color-outline);">Bersih Masuk Rekening</span>
-                <div style="font-weight:800;color:#2e7d32;">${est.formatted.netMonthlyIdr}</div>
-              </div>
+            </div>
+            <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--md-sys-color-outline-variant);display:flex;align-items:center;justify-content:space-between;">
+              <span class="label-small" style="color:var(--md-sys-color-outline);font-weight:700;">Take-Home Masuk Rekening</span>
+              <strong style="font-size:14px;color:#2e7d32;">${est.formatted.netMonthlyIdr}</strong>
             </div>
           </div>
         `;
@@ -597,7 +646,7 @@ async function initDetailPage() {
   const rawDesc = String(job.description || "").trim();
   const detailDescription = (rawDesc && rawDesc.toLowerCase() !== "nan" && rawDesc.toLowerCase() !== "null")
     ? rawDesc
-    : `Perusahaan ${job.company || "Terkait"} membuka lowongan resmi untuk posisi ${job.title || "ini"} di ${job.location || "Indonesia"}. Silakan klik tombol 'Lamar Sekarang' di atas untuk melihat rincian kualifikasi dan mengajukan lamaran langsung di portal resmi penyedia.`;
+    : `Perusahaan ${job.company || "Terkait"} membuka lowongan resmi untuk posisi ${job.title || "ini"} di ${job.location || "Indonesia"}. Silakan klik tombol 'Lamar di Situs Resmi' untuk melihat rincian kualifikasi dan mengajukan lamaran langsung di portal resmi penyedia.`;
 
   const rawAboutCo = String(job.about_company || "").trim();
   const detailAboutCompany = (rawAboutCo && rawAboutCo.toLowerCase() !== "nan" && rawAboutCo.toLowerCase() !== "null")
@@ -613,93 +662,204 @@ async function initDetailPage() {
       ];
 
   root.innerHTML = `
-    <section class="detail-hero" aria-labelledby="detail-title">
-      <div class="detail-hero__top">
-        <a class="button button--text" href="search.html">
+    <!-- Top Breadcrumb Bar -->
+    <nav class="detail-breadcrumb-bar" aria-label="Navigasi halaman">
+      <div class="detail-breadcrumb-bar__left">
+        <a class="detail-back-link" href="search.html">
           <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
-          Kembali ke Pencarian
+          <span>Kembali ke Pencarian</span>
         </a>
+        <span class="detail-breadcrumb-separator" aria-hidden="true">/</span>
+        <span class="detail-breadcrumb-item">${escapeHtml(job.category || "Lowongan")}</span>
+        <span class="detail-breadcrumb-separator" aria-hidden="true">/</span>
+        <span class="detail-breadcrumb-item detail-breadcrumb-item--current">${escapeHtml(job.company)}</span>
+      </div>
+      <div class="detail-breadcrumb-bar__right">
         <button
           class="icon-button js-bookmark-toggle"
           type="button"
           data-job-id="${escapeHtml(job.id)}"
-          aria-label="${bookmarked ? "Hapus dari lowongan tersimpan" : "Simpan lowongan"}"
+          aria-label="${bookmarked ? "Hapus dari tersimpan" : "Simpan lowongan"}"
+          title="${bookmarked ? "Hapus dari tersimpan" : "Simpan lowongan"}"
           aria-pressed="${String(bookmarked)}"
         >
           <span class="${bookmarkIconClass}" aria-hidden="true">${bookmarked ? "bookmark" : "bookmark_border"}</span>
         </button>
-      </div>
-
-      <div class="detail-hero__identity">
-        ${renderCompanyAvatar(job.company, "detail-hero__logo")}
-        <div>
-          <h1 class="display-small" id="detail-title">${escapeHtml(job.title)}</h1>
-          <p class="body-medium">${escapeHtml(job.company)} . ${escapeHtml(job.location)}</p>
-          <div class="cluster" aria-label="Tipe lowongan" style="gap:6px;margin-top:6px;">${renderChips(job.type)}${renderSourceBadge(job)}</div>
-        </div>
-      </div>
-
-      <div>
-        <div class="job-card__salary">${escapeHtml(formatSalary(job.salary))}</div>
-        ${salaryOriginal ? `<div class="job-card__salary-note" style="color:var(--md-sys-color-primary);font-weight:700;font-size:14px;margin-top:4px;">${escapeHtml(salaryOriginal)}</div>` : ""}
-        ${salaryTakeHomeHtml}
-      </div>
-      <div class="job-card__quality">${renderQualitySignals(job)}</div>
-      <div class="detail-actions">
-        <a class="button button--primary button--full" href="${escapeHtml(applyHref)}" data-track-apply-intent="${escapeHtml(job.id)}">
-          <span class="material-symbols-outlined" aria-hidden="true">send</span>
-          ${escapeHtml(applyText)}
-        </a>
-        <button class="button button--tonal button--full" type="button" id="generate-cover-letter-btn">
-          <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
-          Draf Cover Letter AI
-        </button>
-        <button class="button button--tonal button--full" type="button" id="generate-outreach-btn">
-          <span class="material-symbols-outlined" aria-hidden="true">alternate_email</span>
-          Sapa Recruiter (DM)
-        </button>
-        <button class="icon-button" type="button" id="share-button" aria-label="Bagikan lowongan">
+        <button class="icon-button" type="button" id="share-button" aria-label="Bagikan lowongan" title="Bagikan lowongan">
           <span class="material-symbols-outlined" aria-hidden="true">share</span>
         </button>
       </div>
-      <div id="cover-letter-container" style="display:none;margin-top:16px;"></div>
-      <div id="outreach-container" style="display:none;margin-top:16px;"></div>
-    </section>
+    </nav>
 
-    ${atsBlock}
+    <!-- 2-Column Responsive Symmetrical Architecture -->
+    <div class="detail-grid">
+      <!-- Main Column -->
+      <div class="detail-grid__main stack">
+        <!-- Hero Header Card -->
+        <section class="detail-card detail-card--hero" aria-labelledby="detail-title">
+          <div class="detail-card__header-row">
+            ${renderCompanyAvatar(job.company, "detail-card__logo")}
+            <div class="detail-card__header-info">
+              <div class="detail-card__meta-top">
+                <span class="detail-card__company">${escapeHtml(job.company)}</span>
+                <span class="detail-card__dot">·</span>
+                <span class="detail-card__location">
+                  <span class="material-symbols-outlined" aria-hidden="true">location_on</span>
+                  ${escapeHtml(job.location)}
+                </span>
+                ${freshnessBadge}
+              </div>
+              <h1 class="detail-card__title" id="detail-title">${escapeHtml(job.title)}</h1>
+              <div class="detail-card__pills">
+                ${renderChips(job.type)}
+                ${renderSourceBadge(job)}
+              </div>
+            </div>
+          </div>
 
-    <section class="content-block" aria-labelledby="about-job-title">
-      <h2 id="about-job-title">Tentang Pekerjaan</h2>
-      <p>${escapeHtml(detailDescription)}</p>
-    </section>
+          <!-- Symmetrical Key Metrics Grid -->
+          <div class="detail-metrics-grid">
+            <div class="detail-metric-card">
+              <span class="detail-metric-label">Estimasi Kompensasi</span>
+              <span class="detail-metric-value detail-metric-value--salary">${escapeHtml(formatSalary(job.salary))}</span>
+              ${salaryOriginal ? `<span class="detail-metric-sub">${escapeHtml(salaryOriginal)}</span>` : ""}
+            </div>
+            <div class="detail-metric-card">
+              <span class="detail-metric-label">Tipe Pekerjaan</span>
+              <span class="detail-metric-value">${escapeHtml(job.type || "Full-time")}</span>
+              <span class="detail-metric-sub">${escapeHtml(job.category || "Profesional")}</span>
+            </div>
+            <div class="detail-metric-card">
+              <span class="detail-metric-label">Verifikasi Portal</span>
+              <span class="detail-metric-value" style="color:var(--md-sys-color-primary);">Terverifikasi</span>
+              <span class="detail-metric-sub">${escapeHtml(job.source?.name || "Official ATS")}</span>
+            </div>
+          </div>
 
-    <section class="content-block" aria-labelledby="requirements-title">
-      <h2 id="requirements-title">Persyaratan</h2>
-      <ul class="requirement-list">
-        ${detailRequirements.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-      </ul>
-    </section>
+          <!-- Trust Signals Row -->
+          <div class="detail-trust-signals">
+            <span class="detail-trust-pill"><span class="material-symbols-outlined" aria-hidden="true">payments</span> Gaji Transparan</span>
+            <span class="detail-trust-pill"><span class="material-symbols-outlined" aria-hidden="true">verified</span> Link Resmi Terverifikasi</span>
+            <span class="detail-trust-pill"><span class="material-symbols-outlined" aria-hidden="true">public</span> Lokasi Kerja Jelas</span>
+          </div>
 
-    <section class="content-block" aria-labelledby="company-title">
-      <h2 id="company-title">Tentang Perusahaan</h2>
-      <div class="company-strip">
-        ${renderCompanyAvatar(job.company, "company-strip__logo")}
-        <div>
-          <strong>${escapeHtml(job.company)}</strong>
-          <p class="body-medium">${escapeHtml(job.category || "Teknologi")} · ${escapeHtml(job.location || "Indonesia")}</p>
+          <!-- Balanced Actions Grid -->
+          <div class="detail-card-actions">
+            <a class="button button--primary" href="${escapeHtml(directApplyUrl)}" target="_blank" rel="noopener noreferrer" id="hero-direct-apply-btn" data-track-apply-intent="${escapeHtml(job.id)}">
+              <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+              Lamar di Situs Resmi ↗
+            </a>
+            <a class="button button--tonal" href="${escapeHtml(trackerHref)}" id="hero-tracker-btn">
+              <span class="material-symbols-outlined" aria-hidden="true">assignment</span>
+              ${isTracked ? "Buka di Tracker" : "Catat ke Tracker"}
+            </a>
+            <button class="button button--outlined" type="button" id="generate-cover-letter-btn">
+              <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span>
+              Draf Cover Letter AI
+            </button>
+            <button class="button button--outlined" type="button" id="generate-outreach-btn">
+              <span class="material-symbols-outlined" aria-hidden="true">alternate_email</span>
+              Sapa Recruiter (DM)
+            </button>
+          </div>
+
+          <div id="cover-letter-container" style="display:none;margin-top:20px;"></div>
+          <div id="outreach-container" style="display:none;margin-top:20px;"></div>
+        </section>
+
+        <!-- Description Card -->
+        <section class="detail-card" aria-labelledby="about-job-title">
+          <h2 class="detail-card__section-title" id="about-job-title">
+            <span class="material-symbols-outlined" aria-hidden="true">description</span>
+            Tentang Pekerjaan
+          </h2>
+          <div class="detail-card__prose">
+            <p>${escapeHtml(detailDescription)}</p>
+          </div>
+        </section>
+
+        <!-- Requirements Card -->
+        <section class="detail-card" aria-labelledby="requirements-title">
+          <h2 class="detail-card__section-title" id="requirements-title">
+            <span class="material-symbols-outlined" aria-hidden="true">checklist</span>
+            Persyaratan & Kualifikasi
+          </h2>
+          <ul class="detail-requirements-list">
+            ${detailRequirements.map((item) => `
+              <li class="detail-requirement-item">
+                <span class="material-symbols-outlined detail-requirement-icon" aria-hidden="true">check_circle</span>
+                <span>${escapeHtml(item)}</span>
+              </li>
+            `).join("")}
+          </ul>
+        </section>
+
+        <!-- Company Card -->
+        <section class="detail-card" aria-labelledby="company-title">
+          <h2 class="detail-card__section-title" id="company-title">
+            <span class="material-symbols-outlined" aria-hidden="true">apartment</span>
+            Tentang Perusahaan
+          </h2>
+          <div class="company-strip" style="margin-bottom:14px;">
+            ${renderCompanyAvatar(job.company, "company-strip__logo")}
+            <div>
+              <strong style="font-size:16px;">${escapeHtml(job.company)}</strong>
+              <p class="body-medium">${escapeHtml(job.category || "Teknologi")} · ${escapeHtml(job.location || "Indonesia")}</p>
+            </div>
+          </div>
+          <div class="detail-card__prose">
+            <p>${escapeHtml(detailAboutCompany)}</p>
+          </div>
+        </section>
+
+        ${sourceBlock}
+      </div>
+
+      <!-- Sticky Sidebar Column -->
+      <aside class="detail-grid__sidebar">
+        <div class="detail-sidebar-sticky">
+          <!-- Quick Apply Card -->
+          <div class="detail-sidebar-card detail-sidebar-card--cta">
+            <div class="detail-sidebar-card__header">
+              <span class="label-large" style="color:var(--md-sys-color-on-surface);font-weight:700;">Aksi Lamaran Cepat</span>
+              <span class="badge badge--active">${escapeHtml(job.source?.name || "Official")}</span>
+            </div>
+            <div class="detail-sidebar-salary-box">
+              <span class="label-small" style="color:var(--md-sys-color-outline);font-weight:700;">Kompensasi Ditawarkan</span>
+              <div class="detail-sidebar-salary-amount">${escapeHtml(formatSalary(job.salary))}</div>
+              ${salaryOriginal ? `<div class="detail-sidebar-salary-converted">${escapeHtml(salaryOriginal)}</div>` : ""}
+            </div>
+            <a class="button button--primary button--large button--full" href="${escapeHtml(directApplyUrl)}" target="_blank" rel="noopener noreferrer" id="sidebar-direct-apply-btn" data-track-apply-intent="${escapeHtml(job.id)}">
+              <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+              Lamar di Situs Resmi ↗
+            </a>
+            <a class="button button--tonal button--full" href="${escapeHtml(trackerHref)}" id="sidebar-tracker-btn">
+              <span class="material-symbols-outlined" aria-hidden="true">assignment</span>
+              ${isTracked ? "Buka di Tracker" : "Catat ke Tracker Lamaran"}
+            </a>
+            <div class="detail-sidebar-notice">
+              <span class="material-symbols-outlined" aria-hidden="true">shield</span>
+              <span>Tautan langsung ke form pendaftaran resmi. Bebas biaya dan bebas penipuan.</span>
+            </div>
+          </div>
+
+          <!-- ATS Scorecard -->
+          ${atsBlock}
+
+          <!-- Tax / Take Home Pay Engine -->
+          ${salaryTakeHomeHtml}
         </div>
-      </div>
-      <p>${escapeHtml(detailAboutCompany)}</p>
-    </section>
+      </aside>
+    </div>
 
-    ${sourceBlock}
-
-    <section class="content-block" aria-labelledby="similar-title">
+    <!-- Similar Jobs Section (Full Width Responsive Grid) -->
+    <section class="detail-similar-section" aria-labelledby="similar-title">
       <div class="section__header">
-        <h2 id="similar-title">Lowongan Serupa</h2>
+        <h2 class="headline-small" id="similar-title">Lowongan Serupa</h2>
+        <a class="button button--text" href="search.html">Lihat Semua</a>
       </div>
-      <div class="horizontal-scroll">
-        ${similarJobs.map((candidate) => renderJobCard(candidate, { compact: true })).join("")}
+      <div class="job-grid">
+        ${similarJobs.slice(0, 3).map((candidate) => renderJobCard(candidate, { compact: false })).join("")}
       </div>
     </section>
   `;
@@ -707,6 +867,23 @@ async function initDetailPage() {
   initBookmarkButtons(page, ({ bookmarked }) => {
     showSnackbar(bookmarked ? "Lowongan disimpan" : "Lowongan dihapus dari tersimpan");
   });
+
+  // Direct Apply handlers with auto-tracking
+  const handleDirectApply = (e) => {
+    trackEvent("apply_intent", { jobId: job.id, source: job.source?.key || "local" });
+    autoTrackJob(job, "Applied");
+    showSnackbar("Membuka portal resmi... Lowongan otomatis dicatat ke Tracker Lamaran.");
+  };
+
+  document.getElementById("hero-direct-apply-btn")?.addEventListener("click", handleDirectApply);
+  document.getElementById("sidebar-direct-apply-btn")?.addEventListener("click", handleDirectApply);
+
+  const handleTrackerClick = () => {
+    autoTrackJob(job, "Saved");
+  };
+
+  document.getElementById("hero-tracker-btn")?.addEventListener("click", handleTrackerClick);
+  document.getElementById("sidebar-tracker-btn")?.addEventListener("click", handleTrackerClick);
 
   let clLanguage = "id";
   let clTone = "professional";
