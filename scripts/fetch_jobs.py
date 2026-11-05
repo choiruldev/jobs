@@ -970,6 +970,20 @@ def sanitize_and_clean_jobs(jobs):
         if dummy_pattern.search(title) or dummy_pattern.search(company):
             continue
 
+        # 1b. Auto-Purge Loker Kadaluarsa (> 60 hari)
+        posted_str = str(j.get("postedAt") or "")
+        if posted_str:
+            try:
+                dt_clean = posted_str.replace("Z", "+00:00")
+                if len(dt_clean) == 10:
+                    dt_clean += "T00:00:00+00:00"
+                p_dt = datetime.datetime.fromisoformat(dt_clean)
+                now_dt = datetime.datetime.now(datetime.timezone.utc)
+                if (now_dt - p_dt).days > 60:
+                    continue
+            except Exception:
+                pass
+
         # 2. Deduplikasi
         company_clean = re.sub(r'[^a-z0-9]', '', company.lower())
         title_clean = re.sub(r'[^a-z0-9]', '', title.lower())
