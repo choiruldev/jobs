@@ -792,8 +792,155 @@ def fetch_from_himalayas(limit=50):
 
     return jobs
 
+# ==============================================================================
+# 6. ASHBY ATS CRAWLER (SUPABASE, LINEAR, ELEVENLABS, RAMP, SENTRY)
+# ==============================================================================
+def fetch_from_ashby():
+    """Mengambil lowongan remote global dari Silicon Valley Tech Leaders di Ashby ATS"""
+    boards = [
+        ("supabase", "Supabase", "https://supabase.com/brand-assets/supabase-logo-icon.png"),
+        ("linear", "Linear", "https://linear.app/static/apple-touch-icon.png"),
+        ("elevenlabs", "ElevenLabs", "https://elevenlabs.io/favicon.ico"),
+        ("ramp", "Ramp", "https://ramp.com/favicon.ico"),
+        ("sentry", "Sentry", "https://sentry-brand.storage.googleapis.com/sentry-glyph-black.png")
+    ]
+    jobs = []
+    print("[+] Mengambil data Ashby ATS (Supabase, Linear, ElevenLabs, Ramp, Sentry)...")
+    for board_id, company_name, logo_url in boards:
+        url = f"https://api.ashbyhq.com/posting-api/job-board/{board_id}"
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"})
+        try:
+            with urllib.request.urlopen(req, timeout=6) as response:
+                res = json.loads(response.read().decode("utf-8"))
+            items = res.get("jobs", [])
+            count = 0
+            for item in items:
+                loc = (item.get("location") or "Remote Global").strip()
+                is_remote = item.get("isRemote") is True or "remote" in (item.get("workplaceType") or "").lower() or any(k in loc.lower() for k in ["remote", "anywhere", "global", "apac", "asia", "indonesia"])
+                if not is_remote:
+                    continue
+
+                title = str(item.get("title") or "").strip()
+                if not title:
+                    continue
+
+                desc_html = item.get("descriptionHtml") or ""
+                desc_text = clean_html(desc_html) or f"Lowongan {title} di {company_name}."
+                apply_url = str(item.get("applyUrl") or item.get("jobUrl") or "").strip()
+                if not apply_url.startswith("http"):
+                    continue
+
+                job_id = f"ashby-{board_id}-{item.get('id')}"
+                tier = detect_tier(loc, desc_text)
+                category = detect_category(title, desc_text)
+                exp = detect_experience(title, desc_text)
+
+                jobs.append({
+                    "id": job_id,
+                    "title": title,
+                    "company": company_name,
+                    "logo": logo_url,
+                    "location": loc if "remote" in loc.lower() else f"Remote ({loc})",
+                    "remoteTier": tier if tier != "international" else "anywhere",
+                    "workplaceType": "remote",
+                    "experienceLevel": exp,
+                    "category": category,
+                    "salary": {
+                        "min": None,
+                        "max": None,
+                        "currency": None,
+                        "period": "yearly",
+                        "display": "Gaji kompetitif"
+                    },
+                    "applyUrl": apply_url,
+                    "sourcePlatform": "Ashby",
+                    "postedAt": item.get("publishedAt") or get_iso_now(),
+                    "descriptionHtml": desc_html if ("<p>" in desc_html or "<div" in desc_html) else f"<p>{desc_text}</p>",
+                    "descriptionText": desc_text,
+                    "tags": [company_name, "Ashby", "Remote Global", category]
+                })
+                count += 1
+                if count >= 6:
+                    break
+        except Exception as e:
+            print(f"[-] Gagal fetch Ashby {company_name}: {e}")
+    return jobs
+
+# ==============================================================================
+# 7. LEVER ATS CRAWLER
+# ==============================================================================
+def fetch_from_lever():
+    """Mengambil lowongan remote dari perusahaan bereputasi di Lever ATS"""
+    boards = [
+        ("kinsta", "Kinsta", "https://kinsta.com/wp-content/themes/kinsta-blog/dist/images/favicon/favicon.svg")
+    ]
+    jobs = []
+    print("[+] Mengambil data Lever ATS (Kinsta)...")
+    for board_id, company_name, logo_url in boards:
+        url = f"https://api.lever.co/v0/postings/{board_id}?mode=json"
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+        try:
+            with urllib.request.urlopen(req, timeout=5) as response:
+                items = json.loads(response.read().decode("utf-8"))
+            count = 0
+            for item in items:
+                categories = item.get("categories") or {}
+                commitment = str(categories.get("commitment") or "").lower()
+                loc = str(categories.get("location") or "Remote Global").strip()
+                workplace = str(item.get("workplaceType") or "").lower()
+
+                is_remote = "remote" in commitment or "remote" in workplace or "remote" in loc.lower()
+                if not is_remote:
+                    continue
+
+                title = str(item.get("text") or "").strip()
+                if not title:
+                    continue
+
+                desc_html = item.get("description") or ""
+                desc_text = clean_html(desc_html) or f"Lowongan {title} di {company_name}."
+                apply_url = str(item.get("hostedUrl") or item.get("applyUrl") or "").strip()
+                if not apply_url.startswith("http"):
+                    continue
+
+                job_id = f"lever-{board_id}-{item.get('id')}"
+                tier = detect_tier(loc, desc_text)
+                category = detect_category(title, desc_text)
+                exp = detect_experience(title, desc_text)
+
+                jobs.append({
+                    "id": job_id,
+                    "title": title,
+                    "company": company_name,
+                    "logo": logo_url,
+                    "location": loc if "remote" in loc.lower() else f"Remote ({loc})",
+                    "remoteTier": tier if tier != "international" else "anywhere",
+                    "workplaceType": "remote",
+                    "experienceLevel": exp,
+                    "category": category,
+                    "salary": {
+                        "min": None,
+                        "max": None,
+                        "currency": None,
+                        "period": "yearly",
+                        "display": "Gaji kompetitif"
+                    },
+                    "applyUrl": apply_url,
+                    "sourcePlatform": "Lever",
+                    "postedAt": get_iso_now(),
+                    "descriptionHtml": desc_html if ("<p>" in desc_html or "<div" in desc_html) else f"<p>{desc_text}</p>",
+                    "descriptionText": desc_text,
+                    "tags": [company_name, "Lever", "Remote Global", category]
+                })
+                count += 1
+                if count >= 6:
+                    break
+        except Exception as e:
+            print(f"[-] Gagal fetch Lever {company_name}: {e}")
+    return jobs
+
 def sanitize_and_clean_jobs(jobs):
-    """Menjamin integritas data: 0 dummy data, 0 raw NaN, URL valid"""
+    """Menjamin integritas dan keamanan data: 0 dummy data, 0 raw NaN, URL valid, Anti-XSS"""
     dummy_pattern = re.compile(r'\b(lorem|ipsum|dummy|sample\s*job|test\s*lowongan|test\s*company)\b', re.I)
     cleaned = []
     seen = set()
@@ -804,8 +951,8 @@ def sanitize_and_clean_jobs(jobs):
         company = str(j.get("company") or "").strip()
         url = str(j.get("applyUrl") or "").strip()
 
-        # 1. Tolak jika data kosong, nan, atau pola dummy
-        if not title or not company or not url or not url.startswith("http"):
+        # 1. Keamanan & Integritas: Tolak jika data kosong, nan, URL bukan http/https, atau pola dummy
+        if not title or not company or not url or not (url.startswith("http://") or url.startswith("https://")):
             continue
         if is_null_or_nan(title) or is_null_or_nan(company):
             continue
@@ -824,7 +971,13 @@ def sanitize_and_clean_jobs(jobs):
         if len(fuzzy_key) > 6:
             seen.add(fuzzy_key)
 
-        # 3. Sanitasi teks deskripsi
+        # 3. Sanitasi teks deskripsi & Anti-XSS (Hapus script, iframe, event handlers berbahaya)
+        desc_raw_html = str(j.get("descriptionHtml") or "")
+        desc_safe_html = re.sub(r'<\s*(script|iframe|object|embed|applet)[^>]*>.*?<\s*/\s*\1\s*>', '', desc_raw_html, flags=re.I | re.S)
+        desc_safe_html = re.sub(r'\s+on\w+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)', '', desc_safe_html, flags=re.I)
+        desc_safe_html = re.sub(r'javascript\s*:', '', desc_safe_html, flags=re.I)
+        j["descriptionHtml"] = desc_safe_html
+
         desc_text = str(j.get("descriptionText") or "").strip()
         desc_text = re.sub(r'\b(NaN|nan|null|None)\b', '', desc_text).strip()
         if not desc_text:
@@ -837,7 +990,6 @@ def sanitize_and_clean_jobs(jobs):
         if not sal_display or sal_display.lower() in ("nan", "null", "none", "<na>"):
             sal["display"] = "Gaji kompetitif"
         elif re.search(r'\b0[.,]2\s*jt\b', sal_display, re.I):
-            # Guard against anomaly 0.2jt
             sal["display"] = "Rp 20.000.000 - Rp 30.000.000/bln" if "senior" in title.lower() else "Gaji kompetitif"
         j["salary"] = sal
 
@@ -890,6 +1042,16 @@ def main():
     greenhouse_jobs = fetch_from_greenhouse()
     newly_fetched.extend(greenhouse_jobs)
     print(f"[✓] Terkumpul {len(greenhouse_jobs)} lowongan dari Greenhouse.")
+
+    # 6. Ashby ATS (Supabase, Linear, ElevenLabs, Ramp, Sentry)
+    ashby_jobs = fetch_from_ashby()
+    newly_fetched.extend(ashby_jobs)
+    print(f"[✓] Terkumpul {len(ashby_jobs)} lowongan dari Ashby ATS.")
+
+    # 7. Lever ATS (Kinsta)
+    lever_jobs = fetch_from_lever()
+    newly_fetched.extend(lever_jobs)
+    print(f"[✓] Terkumpul {len(lever_jobs)} lowongan dari Lever ATS.")
 
     # Gabungkan: data baru diutamakan di depan, didukung data terverifikasi yang tersimpan
     combined = newly_fetched + existing_jobs

@@ -5,13 +5,31 @@
     <link>https://jobsearch.id/</link>
     <description>Feed lowongan kerja remote dan lokal Indonesia terverifikasi bebas penipuan.</description>
     <language>id</language>
-    <lastBuildDate>Thu, 05 Nov 2026 11:12:32 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 05 Nov 2026 11:30:09 GMT</lastBuildDate>
     <atom:link href="https://jobsearch.id/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Account Manager - Kinsta</title>
+      <link>https://jobsearch.id/pages/detail.html?id=lever-kinsta-caadac8e-381f-42a2-9801-202b351fff28</link>
+      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=lever-kinsta-caadac8e-381f-42a2-9801-202b351fff28</guid>
+      <pubDate>Thu, 05 Nov 2026 11:29:32 GMT</pubDate>
+      <description>Kinsta is one of the top providers of managed hosting for WordPress, with a growing club of 120,000+ businesses including startups, universities, and Fortune 500 firms. We&apos;re motivated by excellent quality and proud to have received a 97% satisfaction rating from our customers. &amp;nbsp; That&apos;s because...</description>
+      <author>noreply@jobsearch.id (Kinsta)</author>
+      <category>Desain</category>
+    </item>
+    <item>
+      <title>Senior Product Designer - Kinsta</title>
+      <link>https://jobsearch.id/pages/detail.html?id=lever-kinsta-44982157-55fc-42e7-b5ce-3f8bfc3f65c7</link>
+      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=lever-kinsta-44982157-55fc-42e7-b5ce-3f8bfc3f65c7</guid>
+      <pubDate>Thu, 05 Nov 2026 11:29:32 GMT</pubDate>
+      <description>Kinsta is one of the top providers of managed hosting for WordPress, with a growing club of 120,000+ businesses including startups, universities, and Fortune 500 firms. We&apos;re motivated by excellent quality and proud to have received a 97% satisfaction rating from our customers. That&apos;s because, to us...</description>
+      <author>noreply@jobsearch.id (Kinsta)</author>
+      <category>Produk</category>
+    </item>
     <item>
       <title>Senior Frontend Developer (React / Next.js) - PT Bank Central Asia Tbk (BCA)</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-0ae48c9d26</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-0ae48c9d26</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>BCA mencari Senior Frontend Developer berpengalaman untuk merancang arsitektur aplikasi perbankan digital generasi terbaru menggunakan React, TypeScript, dan micro-frontend. Menjamin SLA 99.99% dan standar keamanan PCI-DSS....</description>
       <author>noreply@jobsearch.id (PT Bank Central Asia Tbk (BCA))</author>
       <category>Teknologi</category>
@@ -20,7 +38,7 @@
       <title>Data Analyst (Commercial &amp; Growth) - PT Tokopedia (GoTo)</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-2f3b92ae28</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-2f3b92ae28</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>Menganalisis performa merchant, funnel belanja pengguna, dan efektivitas promosi menggunakan BigQuery, SQL, Python, dan Tableau. Terbiasa presentasi insight bisnis langsung ke VP dan Category Managers....</description>
       <author>noreply@jobsearch.id (PT Tokopedia (GoTo))</author>
       <category>Data</category>
@@ -29,7 +47,7 @@
       <title>Backend Software Engineer (Golang / Microservices) - Shopee Indonesia</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-38d0c98561</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-38d0c98561</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>Mengembangkan sistem payment gateway dan voucher engine skala jutaan QPS. Membutuhkan pemahaman mendalam tentang Golang, Redis caching, Kafka message queue, dan database optimasi PostgreSQL....</description>
       <author>noreply@jobsearch.id (Shopee Indonesia)</author>
       <category>Teknologi</category>
@@ -38,7 +56,7 @@
       <title>UI/UX Product Designer - Tiket.com (PT Global Tiket Network)</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-70c1ed2ac5</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-70c1ed2ac5</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>Bertanggung jawab atas user journey pemesanan akomodasi dan penerbangan. Menjalankan usability testing, wireframing di Figma, serta berkolaborasi aktif dengan Design System team....</description>
       <author>noreply@jobsearch.id (Tiket.com (PT Global Tiket Network))</author>
       <category>Desain</category>
@@ -47,7 +65,7 @@
       <title>Lead DevOps &amp; Cloud Infrastructure - PT Telkom Indonesia (Persero) Tbk</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-c752ddd631</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-c752ddd631</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>Memimpin transformasi arsitektur cloud nasional Telkom. Mengelola Kubernetes clusters, Terraform infrastructure-as-code, CI/CD pipelines GitLab, dan observability berbasis Prometheus &amp; Grafana....</description>
       <author>noreply@jobsearch.id (PT Telkom Indonesia (Persero) Tbk)</author>
       <category>Teknologi</category>
@@ -56,7 +74,7 @@
       <title>Digital Performance Marketing Specialist - PT Blibli.com (Global Digital Niaga)</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-c9733afce2</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-c9733afce2</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>Mengelola campaign berbayar skala besar di Google Ads, Meta Ads, dan TikTok Ads. Melakukan analisis ROAS, conversion rate optimization (CRO), dan A/B testing copy iklan....</description>
       <author>noreply@jobsearch.id (PT Blibli.com (Global Digital Niaga))</author>
       <category>Marketing</category>
@@ -65,7 +83,7 @@
       <title>Junior Full Stack Web Developer - Astra International Digital Hub</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-65f0ffcf99</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-65f0ffcf99</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>Peluang karir untuk lulusan baru bertalenta di ekosistem digital Astra. Mengembangkan aplikasi web internal dengan Node.js, React, dan MySQL. Mentoring langsung dari Principal Engineer....</description>
       <author>noreply@jobsearch.id (Astra International Digital Hub)</author>
       <category>Teknologi</category>
@@ -74,7 +92,7 @@
       <title>Product Manager (Fintech &amp; Lending) - PT Kawan Lama Sejahtera</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-58b26a3139</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-58b26a3139</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>Memimpin inisiatif produk digital omnichannel dan pembiayaan retail. Menyusun PRD, mengelola backlog sprint, serta koordinasi dengan legal, compliance, dan engineering....</description>
       <author>noreply@jobsearch.id (PT Kawan Lama Sejahtera)</author>
       <category>Produk</category>
@@ -83,7 +101,7 @@
       <title>Cyber Security Analyst &amp; Penetration Tester - PT Bank Mandiri (Persero) Tbk</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-9c9f9c384e</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-9c9f9c384e</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>Melakukan vulnerability assessment, penetration testing berkala pada web dan mobile app perbankan, serta merancang mitigasi insiden siber sesuai standar OJK dan ISO 27001....</description>
       <author>noreply@jobsearch.id (PT Bank Mandiri (Persero) Tbk)</author>
       <category>Teknologi</category>
@@ -92,7 +110,7 @@
       <title>Business Intelligence &amp; Reporting Specialist - PT Kalbe Farma Tbk</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-3d2c5f3d90</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-3d2c5f3d90</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>Membangun dashboard monitoring rantai pasok dan distribusi farmasi menggunakan Power BI, SQL Server, dan data warehouse. Menghasilkan laporan mingguan untuk jajaran direksi....</description>
       <author>noreply@jobsearch.id (PT Kalbe Farma Tbk)</author>
       <category>Data</category>
@@ -101,7 +119,7 @@
       <title>Mobile Android Engineer (Kotlin / Compose) - PT Bank Rakyat Indonesia (Persero) Tbk</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-98f26ca5c4</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-98f26ca5c4</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>Mengembangkan fitur inovatif pada aplikasi perbankan BRImo dengan jutaan pengguna harian. Menerapkan Clean Architecture, Jetpack Compose, Unit Testing, dan biometric authentication....</description>
       <author>noreply@jobsearch.id (PT Bank Rakyat Indonesia (Persero) Tbk)</author>
       <category>Teknologi</category>
@@ -110,7 +128,7 @@
       <title>Senior Data Engineer (Spark / Airflow) - Telkomsel (PT Telekomunikasi Selular)</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-0945e921d8</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-0945e921d8</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>Merancang data pipeline terdistribusi skala petabyte menggunakan Apache Spark, Airflow, Kafka, dan Google Cloud BigQuery untuk analitik jaringan telekomunikasi nasional....</description>
       <author>noreply@jobsearch.id (Telkomsel (PT Telekomunikasi Selular))</author>
       <category>Data</category>
@@ -119,7 +137,7 @@
       <title>Frontend Engineer (React / TypeScript) - DANA Indonesia (PT Espay Debit Indonesia)</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-359a6333a5</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-359a6333a5</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>Membangun ekosistem web portal merchant dan payment checkout DANA. Fokus pada web performance, security standards, dan micro-frontend interoperability....</description>
       <author>noreply@jobsearch.id (DANA Indonesia (PT Espay Debit Indonesia))</author>
       <category>Teknologi</category>
@@ -128,7 +146,7 @@
       <title>Golang Backend Developer - Halodoc (PT Media Dokter Investama)</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-56c70aed5a</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-56c70aed5a</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>Mengembangkan layanan konsultasi dokter online dan pengiriman resep obat instan. Memanfaatkan Golang, gRPC, PostgreSQL, AWS ECS, dan Redis....</description>
       <author>noreply@jobsearch.id (Halodoc (PT Media Dokter Investama))</author>
       <category>Teknologi</category>
@@ -137,7 +155,7 @@
       <title>SEO &amp; Content Marketing Specialist - Paragon Technology and Innovation (Wardah)</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-44c34f7862</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-44c34f7862</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>Meningkatkan visibilitas organik merek-merek kosmetik Paragon (Wardah, Make Over, Emina, Kahf) melalui strategi SEO on-page, off-page, technical audit, dan content brief terarah....</description>
       <author>noreply@jobsearch.id (Paragon Technology and Innovation (Wardah))</author>
       <category>Marketing</category>
@@ -146,7 +164,7 @@
       <title>QA Automation Engineer (Playwright / Cypress) - PT Bukalapak.com Tbk</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-a5f0acb706</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-a5f0acb706</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>Membuat end-to-end automated test suites menggunakan TypeScript, Playwright, dan Appium untuk menjamin kualitas rilis e-commerce dan mitra Bukalapak....</description>
       <author>noreply@jobsearch.id (PT Bukalapak.com Tbk)</author>
       <category>Teknologi</category>
@@ -155,7 +173,7 @@
       <title>Associate Product Manager - Gojek (GoTo Financial)</title>
       <link>https://jobsearch.id/pages/detail.html?id=jobstreet-037d12f3ae</link>
       <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=jobstreet-037d12f3ae</guid>
-      <pubDate>Thu, 05 Nov 2026 11:12:05 GMT</pubDate>
+      <pubDate>Thu, 05 Nov 2026 11:29:19 GMT</pubDate>
       <description>Berkontribusi pada ekosistem GoPay dan GoPay Merchant. Menjalankan user interviews, perumusan requirement MVP, sprint planning, dan tracking metrik retensi....</description>
       <author>noreply@jobsearch.id (Gojek (GoTo Financial))</author>
       <category>Produk</category>
@@ -341,121 +359,103 @@
       <category>Desain</category>
     </item>
     <item>
-      <title>Office Manager (m/w/d) - Liqid Lig</title>
-      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-office-manager-berlin-302826</link>
-      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-office-manager-berlin-302826</guid>
-      <pubDate>Thu, 05 Nov 2026 09:40:51 GMT</pubDate>
-      <description>Deine Rolle Als Office Manager (w/m/d) bist du das Herzstück unseres Berliner Offices. Du sorgst dafür, dass im Hintergrund alles funktioniert und sich Kolleg*innen, Kund*innen und Gäste rundum wohlfühlen. Du denkst voraus, behältst den Überblick und packst selbst mit an – vom täglichen Office-Betri...</description>
-      <author>noreply@jobsearch.id (Liqid Lig)</author>
+      <title>Praktikant*in Social Media Marketing (m/w/d) - SaleLab GmbH</title>
+      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-praktikantin-social-media-marketing-weingarten-241163</link>
+      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-praktikantin-social-media-marketing-weingarten-241163</guid>
+      <pubDate>Thu, 05 Nov 2026 10:31:14 GMT</pubDate>
+      <description>Du brennst total für Social Media und hast Lust mal die Seite der Marke einzunehmen? Dann hast du jetzt die Chance für unsere Marke pamo design ein Praktikum im Bereich Social Media und Influencer Marketing zu absolvieren. Bei SaleLab erwartet dich nicht nur eine mega spanennde Aufgabe, sondern ein ...</description>
+      <author>noreply@jobsearch.id (SaleLab GmbH)</author>
       <category>Desain</category>
     </item>
     <item>
-      <title>Head of Propulsion Battery System (all genders) - væridion</title>
-      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-head-of-propulsion-battery-system-all-genders-munich-322419</link>
-      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-head-of-propulsion-battery-system-all-genders-munich-322419</guid>
-      <pubDate>Thu, 05 Nov 2026 09:40:26 GMT</pubDate>
-      <description>Your Mission: Join VÆRIDION on our journey to develop the world’s first electric nine-seater aircraft. As Head of Propulsion Battery System (PBS), you will lead VÆRIDION’s PBS department and hold overall technical accountability for the Microliner’s propulsion battery system. The propulsion battery ...</description>
-      <author>noreply@jobsearch.id (væridion)</author>
-      <category>Produk</category>
-    </item>
-    <item>
-      <title>Mechanical Systems Engineer - Landing Gear (all genders) - væridion</title>
-      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-mechanical-systems-engineer-landing-gear-all-genders-munich-104600</link>
-      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-mechanical-systems-engineer-landing-gear-all-genders-munich-104600</guid>
-      <pubDate>Thu, 05 Nov 2026 09:40:26 GMT</pubDate>
-      <description>Your Mission: We are looking for a Mechanical Systems Engineer to help us develop and integrate the Landing Gear System of our fully battery-electric aircraft (CS-23). You will take a leading role in defining, integrating and certifying the retractable landing gear system of a clean-sheet battery-el...</description>
-      <author>noreply@jobsearch.id (væridion)</author>
+      <title>Entwicklungsingenieur Konstruktion (m/w/d) - MY Humancapital GmbH</title>
+      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-entwicklungsingenieur-konstruktion-munich-141926</link>
+      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-entwicklungsingenieur-konstruktion-munich-141926</guid>
+      <pubDate>Thu, 05 Nov 2026 10:31:12 GMT</pubDate>
+      <description>Entwicklungsingenieur Konstruktion (m/w/d) - Vollzeit | München Im Auftrag unseres Partnerunternehmens in München suchen wir Sie zum nächstmöglichen Zeitpunkt als „Entwicklungsingenieur Konstruktion (m/w/d)“. Aufgaben Als Entwicklungsingenieur (m/w/d) entwickeln und konstruieren Sie eigenständig Bau...</description>
+      <author>noreply@jobsearch.id (MY Humancapital GmbH)</author>
       <category>Desain</category>
     </item>
     <item>
-      <title>Electrical Systems Designer (all genders) - væridion</title>
-      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-electrical-systems-designer-all-genders-munich-42137</link>
-      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-electrical-systems-designer-all-genders-munich-42137</guid>
-      <pubDate>Thu, 05 Nov 2026 09:40:26 GMT</pubDate>
-      <description>Your Mission: As an Electrical Systems Designer, you will join the Vehicle Systems team and contribute to the development and certification of the VÆRIDION Microliners’ Low-Voltage (LV) electrical and avionics systems. Your primary responsibility will be to mature the physical installation of the ai...</description>
-      <author>noreply@jobsearch.id (væridion)</author>
-      <category>Desain</category>
+      <title>Account Director:in (m/w/d) - aha! Agentur für Handelsmarketing</title>
+      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-account-directorin-cologne-404197</link>
+      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-account-directorin-cologne-404197</guid>
+      <pubDate>Thu, 05 Nov 2026 10:31:12 GMT</pubDate>
+      <description>Wir suchen DICH, wenn Du Lust hast, als Account Director:in (m/w/d) Marken aus Industrie und Handel (u.a. Goodyear, Bayer, Kühne, JTi, Beiersdorf, Lactalis, Mondelez) strategisch zu beraten und sie dorthin zu bringen, wo Kaufentscheidungen fallen: an den Point of Sale, online wie offline. Du führst ...</description>
+      <author>noreply@jobsearch.id (aha! Agentur für Handelsmarketing)</author>
+      <category>Marketing</category>
     </item>
     <item>
-      <title>Talent Partner (all genders) - væridion</title>
-      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-talent-partner-all-genders-munich-446861</link>
-      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-talent-partner-all-genders-munich-446861</guid>
-      <pubDate>Thu, 05 Nov 2026 09:40:26 GMT</pubDate>
-      <description>Your Mission: At VÆRIDION, we&apos;re building the Microliner, a fully electric aircraft, and the battery technology that powers it. To make that happen, we need great people, and as our Talent Acquisition Manager (all genders), you&apos;ll play a key role in bringing them on board. As part of our People &amp;amp...</description>
-      <author>noreply@jobsearch.id (væridion)</author>
-      <category>Data</category>
+      <title>Praktikum eCommerce-/ Projektmanagement (m/w/d) - SaleLab GmbH</title>
+      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-praktikum-ecommerce-projektmanagement-weingarten-418516</link>
+      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-praktikum-ecommerce-projektmanagement-weingarten-418516</guid>
+      <pubDate>Thu, 05 Nov 2026 10:31:11 GMT</pubDate>
+      <description>SaleLab ist ein stark wachsendes E-Commerce Unternehmen aus Ravensburg. Weltweit agierend, verkaufen wir auf verschiedenen Marktplätzen und in eigenen Onlineshops Produkte unserer eigenen Marken. Du brennst für Sales und hast Lust, mit uns die eCommerce-Welt zu erobern? Du hast keine Lust auf ein 08...</description>
+      <author>noreply@jobsearch.id (SaleLab GmbH)</author>
+      <category>Marketing</category>
     </item>
     <item>
-      <title>Technical Recruiter (all genders) - væridion</title>
-      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-technical-recruiter-all-genders-munich-162061</link>
-      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-technical-recruiter-all-genders-munich-162061</guid>
-      <pubDate>Thu, 05 Nov 2026 09:40:26 GMT</pubDate>
-      <description>Your Mission: At VÆRIDION, we&apos;re building the Microliner, a fully electric aircraft, and the battery technology that powers it. To make that happen, we need great people, and as our Talent Acquisition Manager (all genders), you&apos;ll play a key role in bringing them on board. As part of our People &amp;amp...</description>
-      <author>noreply@jobsearch.id (væridion)</author>
-      <category>Data</category>
+      <title>(Senior) Sales Manager (m/w/d) | Deggendorf - hairfree</title>
+      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-senior-sales-manager-deggendorf-375241</link>
+      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-senior-sales-manager-deggendorf-375241</guid>
+      <pubDate>Thu, 05 Nov 2026 10:20:12 GMT</pubDate>
+      <description>Über uns Die hairfree GmbH ist Marktführer für dauerhafte Haarentfernung¹ in der DACH-Region. Mit über 70 Standorten in Deutschland, Österreich und der Schweiz sowie mehr als 100 Mitarbeitenden gehören wir zu den führenden Anbietern im Bereich ästhetischer Dienstleistungen. Seit über 20 Jahren verbi...</description>
+      <author>noreply@jobsearch.id (hairfree)</author>
+      <category>Sales</category>
     </item>
     <item>
-      <title>Talent Acquisition Manager (all genders) - væridion</title>
-      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-talent-acquisition-manager-all-genders-munich-136362</link>
-      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-talent-acquisition-manager-all-genders-munich-136362</guid>
-      <pubDate>Thu, 05 Nov 2026 09:40:26 GMT</pubDate>
-      <description>Your Mission: At VÆRIDION, we&apos;re building the Microliner, a fully electric aircraft, and the battery technology that powers it. To make that happen, we need great people, and as our Talent Acquisition Manager (all genders), you&apos;ll play a key role in bringing them on board. As part of our People &amp;amp...</description>
-      <author>noreply@jobsearch.id (væridion)</author>
-      <category>Data</category>
+      <title>Senior Sales Consultant - Vollzeit (German Speaking) - Swiss Life Select</title>
+      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-senior-sales-consultant-vollzeit-german-speaking-freiburg-185824</link>
+      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-senior-sales-consultant-vollzeit-german-speaking-freiburg-185824</guid>
+      <pubDate>Thu, 05 Nov 2026 10:20:12 GMT</pubDate>
+      <description>Du willst Ergebnisse, keine Diskussionen? Du arbeitest strukturiert, hast ein klares Verständnis für saubere Prozesse und weißt, wie wichtig Verlässlichkeit im Vertrieb ist? Dann bist du bei uns genau richtig! Wir suchen einen Senior Sales Consultant (m/w/d), der mit klarem Fokus auf Abschlussquote,...</description>
+      <author>noreply@jobsearch.id (Swiss Life Select)</author>
+      <category>Sales</category>
     </item>
     <item>
-      <title>Head of Event Marketing - CodeRabbit</title>
-      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-remote-head-of-event-marketing-446605</link>
-      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-remote-head-of-event-marketing-446605</guid>
-      <pubDate>Thu, 05 Nov 2026 09:40:26 GMT</pubDate>
-      <description>About CodeRabbit CodeRabbit is the governance and control layer for agentic software development, helping engineering teams trust the code they ship. AI can generate code faster than people can review and understand it. Teams still need to know whether each change solves the right problem, fits thei...</description>
-      <author>noreply@jobsearch.id (CodeRabbit)</author>
-      <category>Produk</category>
-    </item>
-    <item>
-      <title>Head of Product – SAP (m/f/d) - Qorelo</title>
-      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-head-of-product-sap-berlin-422403</link>
-      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-head-of-product-sap-berlin-422403</guid>
-      <pubDate>Thu, 05 Nov 2026 09:40:25 GMT</pubDate>
-      <description>Almost every company running SAP faces the same task: the move to SAP S/4HANA. These programmes run for years, cost tens of millions, and regularly stall at the same point. Nobody fully understands the legacy landscape that has grown over decades. That is where Qorelo comes in. We are building the A...</description>
-      <author>noreply@jobsearch.id (Qorelo)</author>
-      <category>Produk</category>
-    </item>
-    <item>
-      <title>Founders Associate, Growth (Munich Office) - Dataleap</title>
-      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-founders-associate-growth-munich-office-223542</link>
-      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-founders-associate-growth-munich-office-223542</guid>
-      <pubDate>Thu, 05 Nov 2026 09:40:25 GMT</pubDate>
-      <description>About Dataleap Dataleap is the agentic operating system for the enterprise: a coding agent for business users. With Dataleap, teams build, scale and manage agentic systems, where agents, apps and chat work as one connected system. Agents do the grunt work, and humans add judgment from their own cock...</description>
-      <author>noreply@jobsearch.id (Dataleap)</author>
-      <category>Data</category>
-    </item>
-    <item>
-      <title>Field Account Executive - Bonn / Ruhrgebiet (w/m/d) - Lightspeedhq</title>
-      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-field-account-executive-bonn-ruhrgebiet-230891</link>
-      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-field-account-executive-bonn-ruhrgebiet-230891</guid>
-      <pubDate>Thu, 05 Nov 2026 09:40:25 GMT</pubDate>
-      <description>Über uns &amp;amp; Die Opportunity Bereit für die Freiheit, komplett eigenständig zu arbeiten, aber mit der Power eines globalen Tech-Pioniers im Rücken? Lightspeed ist die führende All-in-One-Plattform für Handel und Gastronomie. Als KI-getriebenes Tech-Unternehmen bieten wir dir eines der besten SaaS-...</description>
-      <author>noreply@jobsearch.id (Lightspeedhq)</author>
-      <category>Desain</category>
-    </item>
-    <item>
-      <title>Senior Systems &amp; Infrastructure Engineer - Se3</title>
-      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-senior-systems-infrastructure-engineer-munich-252853</link>
-      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-senior-systems-infrastructure-engineer-munich-252853</guid>
-      <pubDate>Thu, 05 Nov 2026 09:40:25 GMT</pubDate>
-      <description>Join SE3 Labs as Senior Systems &amp;amp; Infrastructure Engineer Join our new Software Platform team and make the devices, networks and compute behind SE3&apos;s autonomy run reliably, so our engineers can focus on what they do best. About SE3 SE3 Labs builds spatial intelligence and autonomy software for u...</description>
-      <author>noreply@jobsearch.id (Se3)</author>
-      <category>Produk</category>
-    </item>
-    <item>
-      <title>Prüfungsassistent (m/w/d) - Scheller &amp;amp; Partner PartG mbB</title>
-      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-prufungsassistent-hamburg-111155</link>
-      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-prufungsassistent-hamburg-111155</guid>
-      <pubDate>Thu, 05 Nov 2026 09:30:55 GMT</pubDate>
-      <description>Wer wir sind Mittelständisch denken, weltweit agieren – unser Ansatz seit 1935. Als Kanzlei im Herzen von Hamburg mit ca. 20 Mitarbeitenden betreuen wir Unternehmen verschiedenster Größen und Branchen in den Bereichen Steuerberatung und Wirtschaftsprüfung. Durch diese interdisziplinäre Ausrichtung e...</description>
-      <author>noreply@jobsearch.id (Scheller &amp; Partner PartG mbB)</author>
+      <title>Teamleiter (m/w/d) im Finanzvertrieb (German Speaking) - XpertsOne</title>
+      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-teamleiter-im-finanzvertrieb-german-speaking-celle-403490</link>
+      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-teamleiter-im-finanzvertrieb-german-speaking-celle-403490</guid>
+      <pubDate>Thu, 05 Nov 2026 10:20:12 GMT</pubDate>
+      <description>Du bist eine Führungspersönlichkeit, die Verlässlichkeit, klare Strukturen und Teamgeist lebt? Übernimm Verantwortung, optimiere Prozesse und führe dein Team zu Höchstleistungen. Begeistere unsere Kunden mit ehrlicher Beratung und nachhaltigen Konzepten und wachse mit uns in einem Umfeld mit klaren ...</description>
+      <author>noreply@jobsearch.id (XpertsOne)</author>
       <category>Teknologi</category>
+    </item>
+    <item>
+      <title>Projektingenieur Entwicklung (m/w/x) – Teilprojektleitung Prototypen und Prüftechnik - Alveon MedTech GmbH</title>
+      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-projektingenieur-entwicklung-teilprojektleitung-prototypen-und-pruftechnik-ostfildern-464576</link>
+      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-projektingenieur-entwicklung-teilprojektleitung-prototypen-und-pruftechnik-ostfildern-464576</guid>
+      <pubDate>Thu, 05 Nov 2026 10:01:17 GMT</pubDate>
+      <description>Die Alveon MedTech GmbH ist ein innovatives Medizintechnik-Startup mit Sitz in Ostfildern bei Stuttgart. Unser Fokus liegt auf der Entwicklung medizinischer Inhalationssysteme. Seit unserer Gründung im Jahr 2020 haben wir erfolgreich eine patentgeschützte Basistechnologie entwickelt. Aktuell arbeite...</description>
+      <author>noreply@jobsearch.id (Alveon MedTech GmbH)</author>
+      <category>Desain</category>
+    </item>
+    <item>
+      <title>Werkstudent Content Creator Social Media mit Fokus vor der Kamera (m/w/d) - Global Treats GmbH</title>
+      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-werkstudent-content-creator-social-media-mit-fokus-vor-der-kamera-wutoschingen-277417</link>
+      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-werkstudent-content-creator-social-media-mit-fokus-vor-der-kamera-wutoschingen-277417</guid>
+      <pubDate>Thu, 05 Nov 2026 10:01:17 GMT</pubDate>
+      <description>Du fühlst dich vor der Kamera wohl, hast ein gutes Gespür für Social Media und weißt, wie man Menschen innerhalb der ersten Sekunden eines Videos abholt? Dann suchen wir dich. Für unsere Social Media Kanäle suchen wir eine kreative Content Creatorin, die regelmäßig selbst vor der Kamera steht und ei...</description>
+      <author>noreply@jobsearch.id (Global Treats GmbH)</author>
+      <category>Desain</category>
+    </item>
+    <item>
+      <title>UI/UX Designer (w/m/d) - Migrando GmbH</title>
+      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-ui-ux-designer-cottbus-50095</link>
+      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-ui-ux-designer-cottbus-50095</guid>
+      <pubDate>Thu, 05 Nov 2026 10:01:16 GMT</pubDate>
+      <description>Einleitung Wir sind auf der Suche nach neuen Kollegen! Migrando ist ein Legal-Tech-Unternehmen aus Cottbus. Wir haben es uns zur Aufgabe gemacht, den komplizierten und langwierigen Prozess der Einbürgerung effizienter und kundenfreundlicher zu gestalten. Mit unserer Expertise im Ausländerrecht, unse...</description>
+      <author>noreply@jobsearch.id (Migrando GmbH)</author>
+      <category>Data</category>
+    </item>
+    <item>
+      <title>Mediengestalter Web &amp; Digital (w/m/d) - Migrando GmbH</title>
+      <link>https://jobsearch.id/pages/detail.html?id=arbeitnow-mediengestalter-web-digital-cottbus-234564</link>
+      <guid isPermaLink="true">https://jobsearch.id/pages/detail.html?id=arbeitnow-mediengestalter-web-digital-cottbus-234564</guid>
+      <pubDate>Thu, 05 Nov 2026 10:01:16 GMT</pubDate>
+      <description>Einleitung Wir sind auf der Suche nach neuen Kollegen! Migrando ist ein Legal-Tech-Unternehmen aus Cottbus. Wir haben es uns zur Aufgabe gemacht, den komplizierten und langwierigen Prozess der Einbürgerung effizienter und kundenfreundlicher zu gestalten. Mit unserer Expertise im Ausländerrecht, unse...</description>
+      <author>noreply@jobsearch.id (Migrando GmbH)</author>
+      <category>Desain</category>
     </item>
   </channel>
 </rss>

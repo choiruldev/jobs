@@ -121,6 +121,12 @@ export function renderSourceBadge(job) {
   if (platform.includes("greenhouse")) {
     return `<span class="source-badge source-badge--greenhouse"><span class="badge-icon">🌿</span> Greenhouse</span>`;
   }
+  if (platform.includes("ashby")) {
+    return `<span class="source-badge source-badge--ashby"><span class="badge-icon">⚡</span> Ashby</span>`;
+  }
+  if (platform.includes("lever")) {
+    return `<span class="source-badge source-badge--lever"><span class="badge-icon">🎯</span> Lever</span>`;
+  }
   if (platform.includes("himalayas")) {
     return `<span class="source-badge source-badge--himalayas"><span class="badge-icon">🏔️</span> Himalayas</span>`;
   }
