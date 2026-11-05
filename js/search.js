@@ -3,8 +3,8 @@ import {
   getAllKnownJobs,
   rememberJobs,
   salaryAverage
-} from "./data.js?v=20260616z";
-import { detectExperienceLevel } from "./schema.js?v=20260616z";
+} from "./data.js?v=20261106a";
+import { detectExperienceLevel } from "./schema.js?v=20261106a";
 import {
   JOB_SOURCES,
   PROVIDER_LABELS,
@@ -12,13 +12,13 @@ import {
   isIndonesiaScope,
   matchesScope,
   loadJobsForSource
-} from "./providers.js?v=20261105b";
+} from "./providers.js?v=20261106a";
 import {
   escapeHtml,
   initBookmarkButtons,
   renderJobCard,
   showSnackbar
-} from "./bookmark.js?v=20260616z";
+} from "./bookmark.js?v=20261106a";
 import {
   clearMatchProfile,
   getProfileSummary,
@@ -26,16 +26,16 @@ import {
   readMatchProfile,
   scoreJobForProfile,
   writeMatchProfile
-} from "./profile.js?v=20260616z";
+} from "./profile.js?v=20261106a";
 import {
   countNewJobs,
   deleteSavedSearch,
   markSearchSeen,
   readSavedSearches,
   saveSearch
-} from "./saved-searches.js?v=20260616z";
-import { recordPageView, trackEvent } from "./analytics.js?v=20260616z";
-import { initThemeEngine } from "./theme-engine.js?v=20261104g";
+} from "./saved-searches.js?v=20261106a";
+import { recordPageView, trackEvent } from "./analytics.js?v=20261106a";
+import { initThemeEngine } from "./theme-engine.js?v=20261106a";
 
 const LAST_SEARCH_KEY = "jsa_last_search";
 const FILTER_GROUPS_SINGLE = new Set(["location", "category", "salary"]);

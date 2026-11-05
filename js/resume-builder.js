@@ -3,8 +3,8 @@
  * Manages form state, live preview rendering, dynamic experiences/education, and PDF generation via window.print().
  */
 
-import { readMatchProfile } from "./profile.js?v=20260616z";
-import { escapeHtml } from "./bookmark.js?v=20260616z";
+import { readMatchProfile } from "./profile.js?v=20261106a";
+import { escapeHtml } from "./bookmark.js?v=20261106a";
 
 export function sanitizeInput(str) {
   if (typeof str !== "string") return "";

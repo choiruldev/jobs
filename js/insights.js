@@ -2,10 +2,10 @@ import {
   clearAnalyticsEvents,
   getAnalyticsSummary,
   recordPageView
-} from "./analytics.js?v=20260616z";
-import { showSnackbar } from "./bookmark.js?v=20260616z";
-import { calculateApplicationFunnel, buildOfferComparisonMatrix } from "./insights-engine.js?v=20260616z";
-import { readApplications, getTrackedApplicationItems } from "./apply.js?v=20260616z";
+} from "./analytics.js?v=20261106a";
+import { showSnackbar } from "./bookmark.js?v=20261106a";
+import { calculateApplicationFunnel, buildOfferComparisonMatrix } from "./insights-engine.js?v=20261106a";
+import { readApplications, getTrackedApplicationItems } from "./apply.js?v=20261106a";
 
 function escapeHtml(value) {
   return String(value)

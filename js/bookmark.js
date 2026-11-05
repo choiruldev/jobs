@@ -6,22 +6,27 @@ import {
   getJobQualitySignals,
   getJobById,
   getSimilarJobs
-} from "./data.js?v=20260616z";
-import { fetchJobById } from "./providers.js?v=20261105b";
-import { readMatchProfile, scoreJobForProfile } from "./profile.js?v=20260616z";
-import { analyzeAtsMatch } from "./ats-checker.js?v=20260616z";
-import { generateCoverLetter } from "./ai-writer.js?v=20260616z";
-import { generateOutreachMessage } from "./outreach-generator.js?v=20260616z";
-import { estimateTakeHomePay, formatIDR } from "./salary-calculator.js?v=20260616z";
-import { generateJobPostingJsonLd, injectJsonLd } from "./routes.js?v=20260616z";
-import { recordPageView, trackEvent } from "./analytics.js?v=20260616z";
-import { toggleJobComparison, renderComparatorTrigger } from "./job-comparator.js?v=20260616z";
-import { shareJob } from "./share.js?v=20260616z";
-import { initThemeEngine } from "./theme-engine.js?v=20261104g";
+} from "./data.js?v=20261106a";
+import { fetchJobById } from "./providers.js?v=20261106a";
+import { readMatchProfile, scoreJobForProfile } from "./profile.js?v=20261106a";
+import { analyzeAtsMatch } from "./ats-checker.js?v=20261106a";
+import { generateCoverLetter } from "./ai-writer.js?v=20261106a";
+import { generateOutreachMessage } from "./outreach-generator.js?v=20261106a";
+import { estimateTakeHomePay, formatIDR } from "./salary-calculator.js?v=20261106a";
+import { generateJobPostingJsonLd, injectJsonLd } from "./routes.js?v=20261106a";
+import { recordPageView, trackEvent } from "./analytics.js?v=20261106a";
+import {
+  isJobCompared,
+  syncCompareButtons,
+  toggleJobComparison,
+  renderComparatorTrigger
+} from "./job-comparator.js?v=20261106a";
+import { shareJob } from "./share.js?v=20261106a";
+import { initThemeEngine } from "./theme-engine.js?v=20261106a";
 
 export const BOOKMARK_KEY = "jsa_bookmarks";
 
-const APP_VERSION = "20260616z";
+const APP_VERSION = "20261106a";
 const boundBookmarkRoots = new WeakSet();
 
 export function readBookmarks() {
@@ -112,8 +117,9 @@ function cssEscape(value) {
   return String(value).replace(/"/g, '\\"');
 }
 
-function renderChips(types) {
-  return types
+function renderChips(types = []) {
+  const list = Array.isArray(types) ? types : (types ? [String(types)] : []);
+  return list
     .slice(0, 2)
     .map((type) => `<span class="job-card__chip">${escapeHtml(type)}</span>`)
     .join("");
@@ -197,8 +203,10 @@ export function renderJobCard(job, options = {}) {
     detailPrefix = ""
   } = options;
   const bookmarked = isBookmarked(job.id);
+  const compared = isJobCompared(job.id);
   const classes = [
     "job-card",
+    "job-card--interactive",
     bookmarked ? "job-card--bookmarked" : "",
     compact ? "job-card--compact" : ""
   ].filter(Boolean).join(" ");
@@ -212,54 +220,74 @@ export function renderJobCard(job, options = {}) {
   const dateVal = job.postedAt || job.posted;
   const ageDays = dateVal ? Math.max(0, Math.floor((Date.now() - new Date(dateVal).getTime()) / 86400000)) : 99;
   const freshnessBadge = ageDays <= 3
-    ? `<span class="badge-fresh" style="margin-left:4px;">Baru</span>`
-    : (ageDays > 30 ? `<span class="badge-stale" style="margin-left:4px;">Loker Lama</span>` : "");
+    ? `<span class="badge-fresh">Baru</span>`
+    : (ageDays > 30 ? `<span class="badge-stale">Loker Lama</span>` : "");
 
   return `
     <article class="${classes}" data-job-id="${escapeHtml(job.id)}">
-      <div class="job-card__top-bar">
-        <div class="job-card__company-wrap">
+      <a class="job-card__body" href="${detailHref}" aria-label="Lihat detail ${escapeHtml(job.title)} di ${escapeHtml(job.company)}">
+        <div class="job-card__header">
           ${renderCompanyAvatar(job.company, "job-card__logo")}
           <div class="job-card__identity">
-            <span class="job-card__company">${escapeHtml(job.company)}</span>
+            <div class="job-card__company">${escapeHtml(job.company)}</div>
             <div class="job-card__meta">
-              <span class="job-card__meta-item">
-                <span class="material-symbols-outlined" aria-hidden="true" style="font-size:15px;">location_on</span>
-                <span>${escapeHtml(job.location)}</span>
+              <span class="job-card__meta-item" title="${escapeHtml(job.location)}">
+                <span class="material-symbols-outlined" aria-hidden="true">location_on</span>
+                <span class="job-card__meta-text">${escapeHtml(job.location || "Remote")}</span>
               </span>
-              <span>·</span>
-              <span>${escapeHtml(formatPostedDate(dateVal))}</span>
+              <span class="job-card__meta-dot" aria-hidden="true">·</span>
+              <span class="job-card__meta-date">${escapeHtml(formatPostedDate(dateVal))}</span>
               ${freshnessBadge}
             </div>
           </div>
         </div>
-        <div class="job-card__actions">
-          <button
-            class="icon-button job-card__save js-bookmark-toggle"
-            type="button"
-            data-job-id="${escapeHtml(job.id)}"
-            ${removable ? 'data-remove-on-unsave="true"' : ""}
-            aria-label="${bookmarked ? "Hapus dari lowongan tersimpan" : "Simpan lowongan"}"
-            aria-pressed="${String(bookmarked)}"
-            title="${bookmarked ? "Hapus dari tersimpan" : "Simpan lowongan"}"
-          >
-            <span class="${iconClass}" aria-hidden="true">${bookmarked ? "bookmark" : "bookmark_border"}</span>
-          </button>
-        </div>
-      </div>
 
-      <a class="job-card__link-wrap" href="${detailHref}" aria-label="Lihat detail ${escapeHtml(job.title)} di ${escapeHtml(job.company)}">
-        <h2 class="job-card__title">${highlightText(job.title, query)}</h2>
-        <div class="job-card__salary-badge">
-          <span class="material-symbols-outlined" aria-hidden="true" style="font-size:16px;">payments</span>
-          <span class="${salaryClass}">${escapeHtml(salaryText)}</span>
-          ${salaryOriginal ? `<span style="font-size:11px;opacity:0.85;">(${escapeHtml(salaryOriginal)})</span>` : ""}
+        <div class="job-card__main">
+          <h2 class="job-card__title">${highlightText(job.title, query)}</h2>
+          ${renderMatchScore(job)}
         </div>
-        <div class="job-card__tags-row">
-          ${renderChips(job.type)}
-          ${renderSourceBadge(job)}
+
+        <div class="job-card__bottom">
+          <div class="job-card__salary-badge">
+            <span class="material-symbols-outlined" aria-hidden="true" style="font-size:16px;">payments</span>
+            <span class="${salaryClass}">${escapeHtml(salaryText)}</span>
+            ${salaryOriginal ? `<span class="job-card__salary-sub">(${escapeHtml(salaryOriginal)})</span>` : ""}
+          </div>
+          <div class="job-card__footer">
+            <div class="job-card__tags-row">
+              ${renderChips(job.type)}
+              ${renderSourceBadge(job)}
+            </div>
+            <span class="job-card__detail-cta" aria-hidden="true">
+              Detail <span class="material-symbols-outlined" style="font-size:15px;">arrow_forward</span>
+            </span>
+          </div>
         </div>
       </a>
+
+      <div class="job-card__actions">
+        <button
+          class="icon-button job-card__action-btn job-card__compare js-compare-toggle ${compared ? "is-active" : ""}"
+          type="button"
+          data-job-id="${escapeHtml(job.id)}"
+          aria-label="${compared ? "Hapus dari perbandingan" : "Bandingkan lowongan"}"
+          aria-pressed="${String(compared)}"
+          title="${compared ? "Hapus dari perbandingan" : "Bandingkan lowongan"}"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true" style="font-size:18px;">compare_arrows</span>
+        </button>
+        <button
+          class="icon-button job-card__action-btn job-card__save js-bookmark-toggle"
+          type="button"
+          data-job-id="${escapeHtml(job.id)}"
+          ${removable ? 'data-remove-on-unsave="true"' : ""}
+          aria-label="${bookmarked ? "Hapus dari lowongan tersimpan" : "Simpan lowongan"}"
+          aria-pressed="${String(bookmarked)}"
+          title="${bookmarked ? "Hapus dari tersimpan" : "Simpan lowongan"}"
+        >
+          <span class="${iconClass}" aria-hidden="true" style="font-size:19px;">${bookmarked ? "bookmark" : "bookmark_border"}</span>
+        </button>
+      </div>
     </article>
   `;
 }
@@ -284,10 +312,11 @@ function updateBookmarkButtons(jobId, bookmarked) {
 }
 
 export function initBookmarkButtons(root = document, onChange = () => {}) {
+  syncCompareButtons(root);
+  renderComparatorTrigger();
+
   if (boundBookmarkRoots.has(root)) return;
   boundBookmarkRoots.add(root);
-
-  renderComparatorTrigger();
 
   root.addEventListener("click", (event) => {
     const compareBtn = event.target.closest(".js-compare-toggle");
@@ -296,8 +325,12 @@ export function initBookmarkButtons(root = document, onChange = () => {}) {
       event.stopPropagation();
       const jobId = compareBtn.dataset.jobId;
       if (jobId) {
-        toggleJobComparison(jobId);
-        showSnackbar("Daftar komparasi diperbarui");
+        const { ids, added } = toggleJobComparison(jobId);
+        showSnackbar(
+          added
+            ? `Ditambahkan ke perbandingan (${ids.length}/3)`
+            : `Dihapus dari perbandingan (${ids.length}/3)`
+        );
       }
       return;
     }
@@ -369,9 +402,12 @@ export const showToast = showSnackbar;
 
 function initShellNavigation() {
   const page = document.body.dataset.page || document.querySelector("[data-page]")?.dataset.page || "";
-  const navKey = page === "apply" ? "applications" : page;
+  const navKey = page === "apply" ? "applications" : (page === "detail" ? "search" : page);
+  if (!navKey) return;
   document.querySelectorAll(".nav-link[data-nav]").forEach((link) => {
-    if (link.dataset.nav === navKey) {
+    const active = link.dataset.nav === navKey;
+    link.classList.toggle("nav-link--active", active);
+    if (active) {
       link.setAttribute("aria-current", "page");
     } else {
       link.removeAttribute("aria-current");
@@ -669,6 +705,16 @@ async function initDetailPage() {
       </div>
       <div class="detail-breadcrumb-bar__right">
         <button
+          class="icon-button js-compare-toggle ${isJobCompared(job.id) ? "is-active" : ""}"
+          type="button"
+          data-job-id="${escapeHtml(job.id)}"
+          aria-label="${isJobCompared(job.id) ? "Hapus dari perbandingan" : "Bandingkan lowongan"}"
+          title="${isJobCompared(job.id) ? "Hapus dari perbandingan" : "Bandingkan lowongan"}"
+          aria-pressed="${String(isJobCompared(job.id))}"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true">compare_arrows</span>
+        </button>
+        <button
           class="icon-button js-bookmark-toggle"
           type="button"
           data-job-id="${escapeHtml(job.id)}"
@@ -858,7 +904,7 @@ async function initDetailPage() {
         <div class="apply-modal-actions stack" style="gap:12px;">
           <a class="button button--primary button--large" href="${escapeHtml(directApplyUrl)}" target="_blank" rel="noopener noreferrer" id="modal-official-apply-btn">
             <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
-            Lamar di Situs Resmi ↗
+            Lamar di Situs Resmi
           </a>
           <a class="button button--tonal button--large" href="${escapeHtml(trackerHref)}" id="modal-tracker-apply-btn">
             <span class="material-symbols-outlined" aria-hidden="true">assignment</span>

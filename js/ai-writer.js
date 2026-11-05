@@ -3,7 +3,7 @@
  * Generates personalized cover letters and follow-up email drafts based on job requirements and candidate profile.
  */
 
-import { extractKeywords } from "./ats-checker.js?v=20260616z";
+import { extractKeywords } from "./ats-checker.js?v=20261106a";
 
 export function generateCoverLetter({ profile = {}, job = {}, language = "id", tone = "professional" }) {
   const candidateName = profile.name || "Kandidat Profesional";

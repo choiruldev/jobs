@@ -3,8 +3,8 @@
  * Fetches, filters, and displays curated remote-friendly tech companies.
  */
 
-import { escapeHtml, sanitizeUrl } from "./bookmark.js?v=20260616z";
-import { evaluateCompanyCulture } from "./company-radar.js?v=20260616z";
+import { escapeHtml, sanitizeUrl } from "./bookmark.js?v=20261106a";
+import { evaluateCompanyCulture } from "./company-radar.js?v=20261106a";
 
 let allCompanies = [];
 let activeBadgeFilter = "all";

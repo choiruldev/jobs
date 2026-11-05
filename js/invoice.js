@@ -3,7 +3,7 @@
  * Generates international contractor invoices (USD/EUR/SGD/IDR) with tax/SWIFT details and print layout.
  */
 
-import { formatIDR } from "./salary-calculator.js?v=20260616z";
+import { formatIDR } from "./salary-calculator.js?v=20261106a";
 
 const INVOICE_STORAGE_KEY = "jsa_invoice_data_v1";
 

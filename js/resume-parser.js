@@ -3,7 +3,7 @@
  * Parses raw text from CV/Resume into structured profile and resume builder entities.
  */
 
-import { extractKeywords } from "./ats-checker.js?v=20260616z";
+import { extractKeywords } from "./ats-checker.js?v=20261106a";
 
 export function parseResumeText(rawText = "") {
   if (!rawText || typeof rawText !== "string") {

@@ -3,8 +3,8 @@ import {
   getJobById,
   makeLogo,
   rememberJobs
-} from "./data.js?v=20260616z";
-import { dbSaveJobs, dbGetAllJobs } from "./storage-db.js?v=20260616z";
+} from "./data.js?v=20261106a";
+import { dbSaveJobs, dbGetAllJobs } from "./storage-db.js?v=20261106a";
 
 const EXTERNAL_CACHE_KEY = "jsa_external_jobs_cache_v13";
 try {

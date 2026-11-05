@@ -3,7 +3,7 @@
  * Evaluates foreign tech salaries against Indonesian living standards and global market averages.
  */
 
-import { formatIDR, DEFAULT_EXCHANGE_RATES, estimateTakeHomePay } from "./salary-calculator.js?v=20260616z";
+import { formatIDR, DEFAULT_EXCHANGE_RATES, estimateTakeHomePay } from "./salary-calculator.js?v=20261106a";
 
 // Cost of Living Index (Baseline: New York / San Francisco = 100)
 export const CITY_COL_INDICES = {

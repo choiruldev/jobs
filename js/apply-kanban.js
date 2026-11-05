@@ -3,7 +3,7 @@
  * Drag-and-drop HTML5 Kanban view supporting stages: Saved -> Applied -> Interview -> Offer -> Accepted / Rejected.
  */
 
-import { escapeHtml } from "./bookmark.js?v=20260616z";
+import { escapeHtml } from "./bookmark.js?v=20261106a";
 
 export const KANBAN_COLUMNS = [
   { key: "Saved", title: "Disimpan", badgeClass: "kanban-col--saved" },
@@ -60,11 +60,14 @@ function renderKanbanCard(item) {
   const job = item.job || {};
   const app = item.application || {};
   const isOverdue = app.followUpAt && new Date(app.followUpAt) <= new Date();
+  const titleHtml = (!job.manual && job.id)
+    ? `<a href="detail.html?id=${encodeURIComponent(job.id)}" draggable="false" style="color:inherit;text-decoration:none;">${escapeHtml(job.title || "Posisi Lamaran")}</a>`
+    : `<span data-action="open-detail" data-job-id="${escapeHtml(job.id)}" style="cursor:pointer;">${escapeHtml(job.title || "Posisi Lamaran")}</span>`;
 
   return `
     <div class="kanban-card" draggable="true" data-job-id="${escapeHtml(job.id)}">
       <div class="kanban-card__header">
-        <h3 class="kanban-card__title">${escapeHtml(job.title || "Posisi Lamaran")}</h3>
+        <h3 class="kanban-card__title">${titleHtml}</h3>
         <span class="kanban-card__company">${escapeHtml(job.company || "Perusahaan")}</span>
       </div>
       ${job.salary ? `<div class="kanban-card__salary">${escapeHtml(typeof job.salary === 'object' ? job.salary.display : job.salary)}</div>` : ""}

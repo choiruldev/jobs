@@ -21,25 +21,85 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0..1,0" rel="stylesheet">
-  <link rel="stylesheet" href="../css/main.css?v=20260616z">
-  <link rel="stylesheet" href="../css/components.css?v=20260616z">
+  <script>
+    (function() {
+      var savedTheme = localStorage.getItem('jsa_theme_preference');
+      var theme = savedTheme || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.colorScheme = theme;
+    })();
+  </script>
+  <link rel="stylesheet" href="../css/main.css?v=20261106a">
+  <link rel="stylesheet" href="../css/components.css?v=20261106a">
 </head>
 <body>
   <div class="app-layout">
-    <aside class="side-nav" aria-label="Navigasi utama"><a class="brand-lockup" href="../index.html"><span class="logo-mark" aria-hidden="true"><span class="material-symbols-outlined">work</span></span><span>JobSearch</span></a><nav class="side-nav__links"><a class="nav-link" data-nav="search" href="search.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari</span></a><a class="nav-link" data-nav="bookmarks" href="bookmarks.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">bookmark</span><span>Simpan</span></a><a class="nav-link" data-nav="applications" href="apply.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">assignment</span><span>Tracker</span></a></nav></aside>
-    <header class="top-app-bar"><a class="top-app-bar__brand" href="../index.html" aria-label="JobSearch"><span class="logo-mark logo-mark--small" aria-hidden="true"><span class="material-symbols-outlined">work</span></span><span class="top-app-bar__title">Frontend Remote</span></a><a class="icon-button" href="search.html?q=frontend%20developer&source=indonesia" aria-label="Cari lowongan"><span class="material-symbols-outlined" aria-hidden="true">search</span></a></header>
+    <div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
+    <aside class="side-nav" aria-label="Navigasi utama">
+      <div class="side-nav__header" style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+        <a class="brand-lockup" href="../index.html">
+          <span class="logo-mark" aria-hidden="true"><span class="material-symbols-outlined">work</span></span>
+          <span>JobSearch</span>
+        </a>
+        <button class="icon-button js-sidebar-close" id="sidebar-close" type="button" aria-label="Tutup Menu" title="Sembunyikan Menu">
+          <span class="material-symbols-outlined" aria-hidden="true">menu_open</span>
+        </button>
+      </div>
+      <nav class="side-nav__links">
+        <div class="nav-section-label">UTAMA</div>
+        <a class="nav-link nav-link--active" data-nav="search" href="search.html" aria-current="page"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari Lowongan</span></a>
+        <a class="nav-link" data-nav="applications" href="apply.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">assignment</span><span>Tracker Lamaran</span></a>
+        <a class="nav-link" data-nav="bookmarks" href="bookmarks.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">bookmark</span><span>Lowongan Tersimpan</span></a>
+        <div class="nav-section-label" style="margin-top:12px;">FITUR KARIR</div>
+        <a class="nav-link" data-nav="resume" href="resume-builder.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">description</span><span>ATS Resume Builder</span></a>
+        <a class="nav-link" data-nav="interview" href="interview-prep.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">record_voice_over</span><span>Latihan Interview</span></a>
+        <a class="nav-link" data-nav="code-sandbox" href="code-sandbox.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">terminal</span><span>Coding Sandbox</span></a>
+        <a class="nav-link" data-nav="salary" href="salary-benchmark.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">payments</span><span>Kalkulator PPP Gaji</span></a>
+        <a class="nav-link" data-nav="salary-submit" href="salary-submit.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">volunteer_activism</span><span>Gaji Komunitas</span></a>
+        <a class="nav-link" data-nav="skills-roadmap" href="skills-roadmap.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">conversion_path</span><span>Peta Karir & Skill</span></a>
+        <a class="nav-link" data-nav="companies" href="companies.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">apartment</span><span>Perusahaan Remote</span></a>
+        <a class="nav-link" data-nav="insights" href="insights.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">insights</span><span>Analisis Funnel</span></a>
+        <div class="nav-section-label" style="margin-top:12px;">FREELANCE & ALAT</div>
+        <a class="nav-link" data-nav="contract" href="contract-guide.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">gavel</span><span>Panduan Kontrak & Pajak</span></a>
+        <a class="nav-link" data-nav="invoice" href="invoice-generator.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">receipt_long</span><span>Generator Invoice</span></a>
+        <a class="nav-link" data-nav="portfolio" href="portfolio-card.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">badge</span><span>Kartu Bukti Karya</span></a>
+        <a class="nav-link" data-nav="alerts" href="alerts.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">notifications_active</span><span>Pusat Notifikasi</span></a>
+        <div class="nav-section-label" style="margin-top:12px;">INFORMASI</div>
+        <a class="nav-link" data-nav="privacy" href="privacy-policy.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">shield</span><span>Kebijakan Privasi</span></a>
+        <a class="nav-link" data-nav="terms" href="terms.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">policy</span><span>Syarat & Ketentuan</span></a>
+      </nav>
+    </aside>
+    <header class="top-app-bar">
+      <div style="display:flex;align-items:center;gap:8px;min-width:0;">
+        <button class="icon-button js-sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Toggle Menu Navigasi" title="Sembunyikan/Tampilkan Menu">
+          <span class="material-symbols-outlined" aria-hidden="true">menu</span>
+        </button>
+        <a class="top-app-bar__brand" href="../index.html" aria-label="JobSearch">
+          <span class="logo-mark logo-mark--small" aria-hidden="true"><span class="material-symbols-outlined">work</span></span>
+          <span class="top-app-bar__title">Frontend Remote</span>
+        </a>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
+        <button class="icon-button js-theme-toggle" type="button" aria-label="Ganti Tema">
+          <span class="material-symbols-outlined" aria-hidden="true">dark_mode</span>
+        </button>
+        <a class="icon-button" href="search.html?q=frontend%20developer&source=indonesia" aria-label="Cari lowongan" title="Cari Lowongan">
+          <span class="material-symbols-outlined" aria-hidden="true">search</span>
+        </a>
+      </div>
+    </header>
     <main class="page page--with-topbar"><section class="page__content stack">
       <div class="landing-hero"><span class="landing-hero__eyebrow">Frontend Developer</span><h1 class="display-small">Lowongan Frontend Developer remote untuk kandidat Indonesia.</h1><p class="body-medium">Cari role React, JavaScript, UI Engineer, Web Developer, dan Product Engineer. Simpan alert agar pencarian yang sama mudah dibuka lagi.</p><div class="landing-actions"><a class="button button--primary" href="search.html?q=frontend%20developer&source=indonesia"><span class="material-symbols-outlined" aria-hidden="true">search</span>Cari Frontend Remote</a><a class="button button--tonal" href="search.html?q=react&source=international">Cari React Global</a></div></div>
       <section class="content-block"><h2>Filter yang disarankan</h2><div class="landing-card-grid"><article class="landing-card"><h3 class="title-medium">Skill</h3><p>React, JavaScript, TypeScript, CSS, accessibility, performance.</p></article><article class="landing-card"><h3 class="title-medium">Level</h3><p>Junior sampai senior. Gunakan profil match untuk menyaring role yang paling dekat.</p></article><article class="landing-card"><h3 class="title-medium">Sumber</h3><p>Mulai dari Indonesia/APAC, lalu perluas ke remote global jika timezone memungkinkan.</p></article></div></section>
     </section></main>
-        <nav class="bottom-nav" aria-label="Navigasi bawah">
-      <a class="nav-link" data-nav="search" href="search.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari</span></a>
+    <nav class="bottom-nav" aria-label="Navigasi bawah">
+      <a class="nav-link nav-link--active" data-nav="search" href="search.html" aria-current="page"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari</span></a>
       <a class="nav-link" data-nav="applications" href="apply.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">assignment</span><span>Tracker</span></a>
       <a class="nav-link" data-nav="resume" href="resume-builder.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">description</span><span>Resume</span></a>
       <a class="nav-link" data-nav="bookmarks" href="bookmarks.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">bookmark</span><span>Simpan</span></a>
       <a class="nav-link" data-nav="companies" href="companies.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">apartment</span><span>Perusahaan</span></a>
     </nav>
   </div>
-  <script type="module" src="../js/pageview.js?v=20260616z"></script>
+  <script type="module" src="../js/pageview.js?v=20261106a"></script>
 </body>
 </html>

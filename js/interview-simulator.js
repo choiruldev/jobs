@@ -3,8 +3,8 @@
  * Provides targeted behavioral and technical interview questions with STAR methodology structuring.
  */
 
-import { escapeHtml } from "./bookmark.js?v=20260616z";
-import { createVoicePracticeWidget } from "./interview-voice.js?v=20260616z";
+import { escapeHtml } from "./bookmark.js?v=20261106a";
+import { createVoicePracticeWidget } from "./interview-voice.js?v=20261106a";
 
 export const INTERVIEW_QUESTIONS = [
   {

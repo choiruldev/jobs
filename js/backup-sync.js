@@ -3,8 +3,8 @@
  * Handles 1-click JSON backup export/import and cloud sync adapter preparation.
  */
 
-import { dbGetAllApplications, dbGetAllBookmarks, dbSaveApplication, dbSaveBookmark } from "./storage-db.js?v=20260616z";
-import { readMatchProfile, writeMatchProfile } from "./profile.js?v=20260616z";
+import { dbGetAllApplications, dbGetAllBookmarks, dbSaveApplication, dbSaveBookmark } from "./storage-db.js?v=20261106a";
+import { readMatchProfile, writeMatchProfile } from "./profile.js?v=20261106a";
 
 export async function exportAllData() {
   const [applications, bookmarks] = await Promise.all([

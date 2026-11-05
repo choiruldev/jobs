@@ -4,21 +4,21 @@ import {
   getJobById,
   makeLogo,
   rememberJobs
-} from "./data.js?v=20260616z";
+} from "./data.js?v=20261106a";
 import {
   escapeHtml,
   sanitizeUrl,
   showSnackbar
-} from "./bookmark.js?v=20260616z";
-import { fetchJobById } from "./providers.js?v=20261105b";
-import { recordPageView, trackEvent } from "./analytics.js?v=20260616z";
-import { renderKanbanBoard, bindKanbanEvents } from "./apply-kanban.js?v=20260616z";
-import { downloadInterviewIcs, getPendingFollowUps } from "./apply-reminders.js?v=20260616z";
-import { exportAllData, exportApplicationsCSV, importBackupData } from "./backup-sync.js?v=20260616z";
-import { parseRecruiterEmail } from "./email-status-parser.js?v=20260616z";
-import { renderGoalBanner, recordApplicationActivity } from "./goal-tracker.js?v=20260616z";
-import { saveFeedbackLocally } from "./beta-feedback.js?v=20260616z";
-import { initThemeEngine } from "./theme-engine.js?v=20261104g";
+} from "./bookmark.js?v=20261106a";
+import { fetchJobById } from "./providers.js?v=20261106a";
+import { recordPageView, trackEvent } from "./analytics.js?v=20261106a";
+import { renderKanbanBoard, bindKanbanEvents } from "./apply-kanban.js?v=20261106a";
+import { downloadInterviewIcs, getPendingFollowUps } from "./apply-reminders.js?v=20261106a";
+import { exportAllData, exportApplicationsCSV, importBackupData } from "./backup-sync.js?v=20261106a";
+import { parseRecruiterEmail } from "./email-status-parser.js?v=20261106a";
+import { renderGoalBanner, recordApplicationActivity } from "./goal-tracker.js?v=20261106a";
+import { saveFeedbackLocally } from "./beta-feedback.js?v=20261106a";
+import { initThemeEngine } from "./theme-engine.js?v=20261106a";
 
 const APPLICATION_KEY = "jsa_applications";
 const MAX_CV_SIZE = 5 * 1024 * 1024;
@@ -351,10 +351,14 @@ function renderDetailAction(job) {
 }
 
 function renderTrackerTitleLink(job) {
+  if (!job.manual && job.id) {
+    return `<a class="tracker-job-title-link" href="detail.html?id=${encodeURIComponent(job.id)}">${escapeHtml(job.title)}</a>`;
+  }
   const externalUrl = job.applyUrl || job.source?.url;
-  const href = externalUrl ? sanitizeUrl(externalUrl) : `detail.html?id=${encodeURIComponent(job.id)}`;
-  const attrs = externalUrl ? ` target="_blank" rel="noopener noreferrer"` : "";
-  return `<a class="tracker-job-title-link" href="${escapeHtml(href)}"${attrs}>${escapeHtml(job.title)}</a>`;
+  if (externalUrl) {
+    return `<a class="tracker-job-title-link" href="${escapeHtml(sanitizeUrl(externalUrl))}" target="_blank" rel="noopener noreferrer">${escapeHtml(job.title)}</a>`;
+  }
+  return escapeHtml(job.title);
 }
 
 function typeLabel(job) {

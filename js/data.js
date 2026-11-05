@@ -1,4 +1,4 @@
-import { getLiveExchangeRates, fetchLiveExchangeRates } from "./salary-calculator.js";
+import { getLiveExchangeRates, fetchLiveExchangeRates } from "./salary-calculator.js?v=20261106a";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 const JOB_REGISTRY_KEY = "jsa_job_registry_v7";
@@ -426,8 +426,11 @@ export const JOBS = [
   }
 ];
 
+const inMemoryRegistry = new Map();
+
 export function getJobById(id) {
-  return readJobRegistry()[id] || JOBS.find((job) => job.id === id) || null;
+  if (!id) return null;
+  return inMemoryRegistry.get(id) || readJobRegistry()[id] || JOBS.find((job) => job.id === id) || null;
 }
 
 export function getSimilarJobs(job, limit = 6) {
@@ -701,11 +704,20 @@ export function rememberJobs(jobs) {
   const validJobs = jobs.filter((job) => job?.id);
   if (!validJobs.length) return;
 
+  validJobs.forEach((job) => {
+    inMemoryRegistry.set(job.id, job);
+  });
+
   try {
     const registry = readJobRegistry();
     validJobs.forEach((job) => {
+      const copy = { ...job };
+      if (copy.descriptionHtml) delete copy.descriptionHtml;
+      if (typeof copy.description === "string" && copy.description.length > 500) {
+        copy.description = copy.description.slice(0, 500);
+      }
       registry[job.id] = {
-        ...job,
+        ...copy,
         cachedAt: new Date().toISOString()
       };
     });
@@ -723,13 +735,16 @@ export function rememberJobs(jobs) {
 }
 
 export function getAllKnownJobs() {
-  const registryJobs = Object.values(readJobRegistry());
   const jobsById = new Map();
   JOBS.forEach((job) => {
     if (job?.id) jobsById.set(job.id, job);
   });
+  const registryJobs = Object.values(readJobRegistry());
   registryJobs.forEach((job) => {
     if (job?.id) jobsById.set(job.id, job);
+  });
+  inMemoryRegistry.forEach((job, id) => {
+    jobsById.set(id, job);
   });
   return [...jobsById.values()];
 }

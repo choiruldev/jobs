@@ -3,7 +3,7 @@
  * Generates tailored cold-outreach messages for recruiters and hiring managers.
  */
 
-import { extractKeywords } from "./ats-checker.js?v=20260616z";
+import { extractKeywords } from "./ats-checker.js?v=20261106a";
 
 /**
  * Generate cold outreach messages for LinkedIn or email

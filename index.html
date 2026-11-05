@@ -30,8 +30,8 @@
       document.documentElement.style.colorScheme = theme;
     })();
   </script>
-  <link rel="stylesheet" href="css/main.css?v=20261105c">
-  <link rel="stylesheet" href="css/components.css?v=20261105c">
+  <link rel="stylesheet" href="css/main.css?v=20261106a">
+  <link rel="stylesheet" href="css/components.css?v=20261106a">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -53,12 +53,10 @@
     <aside class="side-nav" aria-label="Navigasi utama">
       <div class="side-nav__header" style="display:flex;align-items:center;justify-content:space-between;width:100%;">
         <a class="brand-lockup" href="index.html">
-          <span class="logo-mark" aria-hidden="true">
-            <span class="material-symbols-outlined">work</span>
-          </span>
+          <span class="logo-mark" aria-hidden="true"><span class="material-symbols-outlined">work</span></span>
           <span>JobSearch</span>
         </a>
-        <button class="icon-button js-sidebar-close" id="sidebar-close" type="button" aria-label="Tutup Menu">
+        <button class="icon-button js-sidebar-close" id="sidebar-close" type="button" aria-label="Tutup Menu" title="Sembunyikan Menu">
           <span class="material-symbols-outlined" aria-hidden="true">menu_open</span>
         </button>
       </div>
@@ -67,46 +65,48 @@
         <a class="nav-link" data-nav="search" href="pages/search.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari Lowongan</span></a>
         <a class="nav-link" data-nav="applications" href="pages/apply.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">assignment</span><span>Tracker Lamaran</span></a>
         <a class="nav-link" data-nav="bookmarks" href="pages/bookmarks.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">bookmark</span><span>Lowongan Tersimpan</span></a>
-
-        <div class="nav-section-label" style="margin-top:16px;">FITUR KARIR</div>
+        <div class="nav-section-label" style="margin-top:12px;">FITUR KARIR</div>
         <a class="nav-link" data-nav="resume" href="pages/resume-builder.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">description</span><span>ATS Resume Builder</span></a>
         <a class="nav-link" data-nav="interview" href="pages/interview-prep.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">record_voice_over</span><span>Latihan Interview</span></a>
+        <a class="nav-link" data-nav="code-sandbox" href="pages/code-sandbox.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">terminal</span><span>Coding Sandbox</span></a>
         <a class="nav-link" data-nav="salary" href="pages/salary-benchmark.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">payments</span><span>Kalkulator PPP Gaji</span></a>
+        <a class="nav-link" data-nav="salary-submit" href="pages/salary-submit.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">volunteer_activism</span><span>Gaji Komunitas</span></a>
+        <a class="nav-link" data-nav="skills-roadmap" href="pages/skills-roadmap.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">conversion_path</span><span>Peta Karir & Skill</span></a>
+        <a class="nav-link" data-nav="companies" href="pages/companies.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">apartment</span><span>Perusahaan Remote</span></a>
+        <a class="nav-link" data-nav="insights" href="pages/insights.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">insights</span><span>Analisis Funnel</span></a>
+        <div class="nav-section-label" style="margin-top:12px;">FREELANCE & ALAT</div>
         <a class="nav-link" data-nav="contract" href="pages/contract-guide.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">gavel</span><span>Panduan Kontrak & Pajak</span></a>
         <a class="nav-link" data-nav="invoice" href="pages/invoice-generator.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">receipt_long</span><span>Generator Invoice</span></a>
         <a class="nav-link" data-nav="portfolio" href="pages/portfolio-card.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">badge</span><span>Kartu Bukti Karya</span></a>
         <a class="nav-link" data-nav="alerts" href="pages/alerts.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">notifications_active</span><span>Pusat Notifikasi</span></a>
-        <a class="nav-link" data-nav="companies" href="pages/companies.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">apartment</span><span>Perusahaan Remote</span></a>
-        <a class="nav-link" data-nav="insights" href="pages/insights.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">insights</span><span>Analisis Funnel</span></a>
-
-        <div class="nav-section-label" style="margin-top:16px;">INFORMASI HUKUM</div>
-        <a class="nav-link" href="pages/privacy-policy.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">shield</span><span>Kebijakan Privasi</span></a>
-        <a class="nav-link" href="pages/terms.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">gavel</span><span>Syarat & Ketentuan</span></a>
+        <div class="nav-section-label" style="margin-top:12px;">INFORMASI</div>
+        <a class="nav-link" data-nav="privacy" href="pages/privacy-policy.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">shield</span><span>Kebijakan Privasi</span></a>
+        <a class="nav-link" data-nav="terms" href="pages/terms.html"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">policy</span><span>Syarat & Ketentuan</span></a>
       </nav>
     </aside>
 
-    <main class="page">
+    <header class="top-app-bar">
+      <div style="display:flex;align-items:center;gap:8px;min-width:0;">
+        <button class="icon-button js-sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Toggle Menu Navigasi" title="Sembunyikan/Tampilkan Menu">
+          <span class="material-symbols-outlined" aria-hidden="true">menu</span>
+        </button>
+        <a class="top-app-bar__brand" href="index.html" aria-label="JobSearch">
+          <span class="logo-mark logo-mark--small" aria-hidden="true"><span class="material-symbols-outlined">work</span></span>
+          <span class="top-app-bar__title">Beranda JobSearch</span>
+        </a>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
+        <button class="icon-button js-theme-toggle" type="button" aria-label="Ganti Tema">
+          <span class="material-symbols-outlined" aria-hidden="true">dark_mode</span>
+        </button>
+        <a class="icon-button" href="pages/search.html" aria-label="Cari lowongan" title="Cari Lowongan">
+          <span class="material-symbols-outlined" aria-hidden="true">search</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="page page--with-topbar">
       <section class="page__content stack" aria-labelledby="home-title" style="gap:36px;">
-        <!-- Top App Bar Navigation on Mobile/Tablet -->
-        <header style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:4px 0;">
-          <div class="brand-lockup">
-            <button class="icon-button js-sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Toggle Menu Navigasi" style="margin-right:4px;">
-              <span class="material-symbols-outlined" aria-hidden="true">menu</span>
-            </button>
-            <span class="logo-mark" aria-hidden="true">
-              <span class="material-symbols-outlined">work</span>
-            </span>
-            <span class="label-large" style="font-size:1.15rem;font-weight:800;letter-spacing:-0.02em;">JobSearch</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:6px;">
-            <button class="icon-button js-theme-toggle" type="button" aria-label="Ganti Tema">
-              <span class="material-symbols-outlined" aria-hidden="true">dark_mode</span>
-            </button>
-            <a class="icon-button" href="pages/search.html" aria-label="Cari Lowongan">
-              <span class="material-symbols-outlined" aria-hidden="true">search</span>
-            </a>
-          </div>
-        </header>
 
         <!-- Modern Informative Hero Section -->
         <section class="home-hero" aria-labelledby="home-title">
@@ -339,9 +339,11 @@
     </nav>
   </div>
 
-  <script type="module" src="js/pageview.js?v=20261105c"></script>
+  <script type="module" src="js/pageview.js?v=20261106a"></script>
   <script type="module">
-    import { openOnboardingModal } from "./js/onboarding.js?v=20261105c";
+    import { openOnboardingModal } from "./js/onboarding.js?v=20261106a";
+    import { loadJobsForSource } from "./js/providers.js?v=20261106a";
+    import { renderJobCard, initBookmarkButtons, showSnackbar } from "./js/bookmark.js?v=20261106a";
 
     document.getElementById("btn-open-tour")?.addEventListener("click", () => {
       openOnboardingModal(true);
@@ -354,76 +356,32 @@
       if (!container) return;
 
       try {
-        const res = await fetch("data/jobs.json");
-        if (!res.ok) throw new Error("Gagal memuat feed");
-        const data = await res.json();
-        const jobs = data.jobs || [];
+        const [{ jobs }, rawRes] = await Promise.all([
+          loadJobsForSource("indonesia"),
+          fetch("data/jobs.json").catch(() => null)
+        ]);
 
-        if (countEl) countEl.textContent = `${jobs.length}+`;
-        if (statEl) statEl.textContent = `${jobs.length}+`;
+        let totalCount = jobs.length;
+        if (rawRes && rawRes.ok) {
+          const rawData = await rawRes.json().catch(() => null);
+          if (rawData && Array.isArray(rawData.jobs)) {
+            totalCount = rawData.jobs.length;
+          }
+        }
 
-        // Select 6 featured jobs with good metadata
-        const withSalary = jobs.filter(j => j.salary?.display && j.salary.display !== "Gaji kompetitif");
+        if (countEl && totalCount) countEl.textContent = `${totalCount}+`;
+        if (statEl && totalCount) statEl.textContent = `${totalCount}+`;
+
+        const withSalary = jobs.filter((j) => j.salary && (j.salary.min > 0 || j.salary.max > 0));
         const list = withSalary.length >= 6 ? withSalary.slice(0, 6) : jobs.slice(0, 6);
 
-        container.innerHTML = list.map(job => {
-          const id = encodeURIComponent(job.id);
-          const title = escapeHtml(job.title || "Posisi Karir Remote");
-          const company = escapeHtml(job.company || "Perusahaan Resmi");
-          const location = escapeHtml(job.location || "Remote");
-          const salary = escapeHtml(job.salary?.display || "Gaji kompetitif");
-          const source = escapeHtml(job.sourcePlatform || "Official ATS");
-          const initials = company.split(" ").map(w => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase() || "JS";
-
-          return `
-            <article class="job-card" style="display:flex;flex-direction:column;justify-content:space-between;padding:22px;border-radius:16px;">
-              <div>
-                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;">
-                  <div style="display:flex;align-items:center;gap:10px;">
-                    <div style="width:42px;height:42px;border-radius:12px;background:var(--md-sys-color-primary-container);color:var(--md-sys-color-on-primary-container);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;">
-                      ${initials}
-                    </div>
-                    <div style="min-width:0;">
-                      <h3 style="font-size:14px;font-weight:700;margin:0;color:var(--md-sys-color-on-surface);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${company}</h3>
-                      <span style="font-size:12px;color:var(--md-sys-color-outline);display:flex;align-items:center;gap:2px;">
-                        <span class="material-symbols-outlined" style="font-size:14px;">location_on</span>
-                        ${location}
-                      </span>
-                    </div>
-                  </div>
-                  <span class="badge badge--active" style="font-size:11px;padding:3px 8px;flex-shrink:0;">${source}</span>
-                </div>
-                <h2 style="font-size:16px;font-weight:700;line-height:1.35;margin:0 0 10px;">
-                  <a href="pages/detail.html?id=${id}" style="color:var(--md-sys-color-on-surface);text-decoration:none;">${title}</a>
-                </h2>
-                <div style="display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:700;color:var(--md-sys-color-primary);background:var(--md-sys-color-surface-container-high);padding:4px 10px;border-radius:6px;">
-                  <span class="material-symbols-outlined" style="font-size:16px;">payments</span>
-                  ${salary}
-                </div>
-              </div>
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:14px;border-top:1px solid var(--md-sys-color-outline-variant);">
-                <span class="badge badge-fresh">Terverifikasi</span>
-                <a class="button button--secondary button--small" href="pages/detail.html?id=${id}">
-                  Lihat Detail
-                  <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
-                </a>
-              </div>
-            </article>
-          `;
-        }).join("");
+        container.innerHTML = list.map((job) => renderJobCard(job, { detailPrefix: "pages/" })).join("");
+        initBookmarkButtons(container, ({ bookmarked }) => {
+          showSnackbar(bookmarked ? "Lowongan disimpan" : "Lowongan dihapus dari tersimpan");
+        });
       } catch (e) {
         console.warn("Featured jobs error:", e);
       }
-    }
-
-    function escapeHtml(str) {
-      if (!str) return "";
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
     }
 
     loadFeaturedJobs();

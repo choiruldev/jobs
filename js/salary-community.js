@@ -3,7 +3,7 @@
  * Collects, verifies, and displays anonymous tech salary reports for Indonesian talent.
  */
 
-import { formatIDR } from "./salary-calculator.js?v=20260616z";
+import { formatIDR } from "./salary-calculator.js?v=20261106a";
 
 const SALARY_COMMUNITY_KEY = "jsa_community_salaries_v1";
 

@@ -1,9 +1,9 @@
 /**
- * JobSearch Service Worker v4
- * Advanced caching, offline fallback screen, and instant update lifecycle.
+ * JobSearch Service Worker v5
+ * Network-first for HTML/CSS/JS/JSON so UI updates apply immediately, with full offline fallback.
  */
 
-const CACHE_NAME = "jobsearch-cache-v17";
+const CACHE_NAME = "jobsearch-cache-v18";
 
 const STATIC_ASSETS = [
   "./",
@@ -21,6 +21,8 @@ const STATIC_ASSETS = [
   "css/main.css",
   "css/components.css",
   "js/pageview.js",
+  "js/theme-engine.js",
+  "js/job-comparator.js",
   "js/pwa-prompt.js",
   "js/beta-feedback.js",
   "js/data.js",
@@ -93,29 +95,32 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // 1. Data Feeds Dinamis (data/jobs.json dsb): Network-First dengan Cache Fallback
-  if (url.pathname.includes("/data/") || url.pathname.endsWith(".json")) {
-    if (url.pathname.endsWith("manifest.json")) {
-      // Manifest gunakan Stale-While-Revalidate agar selalu sinkron
-    } else {
-      event.respondWith(
-        fetch(event.request)
-          .then((response) => {
-            if (response && response.status === 200) {
-              const cloned = response.clone();
-              caches.open(CACHE_NAME).then((cache) => cache.put(event.request, cloned));
-            }
-            return response;
-          })
-          .catch(() => caches.match(event.request))
-      );
-      return;
-    }
+  // 1. Data Feeds Dinamis & Code Assets (.json, .css, .js): Network-First dengan Cache Fallback
+  const isCodeOrFeed =
+    url.pathname.includes("/data/") ||
+    url.pathname.endsWith(".json") ||
+    url.pathname.endsWith(".css") ||
+    url.pathname.endsWith(".js");
+
+  if (isCodeOrFeed && !url.pathname.endsWith("manifest.json")) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const cloned = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, cloned));
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request, { ignoreSearch: true }))
+    );
+    return;
   }
 
   // 2. Navigasi Halaman HTML: Network-First with Stale Cache Fallback -> Offline Screen Fallback
-  const isHtmlRequest = event.request.mode === "navigate" || 
-                        event.request.headers.get("accept")?.includes("text/html");
+  const isHtmlRequest =
+    event.request.mode === "navigate" ||
+    event.request.headers.get("accept")?.includes("text/html");
 
   if (isHtmlRequest) {
     event.respondWith(
@@ -128,32 +133,32 @@ self.addEventListener("fetch", (event) => {
           return response;
         })
         .catch(async () => {
-          // Cari di cache terlebih dahulu
-          const cached = await caches.match(event.request);
+          const cached = await caches.match(event.request, { ignoreSearch: true });
           if (cached) return cached;
 
-          // Jika benar-benar offline dan halaman belum dicache, sajikan halaman offline
-          const offlinePage = await caches.match("pages/offline.html") || 
-                              await caches.match("/pages/offline.html");
+          const offlinePage =
+            (await caches.match("pages/offline.html")) ||
+            (await caches.match("/pages/offline.html"));
           if (offlinePage) return offlinePage;
 
-          // Terakhir, fallback ke index
           return caches.match("index.html") || caches.match("./");
         })
     );
     return;
   }
 
-  // 3. Aset Statis (CSS, JS, Gambar): Stale-While-Revalidate
+  // 3. Aset Media/Font/Ikon: Stale-While-Revalidate
   event.respondWith(
     caches.match(event.request).then((cached) => {
-      const fetchPromise = fetch(event.request).then((response) => {
-        if (response && response.status === 200 && response.type === "basic") {
-          const cloned = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, cloned));
-        }
-        return response;
-      }).catch(() => null);
+      const fetchPromise = fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200 && response.type === "basic") {
+            const cloned = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, cloned));
+          }
+          return response;
+        })
+        .catch(() => cached);
 
       return cached || fetchPromise;
     })

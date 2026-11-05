@@ -3,8 +3,8 @@
  * Enables optional real-time sync for applications, bookmarks, and match profile across devices.
  */
 
-import { dbGetAllApplications, dbGetAllBookmarks, dbSaveApplication, dbSaveBookmark } from "./storage-db.js?v=20260616z";
-import { readMatchProfile, writeMatchProfile } from "./profile.js?v=20260616z";
+import { dbGetAllApplications, dbGetAllBookmarks, dbSaveApplication, dbSaveBookmark } from "./storage-db.js?v=20261106a";
+import { readMatchProfile, writeMatchProfile } from "./profile.js?v=20261106a";
 
 const SUPABASE_CONFIG_KEY = "jsa_supabase_config_v1";
 
