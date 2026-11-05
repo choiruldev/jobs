@@ -29,8 +29,8 @@
       document.documentElement.style.colorScheme = theme;
     })();
   </script>
-  <link rel="stylesheet" href="../css/main.css?v=20261104g">
-  <link rel="stylesheet" href="../css/components.css?v=20261104g">
+  <link rel="stylesheet" href="../css/main.css?v=20261105a">
+  <link rel="stylesheet" href="../css/components.css?v=20261105a">
 </head>
 <body data-page="search">
   <div class="app-layout">
@@ -75,9 +75,6 @@
         <button class="icon-button js-theme-toggle" type="button" aria-label="Ganti Tema">
           <span class="material-symbols-outlined" aria-hidden="true">dark_mode</span>
         </button>
-        <button class="icon-button" id="focus-search" type="button" aria-label="Fokus ke pencarian">
-          <span class="material-symbols-outlined" aria-hidden="true">search</span>
-        </button>
       </div>
     </header>
 
@@ -109,10 +106,10 @@
               <label class="sort-control" for="source-select">
                 <span class="material-symbols-outlined" aria-hidden="true" style="font-size:18px;">public</span>
                 <select id="source-select" autocomplete="off">
-                  <option value="indonesia">Dari Indonesia</option>
-                  <option value="anywhere">Remote-anywhere</option>
-                  <option value="apac">Asia/APAC</option>
-                  <option value="international">Remote Global</option>
+                  <option value="indonesia">Indonesia & Lokal</option>
+                  <option value="anywhere">Remote (Anywhere)</option>
+                  <option value="apac">Asia / APAC</option>
+                  <option value="international">Global / Luar Negeri</option>
                 </select>
               </label>
 
@@ -209,20 +206,19 @@
               </section>
             </section>
           </div>
-
-          <div class="search-status-bar">
-            <p class="source-status" id="source-status" role="status">Menyiapkan sumber lowongan...</p>
-            <p class="source-credit" id="source-credit">Data resmi publik LinkedIn, JobStreet, Indeed & Remote. Apply ke situs resmi.</p>
-          </div>
         </div>
       </section>
 
       <section class="page__content" aria-labelledby="search-title">
         <div class="search-meta">
-          <div>
+          <div class="search-meta__header">
             <h1 class="headline-large" id="search-title">Lowongan Kerja Indonesia</h1>
-            <p class="body-medium" id="result-count" role="status">Memuat lowongan...</p>
+            <div class="search-meta__info">
+              <span class="badge result-badge" id="result-count" role="status">Memuat lowongan...</span>
+              <span class="source-status-pill" id="source-status" role="status">Menyiapkan sumber lowongan...</span>
+            </div>
           </div>
+          <p class="source-credit" id="source-credit">Data resmi publik LinkedIn, Indeed, JobStreet, Remote & Greenhouse. Apply ke situs resmi.</p>
         </div>
 
         <div class="job-grid" id="job-grid" role="list">
@@ -290,6 +286,6 @@
     </nav>
   </div>
 
-  <script type="module" src="../js/search.js?v=20261104g"></script>
+  <script type="module" src="../js/search.js?v=20261105a"></script>
 </body>
 </html>

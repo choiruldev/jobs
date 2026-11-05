@@ -225,26 +225,28 @@ export function renderJobCard(job, options = {}) {
           ${salaryOriginal ? `<div class="job-card__salary-note" style="color:var(--md-sys-color-primary);font-weight:600;font-size:12px;margin-top:2px;">${escapeHtml(salaryOriginal)}</div>` : ""}
         </div>
       </a>
-      <button
-        class="icon-button job-card__compare js-compare-toggle"
-        type="button"
-        data-job-id="${escapeHtml(job.id)}"
-        aria-label="Bandingkan lowongan"
-        style="position:absolute;top:10px;right:48px;"
-        title="Bandingkan lowongan"
-      >
-        <span class="material-symbols-outlined" aria-hidden="true" style="font-size:18px;">compare_arrows</span>
-      </button>
-      <button
-        class="icon-button job-card__save js-bookmark-toggle"
-        type="button"
-        data-job-id="${escapeHtml(job.id)}"
-        ${removable ? 'data-remove-on-unsave="true"' : ""}
-        aria-label="${bookmarked ? "Hapus dari lowongan tersimpan" : "Simpan lowongan"}"
-        aria-pressed="${String(bookmarked)}"
-      >
-        <span class="${iconClass}" aria-hidden="true">${bookmarked ? "bookmark" : "bookmark_border"}</span>
-      </button>
+      <div class="job-card__actions">
+        <button
+          class="icon-button job-card__action-btn job-card__compare js-compare-toggle"
+          type="button"
+          data-job-id="${escapeHtml(job.id)}"
+          aria-label="Bandingkan lowongan"
+          title="Bandingkan lowongan"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true" style="font-size:18px;">compare_arrows</span>
+        </button>
+        <button
+          class="icon-button job-card__action-btn job-card__save js-bookmark-toggle"
+          type="button"
+          data-job-id="${escapeHtml(job.id)}"
+          ${removable ? 'data-remove-on-unsave="true"' : ""}
+          aria-label="${bookmarked ? "Hapus dari lowongan tersimpan" : "Simpan lowongan"}"
+          aria-pressed="${String(bookmarked)}"
+          title="${bookmarked ? "Hapus dari tersimpan" : "Simpan lowongan"}"
+        >
+          <span class="${iconClass}" aria-hidden="true">${bookmarked ? "bookmark" : "bookmark_border"}</span>
+        </button>
+      </div>
     </article>
   `;
 }
