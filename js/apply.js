@@ -1599,13 +1599,161 @@ function renderDirectApplyUnavailable(root, job) {
 function renderExternalApply(root, job) {
   let existing = getApplication(job.id);
   if (!existing) {
-    existing = createTrackedApplication(job, "Applied", {
-      label: "Ditandai sudah apply di situs resmi"
+    existing = createTrackedApplication(job, "Saved", {
+      label: "Disimpan saat membuka portal apply"
     });
-    trackEvent("tracker_mark_applied", { jobId: job.id, source: job.source?.key || "external" });
   }
 
-  renderTracker(root, job, existing);
+  const externalUrl = sanitizeUrl(job.applyUrl || job.source?.url || "#");
+  const sourceName = escapeHtml(job.source?.name || "Portal ATS Resmi");
+  const jobTitle = escapeHtml(job.title);
+  const companyName = escapeHtml(job.company);
+  const statusLabel = STATUS_LABELS[existing.status] || existing.status;
+
+  root.innerHTML = `
+    <div class="page__content" style="max-width: 980px; margin: 0 auto; padding: 0 var(--space-4) var(--space-10);">
+      <!-- Top Breadcrumb Bar -->
+      <nav class="detail-breadcrumb-bar" aria-label="Navigasi lamaran">
+        <div class="detail-breadcrumb-bar__left">
+          <a class="detail-back-link" href="detail.html?id=${encodeURIComponent(job.id)}">
+            <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+            <span>Kembali ke Detail</span>
+          </a>
+          <span class="detail-breadcrumb-separator" aria-hidden="true">/</span>
+          <span class="detail-breadcrumb-item">Tracker Lamaran</span>
+          <span class="detail-breadcrumb-separator" aria-hidden="true">/</span>
+          <span class="detail-breadcrumb-item detail-breadcrumb-item--current">${companyName}</span>
+        </div>
+        <div class="detail-breadcrumb-bar__right">
+          <a class="button button--secondary button--small" href="apply.html">
+            <span class="material-symbols-outlined" aria-hidden="true">view_kanban</span>
+            Papan Kanban
+          </a>
+        </div>
+      </nav>
+
+      <!-- Informative Apply Card Requested by User -->
+      <section class="apply-hub-card stack" aria-labelledby="external-apply-title">
+        <div class="apply-hub-header">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;">
+            <span class="badge badge--active" style="font-weight:700;">${sourceName}</span>
+            <span class="badge" id="current-status-badge" style="background:var(--md-sys-color-primary-container);color:var(--md-sys-color-on-primary-container);font-weight:700;">Status Saat Ini: ${escapeHtml(statusLabel)}</span>
+          </div>
+          <h1 class="headline-medium" id="external-apply-title" style="margin:8px 0 6px;">${jobTitle} di ${companyName}</h1>
+          <div class="cluster" style="gap:12px;color:var(--md-sys-color-on-surface-variant);font-size:0.92rem;margin-bottom:14px;">
+            <span style="display:inline-flex;align-items:center;gap:4px;"><span class="material-symbols-outlined" style="font-size:18px;">location_on</span> ${escapeHtml(job.location || "Remote")}</span>
+            <span>·</span>
+            <span style="display:inline-flex;align-items:center;gap:4px;"><span class="material-symbols-outlined" style="font-size:18px;">payments</span> ${escapeHtml(formatSalary(job.salary))}</span>
+            <span>·</span>
+            <span style="display:inline-flex;align-items:center;gap:4px;"><span class="material-symbols-outlined" style="font-size:18px;">schedule</span> ${escapeHtml(job.type || "Full-time")}</span>
+          </div>
+          <p class="body-medium" style="font-size:15px;line-height:1.6;color:var(--md-sys-color-on-surface-variant);margin-bottom:20px;">
+            Lowongan ini berasal dari sumber resmi eksternal (${sourceName}). Buka halaman apply resmi, lalu tandai di tracker agar proses follow up tetap rapi.
+          </p>
+        </div>
+
+        <div class="apply-hub-actions">
+          <a class="button button--primary button--large" href="${externalUrl}" target="_blank" rel="noopener noreferrer" id="official-apply-link">
+            <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
+            Buka Halaman Apply Resmi ↗
+          </a>
+          <button class="button button--tonal button--large" type="button" id="mark-applied">
+            <span class="material-symbols-outlined" aria-hidden="true">assignment_turned_in</span>
+            Tandai Sudah Dilamar / Catat ke Tracker
+          </button>
+        </div>
+
+        <div class="detail-sidebar-notice" style="background:var(--md-sys-color-surface-container-high);padding:14px 18px;border-radius:12px;border:1px solid var(--md-sys-color-outline-variant);">
+          <span class="material-symbols-outlined" style="color:var(--md-sys-color-primary);font-size:20px;">shield</span>
+          <span>Tautan langsung ke form pendaftaran resmi. Bebas biaya dan bebas penipuan. Status, jadwal follow-up, dan catatan proses seleksi Anda dapat dikelola langsung di panel bawah ini.</span>
+        </div>
+      </section>
+
+      <!-- Live Management Panel -->
+      <section class="apply-management-panel" aria-labelledby="tracker-controls-title" style="margin-top:24px;">
+        <div class="tracker-panel stack">
+          <div class="section__header" style="margin-bottom:8px;">
+            <h2 class="title-medium" id="tracker-controls-title" style="font-size:1.15rem;display:flex;align-items:center;gap:8px;">
+              <span class="material-symbols-outlined" style="color:var(--md-sys-color-primary);">fact_check</span>
+              Pengelolaan Status & Follow-Up Lamaran
+            </h2>
+          </div>
+
+          <div>
+            <p class="label-large" style="margin-bottom:8px;">Tahapan Rekrutmen:</p>
+            ${renderStepper(existing)}
+          </div>
+
+          <form class="status-form" id="status-form" style="display:grid;gap:16px;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:14px;">
+              <label class="compact-field">
+                <span class="label-large">Ubah Status Lamaran:</span>
+                <select name="status" class="field__input">
+                  ${renderStatusOptions(existing.status)}
+                </select>
+              </label>
+              <label class="compact-field">
+                <span class="label-large">Jadwal Follow-Up / Interview:</span>
+                <input name="followUpAt" type="date" class="field__input" value="${escapeHtml(existing.followUpAt || "")}">
+              </label>
+            </div>
+
+            <label class="compact-field">
+              <span class="label-large">Catatan Pribadi & Kontak HR:</span>
+              <textarea name="note" class="field__input" rows="3" placeholder="Contoh: Sudah submit form ATS, dikonfirmasi via email HRD, menunggu jadwal user interview...">${escapeHtml(existing.note || "")}</textarea>
+            </label>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:4px;">
+              <button class="button button--primary" type="submit">
+                <span class="material-symbols-outlined" aria-hidden="true">save</span>
+                Simpan Perubahan
+              </button>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <button class="button button--secondary" type="button" id="download-calendar-invite">
+                  <span class="material-symbols-outlined" aria-hidden="true">event</span>
+                  Download Kalender (.ics)
+                </button>
+                <a class="button button--secondary" href="apply.html">
+                  <span class="material-symbols-outlined" aria-hidden="true">view_kanban</span>
+                  Buka Papan Kanban
+                </a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+  `;
+
+  root.querySelector("#official-apply-link")?.addEventListener("click", () => {
+    trackEvent("official_apply_click", { jobId: job.id, source: job.source?.key || "external" });
+    const updated = saveApplication({
+      ...existing,
+      status: "Applied",
+      history: [
+        { date: new Date().toISOString(), status: "Applied", label: "Membuka form apply resmi" },
+        ...(existing.history || [])
+      ]
+    });
+    showSnackbar("Membuka situs resmi... Status otomatis diubah ke 'Dilamar'!");
+    renderExternalApply(root, job);
+  });
+
+  root.querySelector("#mark-applied")?.addEventListener("click", () => {
+    const updated = saveApplication({
+      ...existing,
+      status: "Applied",
+      history: [
+        { date: new Date().toISOString(), status: "Applied", label: "Ditandai sudah apply di situs resmi" },
+        ...(existing.history || [])
+      ]
+    });
+    trackEvent("tracker_mark_applied", { jobId: job.id, source: job.source?.key || "external" });
+    showSnackbar("Status berhasil diperbarui ke 'Dilamar' di Tracker!");
+    renderExternalApply(root, job);
+  });
+
+  bindTrackerActions(root, job, existing);
 }
 
 async function initApplyPage() {
@@ -1634,15 +1782,7 @@ async function initApplyPage() {
   document.title = `${job.title} | Tracker Lamaran`;
   recordPageView("apply", { jobId: job.id, source: job.source?.key || "local" });
 
-  let existing = getApplication(job.id);
-  if (!existing) {
-    existing = createTrackedApplication(job, "Applied", {
-      label: "Dicatat di Tracker Lamaran"
-    });
-    trackEvent("tracker_auto_enrolled", { jobId: job.id, source: job.source?.key || "external" });
-  }
-
-  renderTracker(root, job, existing);
+  renderExternalApply(root, job);
 }
 
 document.addEventListener("DOMContentLoaded", initApplyPage);

@@ -81,14 +81,14 @@ export function initBetaFeedbackWidget() {
     bottom: 24px;
     right: 24px;
     z-index: 998;
-    background: #006a6a;
-    color: #ffffff;
+    background: var(--md-sys-color-primary, #0284c7);
+    color: var(--md-sys-color-on-primary, #ffffff);
     border: none;
     border-radius: 28px;
     padding: 10px 18px;
     font-size: 13px;
     font-weight: 700;
-    box-shadow: 0 4px 16px rgba(0, 106, 106, 0.35);
+    box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -135,7 +135,7 @@ function openFeedbackModal() {
 
   overlay.innerHTML = `
     <div style="background: #ffffff; width: 100%; max-width: 480px; border-radius: 16px; box-shadow: 0 12px 36px rgba(0,0,0,0.25); overflow: hidden; display: flex; flex-direction: column;">
-      <div style="background: #006a6a; color: #ffffff; padding: 18px 24px; display: flex; align-items: center; justify-content: space-between;">
+      <div style="background: var(--md-sys-color-primary, #0284c7); color: #ffffff; padding: 18px 24px; display: flex; align-items: center; justify-content: space-between;">
         <div style="display: flex; align-items: center; gap: 10px;">
           <span class="material-symbols-outlined" style="font-size: 24px;">rate_review</span>
           <div>
