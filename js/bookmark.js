@@ -540,8 +540,11 @@ async function initDetailPage() {
     try {
       const raw = localStorage.getItem("jsa_applications");
       const applications = raw ? JSON.parse(raw) : {};
-      if (!applications[targetJob.id]) {
-        const now = new Date().toISOString();
+      const now = new Date().toISOString();
+      const existing = applications[targetJob.id];
+      const statusLabel = status === "Applied" ? "Dilamar" : (status === "Saved" ? "Disimpan" : status);
+
+      if (!existing) {
         applications[targetJob.id] = {
           jobId: targetJob.id,
           status: status,
@@ -549,11 +552,22 @@ async function initDetailPage() {
           updatedAt: now,
           notes: `Melamar via portal resmi ${targetJob.source?.name || "ATS"}`,
           history: [
-            { date: now, status: status, label: `Status: ${status} via portal resmi` }
+            { date: now, status: status, label: `Status: ${statusLabel} via portal resmi` }
           ]
         };
-        localStorage.setItem("jsa_applications", JSON.stringify(applications));
+      } else {
+        existing.status = status;
+        existing.updatedAt = now;
+        if (!Array.isArray(existing.history)) {
+          existing.history = [];
+        }
+        existing.history.unshift({
+          date: now,
+          status: status,
+          label: `Status dicatat sebagai ${statusLabel}`
+        });
       }
+      localStorage.setItem("jsa_applications", JSON.stringify(applications));
       return true;
     } catch (e) {
       console.warn("Auto-track error:", e);
@@ -884,36 +898,27 @@ async function initDetailPage() {
     </div>
 
     <!-- Detail Apply Modal Popup -->
-    <div class="apply-modal-backdrop" id="apply-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="apply-modal-title">
-      <div class="apply-modal-card stack">
+    <div class="apply-modal-backdrop" id="apply-modal-backdrop" role="dialog" aria-modal="true" aria-label="Lamar Lowongan">
+      <div class="apply-modal-card">
         <div class="apply-modal-header">
-          <div>
-            <span class="badge badge--active">${escapeHtml(job.source?.name || "Portal Resmi ATS")}</span>
-            <h2 class="headline-small" id="apply-modal-title" style="margin-top:6px;">Lamar Lowongan Ini</h2>
-            <p class="body-medium" style="margin-top:2px;font-size:14px;color:var(--md-sys-color-on-surface-variant);">${escapeHtml(job.title)} · <strong>${escapeHtml(job.company)}</strong></p>
-          </div>
           <button class="icon-button apply-modal-close" id="apply-modal-close-btn" type="button" aria-label="Tutup Modal">
             <span class="material-symbols-outlined" aria-hidden="true">close</span>
           </button>
         </div>
 
-        <p class="body-medium" style="font-size:14px;line-height:1.5;color:var(--md-sys-color-on-surface-variant);">
-          Pilih jalur pengajuan lamaran untuk lowongan ini:
-        </p>
-
-        <div class="apply-modal-actions stack" style="gap:12px;">
+        <div class="apply-modal-actions">
           <a class="button button--primary button--large" href="${escapeHtml(directApplyUrl)}" target="_blank" rel="noopener noreferrer" id="modal-official-apply-btn">
             <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
-            Lamar di Situs Resmi
+            Lamar di Situs Resmi ↗
           </a>
           <a class="button button--tonal button--large" href="${escapeHtml(trackerHref)}" id="modal-tracker-apply-btn">
-            <span class="material-symbols-outlined" aria-hidden="true">assignment</span>
-            Buka di Tracker
+            <span class="material-symbols-outlined" aria-hidden="true">assignment_turned_in</span>
+            Lamar & Catat di Tracker
           </a>
         </div>
 
-        <div class="detail-sidebar-notice" style="margin-top:4px;">
-          <span class="material-symbols-outlined" aria-hidden="true" style="color:var(--md-sys-color-primary);">shield</span>
+        <div class="detail-sidebar-notice">
+          <span class="material-symbols-outlined" aria-hidden="true">shield</span>
           <span>Tautan langsung ke form pendaftaran resmi. Bebas biaya dan bebas penipuan.</span>
         </div>
       </div>
@@ -968,7 +973,9 @@ async function initDetailPage() {
   });
 
   root.querySelector("#modal-tracker-apply-btn")?.addEventListener("click", () => {
-    autoTrackJob(job, "Saved");
+    trackEvent("apply_intent_tracker", { jobId: job.id, source: job.source?.name || "external" });
+    autoTrackJob(job, "Applied");
+    showSnackbar("Status lowongan dicatat sebagai 'Dilamar' di Tracker!");
     closeApplyModal();
   });
 

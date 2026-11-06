@@ -3799,8 +3799,8 @@ textarea:focus-visible,
   background: var(--md-sys-color-surface-container);
   border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: 20px;
-  width: min(100%, 500px);
-  padding: clamp(20px, 4vw, 28px);
+  width: min(100%, 460px);
+  padding: 16px 20px 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
   transform: scale(0.95);
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -3812,10 +3812,9 @@ textarea:focus-visible,
 
 .apply-modal-header {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 0;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 4px;
 }
 
 .apply-modal-close {
@@ -3826,8 +3825,8 @@ textarea:focus-visible,
 .apply-modal-actions {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin: 4px 0;
+  gap: 12px;
+  margin: 6px 0 16px;
 }
 
 .apply-modal-actions .button {
@@ -3836,6 +3835,11 @@ textarea:focus-visible,
   font-weight: 700;
   border-radius: 12px;
   width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
 }
 
 /* ==========================================================================
