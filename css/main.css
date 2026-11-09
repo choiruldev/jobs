@@ -343,12 +343,14 @@ p {
     padding-top: calc(var(--app-bar-height) + var(--space-8));
   }
 
+  /* Saat sidebar kiri dibuka: list card job jadi 2 kolom */
   .job-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  /* Saat sidebar kiri ditutup: list card job jadi 3 kolom */
   .app-layout.sidebar-collapsed .job-grid {
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
