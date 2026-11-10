@@ -6,7 +6,7 @@
  * - PRO VIP accounts (or PRO_VIP branch edition) get 100% UNLIMITED access.
  */
 
-export const APP_EDITION = "FREEMIUM"; // Set to "PRO_VIP" on pro-vip branch for automatic full unlock
+export const APP_EDITION = "PRO_VIP"; // Set to "PRO_VIP" on pro-vip branch for automatic full unlock
 
 const AUTH_USER_KEY = "jsa_hybrid_auth_user_v1";
 const QUOTA_MASTER_LEDGER_KEY = "jsa_quota_master_ledger_v1";
