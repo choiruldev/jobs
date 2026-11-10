@@ -21,7 +21,7 @@
   <script>
     (function() {
       var savedTheme = localStorage.getItem('jsa_theme_preference');
-      var theme = savedTheme || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var theme = savedTheme === 'dark' ? 'dark' : 'light';
       document.documentElement.setAttribute('data-theme', theme);
       document.documentElement.style.colorScheme = theme;
     })();
@@ -269,15 +269,15 @@
 
           <div class="stack" style="gap:14px;">
             ${(data.projects || []).map(p => `
-              <div style="background:#ffffff;border:1px solid var(--md-sys-color-outline-variant);border-radius:12px;padding:16px;">
-                <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
-                  <div>
+              <div style="background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);border-radius:12px;padding:16px;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+                  <div style="min-width:0;">
                     <h4 style="margin:0;font-size:16px;font-weight:800;">${escapeHtml(p.title)}</h4>
                     <span style="font-size:12px;color:var(--md-sys-color-outline);">${escapeHtml(p.tech)}</span>
                   </div>
-                  <div style="display:flex;gap:6px;">
-                    ${p.liveUrl ? `<a class="button button--small button--primary" href="${escapeHtml(sanitizeUrl(p.liveUrl))}" target="_blank" rel="noopener noreferrer" style="padding:0 8px;min-height:30px;font-size:11px;">Demo</a>` : ""}
-                    ${p.repoUrl ? `<a class="button button--small button--tonal" href="${escapeHtml(sanitizeUrl(p.repoUrl))}" target="_blank" rel="noopener noreferrer" style="padding:0 8px;min-height:30px;font-size:11px;">GitHub</a>` : ""}
+                  <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                    ${p.liveUrl ? `<a class="button button--small button--primary" href="${escapeHtml(sanitizeUrl(p.liveUrl))}" target="_blank" rel="noopener noreferrer" style="padding:0 10px;min-height:30px;font-size:11px;">Demo</a>` : ""}
+                    ${p.repoUrl ? `<a class="button button--small button--tonal" href="${escapeHtml(sanitizeUrl(p.repoUrl))}" target="_blank" rel="noopener noreferrer" style="padding:0 10px;min-height:30px;font-size:11px;">GitHub</a>` : ""}
                   </div>
                 </div>
                 ${p.metrics ? `

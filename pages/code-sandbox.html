@@ -21,7 +21,7 @@
   <script>
     (function() {
       var savedTheme = localStorage.getItem('jsa_theme_preference');
-      var theme = savedTheme || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var theme = savedTheme === 'dark' ? 'dark' : 'light';
       document.documentElement.setAttribute('data-theme', theme);
       document.documentElement.style.colorScheme = theme;
     })();
@@ -44,14 +44,15 @@
       font-family: 'JetBrains Mono', 'Fira Code', monospace;
       font-size: 13px;
       line-height: 1.5;
-      background: var(--md-sys-color-surface-container-high, #1e1e1e);
-      color: var(--md-sys-color-on-surface, #f8f8f2);
-      border: 1px solid var(--md-sys-color-outline-variant, #333);
+      background: #0c1d16;
+      color: #ecfdf5;
+      border: 1.5px solid rgba(0, 193, 110, 0.4);
       border-radius: 12px;
       padding: 16px;
       width: 100%;
       tab-size: 2;
       resize: vertical;
+      box-sizing: border-box;
     }
   </style>
 </head>

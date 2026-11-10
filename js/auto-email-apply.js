@@ -406,11 +406,11 @@ function injectTrackerBatchAutoEmailWidget() {
 
       <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 250px), 1fr));gap:10px;margin-bottom:12px;">
         ${allJobs.slice(0, 3).map((j) => `
-          <div style="border:1px solid var(--md-sys-color-outline-variant);border-radius:12px;padding:12px;background:var(--md-sys-color-surface);display:flex;flex-direction:column;justify-content:space-between;gap:10px;">
-            <div>
+          <div style="border:1px solid var(--md-sys-color-outline-variant);border-radius:12px;padding:12px;background:var(--md-sys-color-surface);display:flex;flex-direction:column;justify-content:space-between;gap:10px;min-width:0;overflow-wrap:anywhere;">
+            <div style="min-width:0;">
               <div style="font-size:11px;font-weight:700;color:var(--md-sys-color-outline);">${j.company} · ${j.location}</div>
               <div style="font-size:13.5px;font-weight:800;margin-top:2px;">${j.title}</div>
-              <div style="font-size:11.5px;color:var(--md-sys-color-primary);margin-top:4px;">Tujuan: ${inferRecruiterEmail(j)}</div>
+              <div style="font-size:11.5px;color:var(--md-sys-color-primary);margin-top:4px;overflow-wrap:anywhere;word-break:break-word;">Tujuan: ${inferRecruiterEmail(j)}</div>
             </div>
             <button type="button" class="button button--tonal button--small js-trigger-auto-email" data-job-id="${j.id}" style="width:100%;justify-content:center;font-weight:800;">
               <span class="material-symbols-outlined" style="font-size:16px;">forward_to_inbox</span>
@@ -425,9 +425,9 @@ function injectTrackerBatchAutoEmailWidget() {
           <div style="font-size:12px;font-weight:800;margin-bottom:6px;">📬 Riwayat Auto-Send Email Terakhir (${history.length}):</div>
           <div style="display:grid;gap:6px;font-size:12px;">
             ${history.slice(0, 3).map((h) => `
-              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 10px;border-radius:8px;background:var(--md-sys-color-surface);">
-                <span><strong>${h.jobTitle}</strong> (${h.company}) → <code>${h.to}</code></span>
-                <span style="color:var(--md-sys-color-primary);font-weight:700;">✓ ${h.method}</span>
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:6px 10px;border-radius:8px;background:var(--md-sys-color-surface);min-width:0;">
+                <span style="min-width:0;overflow-wrap:anywhere;"><strong>${h.jobTitle}</strong> (${h.company}) → <code>${h.to}</code></span>
+                <span style="color:var(--md-sys-color-primary);font-weight:700;white-space:nowrap;">✓ ${h.method}</span>
               </div>
             `).join("")}
           </div>
