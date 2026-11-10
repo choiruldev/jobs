@@ -80,6 +80,7 @@
 
 html {
   min-height: 100%;
+  max-width: 100%;
   overflow-x: hidden;
   background: var(--md-sys-color-surface);
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -88,6 +89,7 @@ html {
 
 body {
   min-height: 100vh;
+  max-width: 100%;
   margin: 0;
   overflow-x: hidden;
   background: var(--md-sys-color-surface);
@@ -106,6 +108,8 @@ input,
 select,
 textarea {
   font: inherit;
+  min-width: 0;
+  max-width: 100%;
 }
 
 button {
@@ -290,6 +294,12 @@ p {
 .stack {
   display: grid;
   gap: var(--space-4);
+  min-width: 0;
+}
+
+.stack > * {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .cluster {

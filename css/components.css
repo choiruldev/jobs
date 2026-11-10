@@ -2601,6 +2601,63 @@ mark {
   .compact-field textarea {
     min-height: 112px;
   }
+
+  /* Mobile Builder & Form Layout Elasticity (Zero horizontal overflow) */
+  .builder-layout,
+  .invoice-builder-layout,
+  .portfolio-builder-layout,
+  .salary-benchmark-grid,
+  .ppp-metric-grid {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Two-column sub-forms automatically stack on narrow mobile viewports */
+  [style*="grid-template-columns:1fr 1fr"],
+  [style*="grid-template-columns: 1fr 1fr"],
+  [style*="grid-template-columns:repeat(auto-fit, minmax(320px"] {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-3) !important;
+  }
+
+  .mobile-view-tabs {
+    display: block !important;
+  }
+
+  .ats-paper {
+    padding: 20px 14px !important;
+    font-size: 11.5px !important;
+    overflow-x: auto !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .invoice-paper {
+    padding: 18px 12px !important;
+    font-size: 11px !important;
+    overflow-x: auto !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .invoice-paper table {
+    min-width: 280px;
+    font-size: 11px !important;
+  }
+
+  .proof-card {
+    padding: 20px 14px !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .display-small {
+    font-size: clamp(1.4rem, 5.5vw, 2.1rem) !important;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
 }
 
 @media (min-width: 960px) {

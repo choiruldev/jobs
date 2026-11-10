@@ -97,7 +97,7 @@
           </p>
         </div>
 
-        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:24px;">
+        <div class="salary-benchmark-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 320px), 1fr));gap:24px;">
           <!-- Controls Panel -->
           <div class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:24px;">
             <h2 class="title-large" style="margin:0 0 16px;font-size:18px;">Input Penawaran Kerja</h2>
@@ -158,7 +158,7 @@
         <section class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:24px;margin-top:8px;">
           <h2 class="title-large" style="margin:0 0 8px;font-size:18px;">Standar Benchmark Gaji Remote Software Engineer Indonesia</h2>
           <p class="body-medium" style="margin:0 0 16px;color:var(--md-sys-color-outline);">Berdasarkan data agregasi penawaran kerja regional & global terkini.</p>
-          <div style="overflow-x:auto;">
+          <div class="horizontal-scroll-table" style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
             <table style="width:100%;border-collapse:collapse;font-size:14px;text-align:left;">
               <thead>
                 <tr style="border-bottom:2px solid var(--md-sys-color-outline-variant);">
@@ -237,7 +237,7 @@
               <span class="badge" style="background:#e8f5e9;color:#2e7d32;font-weight:800;font-size:14px;">${ppp.savingsRatePercent}% Tabungan</span>
             </div>
 
-            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--md-sys-color-outline-variant);display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;">
+            <div class="ppp-metric-grid" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--md-sys-color-outline-variant);display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 200px), 1fr));gap:12px;font-size:13px;">
               <div>
                 <span class="label-small" style="color:var(--md-sys-color-outline);">Ekuivalen Gaya Hidup di ${escapeHtml(ppp.input.targetCity.name)}:</span>
                 <div style="font-size:16px;font-weight:800;color:var(--md-sys-color-tertiary);margin-top:2px;">${escapeHtml(ppp.equivalentDisplay)}</div>
