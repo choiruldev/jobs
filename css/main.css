@@ -103,7 +103,6 @@ svg {
   max-width: 100%;
 }
 
-button,
 input,
 select,
 textarea {
@@ -113,6 +112,7 @@ textarea {
 }
 
 button {
+  font: inherit;
   cursor: pointer;
 }
 
