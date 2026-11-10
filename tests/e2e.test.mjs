@@ -13,7 +13,7 @@ import { extractKeywords, analyzeAtsMatch } from "../js/ats-checker.js";
 import { estimateTakeHomePay, calculateProgressiveTax } from "../js/salary-calculator.js";
 import { generateCoverLetter } from "../js/ai-writer.js";
 import { generateBookmarkletCode } from "../js/autofill-bookmarklet.js";
-import { getQuotaStatus, verifyAndActivateProCode } from "../js/auth-quota.js";
+import { getQuotaStatus, verifyAndActivateProCode, APP_EDITION } from "../js/auth-quota.js";
 import { inferRecruiterEmail, composeAutoApplicationEmail } from "../js/auto-email-apply.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -95,8 +95,13 @@ console.log(`  ✓ Data feeds valid (${jobsData.jobs.length} jobs, ${companiesDa
 // 7. Test Hybrid Auth Quota & Auto-Send Email Composer
 console.log("[7/7] Menguji Sistem Kuota Freemium & Auto-Send Email Lamaran...");
 const quotaGuest = getQuotaStatus("auto_email_apply");
-assert.strictEqual(quotaGuest.limit, 2);
-assert.strictEqual( verifyAndActivateProCode("INVALID-CODE").success, false);
+if (APP_EDITION === "PRO_VIP") {
+  assert.strictEqual(quotaGuest.limit, Infinity);
+  assert.strictEqual(quotaGuest.isPro, true);
+} else {
+  assert.strictEqual(quotaGuest.limit, 2);
+}
+assert.strictEqual(verifyAndActivateProCode("INVALID-CODE").success, false);
 assert.strictEqual(inferRecruiterEmail({ company: "PT GoTo Gojek Tokopedia Tbk", description: "" }), "careers@gotogojektokopedia.com");
 const autoDraft = composeAutoApplicationEmail({
   job: { title: "Senior Backend Engineer", company: "Fintech Nusantara" },
