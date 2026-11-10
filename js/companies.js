@@ -63,13 +63,13 @@ export function renderCompanyDirectory(container, companies = allCompanies) {
             <article class="job-card" style="display:flex;flex-direction:column;justify-content:space-between;border-radius:16px;">
               <div>
                 <div class="job-card__header" style="align-items:center;gap:12px;margin-bottom:12px;">
-                  <div class="company-avatar" style="width:48px;height:48px;border-radius:12px;background:var(--md-sys-color-primary-container);color:var(--md-sys-color-on-primary-container);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;">
+                  <div class="company-avatar" style="width:48px;height:48px;border-radius:12px;background:var(--md-sys-color-primary-container);color:var(--md-sys-color-on-primary-container);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0;">
                     ${initials}
                   </div>
-                  <div style="flex:1;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <div style="flex:1;min-width:0;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
                       <h2 class="headline-small" style="margin:0;font-size:18px;">${escapeHtml(comp.name)}</h2>
-                      <span class="badge" style="font-size:11px;font-weight:800;color:${scoreColor};background:var(--md-sys-color-surface-container-high);border:1px solid var(--md-sys-color-outline-variant);">
+                      <span class="badge" style="font-size:11px;font-weight:800;color:${scoreColor};background:var(--md-sys-color-surface-container-high);border:1px solid var(--md-sys-color-outline-variant);white-space:nowrap;">
                         Radar: ${culture.score}/100
                       </span>
                     </div>

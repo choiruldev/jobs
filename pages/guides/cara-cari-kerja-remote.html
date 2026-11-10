@@ -19,7 +19,7 @@
   <script>
     (function() {
       var savedTheme = localStorage.getItem('jsa_theme_preference');
-      var theme = savedTheme || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var theme = savedTheme === 'dark' ? 'dark' : 'light';
       document.documentElement.setAttribute('data-theme', theme);
       document.documentElement.style.colorScheme = theme;
     })();

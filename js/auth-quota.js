@@ -701,8 +701,9 @@ export function refreshAuthQuotaUI() {
       pill.style.borderColor = "rgba(16,185,129,0.35)";
       pill.innerHTML = `<span class="material-symbols-outlined" style="font-size:15px;">account_circle</span><span>${shortName} · Upgrade</span>`;
     } else {
-      pill.style.background = "var(--md-sys-color-surface-container-low)";
-      pill.style.color = "var(--md-sys-color-on-surface)";
+      pill.style.background = "rgba(0, 193, 110, 0.14)";
+      pill.style.color = "var(--md-sys-color-primary)";
+      pill.style.borderColor = "var(--md-sys-color-primary)";
       pill.innerHTML = `<span class="material-symbols-outlined" style="font-size:15px;">login</span><span>Masuk / Kuota</span>`;
     }
   }
