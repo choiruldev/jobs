@@ -348,11 +348,13 @@
 
 .filter-row {
   display: flex;
+  align-items: center;
+  gap: var(--space-2);
   width: 100%;
   min-width: 0;
-  gap: var(--space-2);
   overflow-x: auto;
-  padding: var(--space-1) 0;
+  padding: 4px 2px 6px;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
 
@@ -364,20 +366,25 @@
 .job-card__chip,
 .badge {
   display: inline-flex;
-  min-height: 30px;
+  min-height: 32px;
   align-items: center;
+  justify-content: center;
   gap: var(--space-1);
   border-radius: var(--shape-chip);
-  padding: 0 10px;
+  padding: 0 12px;
   font-size: 0.78rem;
   font-weight: 700;
-  white-space: nowrap;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0;
 }
 
 .filter-chip {
   border: 1px solid var(--md-sys-color-outline);
   background: var(--md-sys-color-surface-container);
   color: var(--md-sys-color-on-surface-variant);
+  cursor: pointer;
+  transition: all 0.16s ease;
 }
 
 .filter-chip[aria-pressed="true"] {
@@ -565,8 +572,10 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  width: 100%;
+  min-width: 0;
   overflow-x: auto;
-  padding: 2px 2px 4px;
+  padding: 4px 2px 6px;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
@@ -578,9 +587,11 @@
 .portal-pill {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  height: 36px;
-  padding: 0 14px;
+  min-height: 38px;
+  height: 38px;
+  padding: 0 16px;
   border-radius: 999px;
   border: 1px solid var(--md-sys-color-outline-variant);
   background: var(--md-sys-color-surface-container);
@@ -588,7 +599,9 @@
   font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
-  white-space: nowrap;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0;
   transition: all 0.15s ease;
   user-select: none;
 }
@@ -618,33 +631,37 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2);
+  width: 100%;
 }
 
 .search-selects-group {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
+  flex: 1 1 320px;
 }
 
 .search-actions-group {
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  flex: 0 0 auto;
 }
 
 .search-secondary-bar .sort-control {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   height: 38px;
-  padding: 0 8px 0 10px;
+  padding: 0 10px;
   border-radius: 12px;
   border: 1px solid var(--md-sys-color-outline-variant);
   background: var(--md-sys-color-surface-container);
   color: var(--md-sys-color-on-surface-variant);
   font-size: 0.82rem;
   font-weight: 700;
+  flex: 1 1 140px;
+  min-width: 0;
 }
 
 .search-secondary-bar .sort-control select {
@@ -657,6 +674,23 @@
   color: var(--md-sys-color-on-surface);
   outline: none;
   cursor: pointer;
+  width: 100%;
+  min-width: 0;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 540px) {
+  .search-selects-group {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+  .search-actions-group {
+    width: 100%;
+  }
+  .search-actions-group #toggle-search-tools {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 .search-status-bar {
@@ -715,18 +749,27 @@
 }
 
 .source-status-pill {
-  font-size: 0.8rem;
-  color: var(--md-sys-color-on-surface-variant);
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.78rem;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #f0fdf7;
+  color: #065f46;
+  border: 1px solid rgba(0, 193, 110, 0.32);
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .source-status-pill[data-tone="success"] {
-  color: var(--md-sys-color-success);
-  font-weight: 600;
+  color: #047857;
+  font-weight: 700;
 }
 
 .source-status-pill[data-tone="warning"] {
   color: var(--md-sys-color-warning);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .job-card {
@@ -859,7 +902,7 @@
 
 .job-card__meta-text {
   min-width: 0;
-  max-width: 150px;
+  max-width: none;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -4354,6 +4397,23 @@ textarea:focus-visible,
 
 [data-theme="dark"] .button--text {
   color: #34d399;
+}
+
+/* Universal anti-squish for all horizontal pills, chips, tabs & badges */
+.chip,
+.filter-chip,
+.portal-pill,
+.search-suggestion-chip,
+.job-card__chip,
+.badge,
+.home-tag-pill,
+.home-company-tag,
+.interview-tab-btn,
+.view-mode-btn,
+.detail-trust-pill,
+.ats-chip {
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
 }
 
 /* Filter Chips, Portal Pills, View Mode Toggle & Kanban Card Action Button */
