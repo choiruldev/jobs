@@ -13,6 +13,8 @@ import { extractKeywords, analyzeAtsMatch } from "../js/ats-checker.js";
 import { estimateTakeHomePay, calculateProgressiveTax } from "../js/salary-calculator.js";
 import { generateCoverLetter } from "../js/ai-writer.js";
 import { generateBookmarkletCode } from "../js/autofill-bookmarklet.js";
+import { getQuotaStatus, verifyAndActivateProCode } from "../js/auth-quota.js";
+import { inferRecruiterEmail, composeAutoApplicationEmail } from "../js/auto-email-apply.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -89,5 +91,19 @@ const companiesData = JSON.parse(fs.readFileSync(companiesPath, "utf-8"));
 assert.ok(Array.isArray(jobsData.jobs) && jobsData.jobs.length > 0);
 assert.ok(Array.isArray(companiesData) && companiesData.length > 0);
 console.log(`  ✓ Data feeds valid (${jobsData.jobs.length} jobs, ${companiesData.length} perusahaan remote).`);
+
+// 7. Test Hybrid Auth Quota & Auto-Send Email Composer
+console.log("[7/7] Menguji Sistem Kuota Freemium & Auto-Send Email Lamaran...");
+const quotaGuest = getQuotaStatus("auto_email_apply");
+assert.strictEqual(quotaGuest.limit, 2);
+assert.strictEqual( verifyAndActivateProCode("INVALID-CODE").success, false);
+assert.strictEqual(inferRecruiterEmail({ company: "PT GoTo Gojek Tokopedia Tbk", description: "" }), "careers@gotogojektokopedia.com");
+const autoDraft = composeAutoApplicationEmail({
+  job: { title: "Senior Backend Engineer", company: "Fintech Nusantara" },
+  language: "id"
+});
+assert.ok(autoDraft.subject.includes("Senior Backend Engineer"));
+assert.ok(autoDraft.body.includes("Fintech Nusantara"));
+console.log("  ✓ Hybrid Auth Quota & Auto-Send Email Composer berfungsi akurat.");
 
 console.log("\n🎉 SEMUA PENGUJIAN LULUS DENGAN SUKSES (100% Passed)!");

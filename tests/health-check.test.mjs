@@ -81,7 +81,9 @@ const REQUIRED_JS_MODULES = [
   "js/onboarding.js",
   "js/error-logger.js",
   "js/i18n.js",
-  "js/share.js"
+  "js/share.js",
+  "js/auth-quota.js",
+  "js/auto-email-apply.js"
 ];
 
 console.log(`[2/5] Memeriksa Integritas ${REQUIRED_JS_MODULES.length} Modul JavaScript ES6...`);

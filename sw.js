@@ -3,7 +3,7 @@
  * Network-first for HTML/CSS/JS/JSON so UI updates apply immediately, with full offline fallback.
  */
 
-const CACHE_NAME = "jobsearch-cache-v22";
+const CACHE_NAME = "jobsearch-cache-v23";
 
 const STATIC_ASSETS = [
   "./",
@@ -23,6 +23,8 @@ const STATIC_ASSETS = [
   "css/components.css",
   "js/pageview.js",
   "js/theme-engine.js",
+  "js/auth-quota.js",
+  "js/auto-email-apply.js",
   "js/job-comparator.js",
   "js/pwa-prompt.js",
   "js/beta-feedback.js",

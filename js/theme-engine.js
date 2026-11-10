@@ -3,6 +3,9 @@
  * Automatically syncs with system preference or user manual toggle, persisting in localStorage.
  */
 
+import { initAuthQuotaEngine } from "./auth-quota.js?v=20261110a";
+import { initAutoEmailApplyEngine } from "./auto-email-apply.js?v=20261110a";
+
 const THEME_KEY = "jsa_theme_preference";
 const SIDEBAR_KEY = "jsa_sidebar_collapsed";
 
@@ -177,6 +180,8 @@ export function initThemeEngine() {
   });
 
   initSidebar();
+  initAuthQuotaEngine();
+  initAutoEmailApplyEngine();
 }
 
 if (typeof document !== "undefined") {
