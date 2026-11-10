@@ -3,7 +3,7 @@
  * Network-first for HTML/CSS/JS/JSON so UI updates apply immediately, with full offline fallback.
  */
 
-const CACHE_NAME = "jobsearch-cache-v20";
+const CACHE_NAME = "jobsearch-cache-v21";
 
 const STATIC_ASSETS = [
   "./",
@@ -14,6 +14,7 @@ const STATIC_ASSETS = [
   "favicon.svg",
   "favicon.ico",
   "apple-touch-icon.png",
+  "assets/logo-field-19jt.svg",
   "assets/icons/icon-192.png",
   "assets/icons/icon-512.png",
   "assets/icons/icon-maskable.png",

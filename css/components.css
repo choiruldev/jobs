@@ -22,24 +22,66 @@
   gap: var(--space-3);
   min-width: 0;
   font-weight: 800;
+  text-decoration: none;
+}
+
+.brand-lockup > span:not(.logo-mark):not(.brand-text) {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.12rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--md-sys-color-on-surface);
+  line-height: 1.1;
+}
+
+.brand-lockup > span:not(.logo-mark):not(.brand-text)::after {
+  content: "19 JT LAPANGAN KERJA";
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #00c16e;
+  line-height: 1.25;
+  margin-top: 1px;
 }
 
 .logo-mark {
-  display: inline-grid;
-  width: 40px;
-  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 31px;
   flex: 0 0 auto;
-  place-items: center;
-  border-radius: 14px;
-  background: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
-  box-shadow: var(--md-sys-elevation-level1);
+  border-radius: 6px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.logo-mark .material-symbols-outlined {
+  display: none !important;
+}
+
+.logo-mark::before {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 31px;
+  background: url("../assets/logo-field-19jt.svg") no-repeat center / contain;
+}
+
+.logo-mark:has(svg)::before {
+  display: none;
 }
 
 .logo-mark--small {
-  width: 32px;
-  height: 32px;
-  border-radius: 11px;
+  width: 36px;
+  height: 25px;
+}
+
+.logo-mark--small::before {
+  width: 36px;
+  height: 25px;
 }
 
 .top-app-bar__title {
@@ -161,13 +203,14 @@
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
   border-color: var(--md-sys-color-primary);
-  box-shadow: 0 1px 3px rgba(2, 132, 199, 0.2), 0 1px 2px rgba(2, 132, 199, 0.12);
+  box-shadow: 0 1px 3px rgba(0, 193, 110, 0.25), 0 1px 2px rgba(0, 193, 110, 0.16);
+  font-weight: 700;
 }
 
 .button--primary:hover {
   background: var(--md-sys-color-primary-hover);
   border-color: var(--md-sys-color-primary-hover);
-  box-shadow: 0 4px 10px rgba(2, 132, 199, 0.28);
+  box-shadow: 0 4px 12px rgba(0, 193, 110, 0.35);
 }
 
 .button--secondary {
@@ -345,8 +388,9 @@
 
 .job-card__chip,
 .badge {
-  background: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface-variant);
+  border: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .badge {
@@ -754,8 +798,9 @@
   flex: 0 0 auto;
   place-items: center;
   overflow: hidden;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--md-sys-color-primary) 88%, #1e3a8a), var(--md-sys-color-primary));
-  color: var(--md-sys-color-on-primary);
+  background: #0f172a;
+  color: #00c16e;
+  border: 1px solid #1e293b;
   font-weight: 800;
   letter-spacing: 0.01em;
   line-height: 1;
@@ -879,7 +924,7 @@
   gap: 6px;
   font-size: 0.86rem;
   font-weight: 700;
-  color: var(--md-sys-color-primary);
+  color: #047857;
   background: var(--md-sys-color-surface-container-high);
   padding: 5px 10px;
   border-radius: 8px;
@@ -917,7 +962,7 @@
   gap: 3px;
   font-size: 0.78rem;
   font-weight: 700;
-  color: var(--md-sys-color-primary);
+  color: #047857;
   flex-shrink: 0;
   white-space: nowrap;
 }
@@ -963,7 +1008,7 @@
   background: var(--md-sys-color-primary) !important;
   color: var(--md-sys-color-on-primary) !important;
   border-color: var(--md-sys-color-primary) !important;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3) !important;
+  box-shadow: 0 2px 8px rgba(0, 193, 110, 0.3) !important;
 }
 
 /* SAVED STATE: High-contrast warm amber/gold badge with solid glyph */
@@ -1001,7 +1046,7 @@
   color: var(--md-sys-color-on-primary);
   font-size: 0.88rem;
   font-weight: 800;
-  box-shadow: 0 10px 26px rgba(2, 132, 199, 0.38);
+  box-shadow: 0 10px 26px rgba(0, 193, 110, 0.38);
   cursor: pointer;
   white-space: nowrap;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -1009,7 +1054,7 @@
 
 .comparator-floating-bar:hover {
   transform: translateX(-50%) translateY(-2px);
-  box-shadow: 0 14px 30px rgba(2, 132, 199, 0.46);
+  box-shadow: 0 14px 30px rgba(0, 193, 110, 0.46);
 }
 
 .comparator-floating-bar__clear {
@@ -1157,7 +1202,7 @@
 }
 
 .job-card__salary {
-  color: var(--md-sys-color-primary);
+  color: #047857;
   font-size: 0.9rem;
   font-weight: 800;
 }
@@ -3382,6 +3427,164 @@ mark {
   color: var(--md-sys-color-on-primary-container);
 }
 
+[data-theme="dark"] .job-card__salary-badge {
+  background: rgba(0, 193, 110, 0.14);
+  color: #00c16e;
+  border: 1px solid rgba(0, 193, 110, 0.3);
+}
+
+[data-theme="dark"] .job-card__detail-cta {
+  color: #00c16e;
+}
+
+[data-theme="dark"] .job-card__logo,
+[data-theme="dark"] .detail-hero__logo,
+[data-theme="dark"] .company-strip__logo {
+  background: #1a222c;
+  color: #00c16e;
+  border-color: #283342;
+}
+
+/* Kanban Board Dark Theme (No clashing text) */
+[data-theme="dark"] .kanban-column {
+  background: var(--md-sys-color-surface-container-low);
+  border-color: var(--md-sys-color-outline-variant);
+}
+
+[data-theme="dark"] .kanban-column__header {
+  color: var(--md-sys-color-on-surface);
+}
+
+[data-theme="dark"] .kanban-column__count {
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+[data-theme="dark"] .kanban-card {
+  background: var(--md-sys-color-surface-container);
+  border-color: var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface);
+}
+
+[data-theme="dark"] .kanban-card__company {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+[data-theme="dark"] .kanban-card__salary {
+  color: var(--md-sys-color-primary);
+}
+
+[data-theme="dark"] .kanban-card__btn {
+  color: var(--md-sys-color-primary);
+}
+
+[data-theme="dark"] .kanban-card__btn:hover {
+  background: var(--md-sys-color-primary-container);
+}
+
+/* ATS Scorecard Dark Theme */
+[data-theme="dark"] .ats-scorecard__circle,
+[data-theme="dark"] .ats-chip {
+  background: rgba(74, 222, 128, 0.16);
+  color: #4ade80;
+}
+
+[data-theme="dark"] .ats-scorecard__circle--warning {
+  background: rgba(251, 191, 36, 0.16);
+  color: #fbbf24;
+}
+
+[data-theme="dark"] .ats-scorecard__circle--danger,
+[data-theme="dark"] .ats-chip--missing {
+  background: rgba(248, 113, 113, 0.16);
+  color: #f87171;
+}
+
+/* Quality Chips, Score, Mark, Comparator Dark Theme */
+[data-theme="dark"] .job-card__quality-chip[data-tone="good"] {
+  background: rgba(74, 222, 128, 0.16);
+  color: #4ade80;
+}
+
+[data-theme="dark"] .job-card__quality-chip[data-tone="warning"] {
+  background: rgba(251, 191, 36, 0.16);
+  color: #fbbf24;
+}
+
+[data-theme="dark"] .job-card__score {
+  background: rgba(0, 193, 110, 0.18);
+  color: #6ee7b7;
+}
+
+[data-theme="dark"] mark {
+  background: rgba(0, 193, 110, 0.35);
+  color: #f8fafc;
+}
+
+[data-theme="dark"] .comparator-job-col {
+  background: var(--md-sys-color-surface-container-low);
+  border-color: var(--md-sys-color-outline-variant);
+}
+
+[data-theme="dark"] .comparator-modal-card {
+  background: var(--md-sys-color-surface-container);
+  border-color: var(--md-sys-color-outline-variant);
+}
+
+/* Tracker & Forms Dark Theme */
+[data-theme="dark"] .tracker-list-panel,
+[data-theme="dark"] .tracker-panel,
+[data-theme="dark"] .form-panel,
+[data-theme="dark"] .application-item {
+  background: var(--md-sys-color-surface-container);
+  border-color: var(--md-sys-color-outline-variant);
+}
+
+[data-theme="dark"] .field label {
+  color: var(--md-sys-color-on-surface);
+}
+
+[data-theme="dark"] .field input,
+[data-theme="dark"] .field textarea {
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  border-color: var(--md-sys-color-outline-variant);
+}
+
+[data-theme="dark"] .field__helper {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* Tags & Interview Tabs Dark Theme */
+[data-theme="dark"] .home-tag-pill {
+  background: var(--md-sys-color-surface-container);
+  border-color: var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+[data-theme="dark"] .home-tag-pill:hover {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  border-color: var(--md-sys-color-primary);
+}
+
+[data-theme="dark"] .interview-tab-btn {
+  background: var(--md-sys-color-surface-container);
+  border-color: var(--md-sys-color-outline-variant);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+[data-theme="dark"] .interview-tab-btn:hover {
+  background: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-primary);
+}
+
+[data-theme="dark"] .interview-tab-btn.is-active {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border-color: var(--md-sys-color-primary);
+}
+
 /* ==========================================================================
    FASE 2: UX POLISH, SKELETON LOADERS, TOAST NOTIFICATIONS & WCAG 2.1 AA
    ========================================================================== */
@@ -3533,7 +3736,7 @@ textarea:focus-visible,
   border: 2px solid var(--md-sys-color-primary);
   border-radius: 14px;
   padding: 6px;
-  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.12);
+  box-shadow: 0 4px 20px rgba(0, 193, 110, 0.16);
   gap: 8px;
 }
 
@@ -3731,7 +3934,7 @@ textarea:focus-visible,
   border: 2px solid var(--md-sys-color-primary);
   border-radius: var(--shape-card);
   padding: clamp(20px, 3.5vw, 32px);
-  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 193, 110, 0.12);
 }
 
 .apply-hub-actions {
@@ -3879,7 +4082,7 @@ textarea:focus-visible,
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
   border-color: var(--md-sys-color-primary);
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35);
+  box-shadow: 0 2px 8px rgba(0, 193, 110, 0.35);
 }
 
 .voice-record-btn {
@@ -3898,7 +4101,7 @@ textarea:focus-visible,
 .voice-record-btn--idle {
   background: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 193, 110, 0.3);
 }
 
 .voice-record-btn--idle:hover {

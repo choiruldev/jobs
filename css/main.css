@@ -1,15 +1,15 @@
 :root {
   color-scheme: light;
-  --md-sys-color-primary: #0284c7;
-  --md-sys-color-primary-hover: #0369a1;
-  --md-sys-color-on-primary: #ffffff;
-  --md-sys-color-primary-container: #e0f2fe;
-  --md-sys-color-on-primary-container: #0369a1;
+  --md-sys-color-primary: #00c16e;
+  --md-sys-color-primary-hover: #00a35c;
+  --md-sys-color-on-primary: #042517;
+  --md-sys-color-primary-container: #e6f9f0;
+  --md-sys-color-on-primary-container: #007a44;
   --md-sys-color-surface: #f8fafc;
   --md-sys-color-surface-container: #ffffff;
   --md-sys-color-surface-container-high: #f1f5f9;
   --md-sys-color-surface-container-low: #ffffff;
-  --md-sys-color-on-surface: #0f172a;
+  --md-sys-color-on-surface: #09090b;
   --md-sys-color-on-surface-variant: #334155;
   --md-sys-color-outline: #64748b;
   --md-sys-color-outline-variant: #e2e8f0;
@@ -37,23 +37,41 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --md-sys-color-primary: #38bdf8;
-  --md-sys-color-primary-hover: #7dd3fc;
-  --md-sys-color-on-primary: #082f49;
-  --md-sys-color-primary-container: #0c4a6e;
-  --md-sys-color-on-primary-container: #e0f2fe;
-  --md-sys-color-surface: #0b0f19;
-  --md-sys-color-surface-container: #131b2e;
-  --md-sys-color-surface-container-high: #1e293b;
-  --md-sys-color-surface-container-low: #0f172a;
+  --md-sys-color-primary: #00c16e;
+  --md-sys-color-primary-hover: #34d399;
+  --md-sys-color-on-primary: #042517;
+  --md-sys-color-primary-container: rgba(0, 193, 110, 0.16);
+  --md-sys-color-on-primary-container: #6ee7b7;
+  --md-sys-color-surface: #0b0f14;
+  --md-sys-color-surface-container: #121820;
+  --md-sys-color-surface-container-high: #1a222c;
+  --md-sys-color-surface-container-low: #0f141b;
   --md-sys-color-on-surface: #f8fafc;
-  --md-sys-color-on-surface-variant: #cbd5e1;
-  --md-sys-color-outline: #94a3b8;
-  --md-sys-color-outline-variant: #1e293b;
+  --md-sys-color-on-surface-variant: #94a3b8;
+  --md-sys-color-outline: #64748b;
+  --md-sys-color-outline-variant: #222b36;
   --md-sys-color-error: #f87171;
   --md-sys-color-success: #4ade80;
   --md-sys-color-warning: #fbbf24;
   --md-sys-color-scrim: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background-color: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  border-color: var(--md-sys-color-outline-variant);
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: var(--md-sys-color-outline);
+}
+
+[data-theme="dark"] select option {
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface);
 }
 
 * {
