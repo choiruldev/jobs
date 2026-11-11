@@ -356,7 +356,7 @@ p {
 
 @media (min-width: 960px) {
   .app-layout {
-    padding-left: 0;
+    padding-left: var(--side-nav-width, 272px);
   }
 
   .app-layout.sidebar-collapsed {
@@ -364,10 +364,24 @@ p {
   }
 
   .top-app-bar {
+    left: var(--side-nav-width, 272px);
+  }
+
+  .app-layout.sidebar-collapsed .top-app-bar {
+    left: 0;
+  }
+
+  /* Only on Welcome to the Jungle 2-column search page, desktop has top navigation pills and left filter card */
+  [data-page="search"] .app-layout,
+  [data-page="search"].app-layout {
+    padding-left: 0 !important;
+  }
+
+  [data-page="search"] .top-app-bar {
     left: 0 !important;
   }
 
-  .side-nav {
+  [data-page="search"] .side-nav {
     display: none !important;
   }
 
