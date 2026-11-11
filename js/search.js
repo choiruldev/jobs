@@ -639,6 +639,10 @@ function initSearchPage() {
       searchTitle.textContent = SOURCE_TITLES[state.source] || "Cari Lowongan";
     }
     resultCount.textContent = `${jobs.length} ${SOURCE_RESULT_LABELS[state.source] || "lowongan ditemukan"}`;
+    const badgeTotal = document.getElementById("badge-total-count");
+    if (badgeTotal) badgeTotal.textContent = String(allJobs.length || jobs.length);
+    const mobileStatus = document.getElementById("mobile-status-pill");
+    if (mobileStatus) mobileStatus.textContent = `${jobs.length} Loker`;
     clearButton.hidden = !state.query;
     grid.hidden = jobs.length === 0;
     empty.hidden = jobs.length > 0;
@@ -892,6 +896,84 @@ function initSearchPage() {
   initBookmarkButtons(page, ({ bookmarked }) => {
     showSnackbar(bookmarked ? "Lowongan disimpan" : "Lowongan dihapus dari tersimpan");
   });
+
+  document.getElementById("reset-filters-empty")?.addEventListener("click", () => {
+    resetButton.click();
+  });
+
+  // Mobile Bottom Sheet Filter Drawer controls
+  const filterSidebar = document.getElementById("search-filter-sidebar");
+  const mobileFilterOpenBtn = document.getElementById("mobile-filter-open-btn");
+  const closeFilterBtn = document.getElementById("close-filter-sidebar");
+
+  mobileFilterOpenBtn?.addEventListener("click", () => {
+    filterSidebar?.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+  });
+
+  const closeMobileFilter = () => {
+    filterSidebar?.classList.remove("is-open");
+    document.body.style.overflow = "";
+  };
+
+  closeFilterBtn?.addEventListener("click", closeMobileFilter);
+  filterSidebar?.addEventListener("click", (e) => {
+    if (e.target === filterSidebar) closeMobileFilter();
+  });
+
+  // WTTJ Mode Choice Pills (Remote, Hybrid, Onsite)
+  document.querySelectorAll("[data-mode-val]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const val = btn.dataset.modeVal;
+      const wasActive = btn.classList.contains("is-active");
+      document.querySelectorAll("[data-mode-val]").forEach((b) => b.classList.remove("is-active"));
+      state.filters.type.delete("Remote");
+      state.filters.type.delete("Hybrid");
+      state.filters.type.delete("On-site");
+      if (!wasActive) {
+        btn.classList.add("is-active");
+        if (val === "remote") state.filters.type.add("Remote");
+        else if (val === "hybrid") state.filters.type.add("Hybrid");
+        else state.filters.type.add("On-site");
+      }
+      render();
+    });
+  });
+
+  // WTTJ Sub-nav Tabs (Semua Loker, Loker Baru)
+  const tabAll = document.getElementById("tab-all-jobs");
+  const tabNew = document.getElementById("tab-new-jobs");
+  tabAll?.addEventListener("click", () => {
+    tabAll.classList.add("is-active");
+    tabNew?.classList.remove("is-active");
+    state.query = state.query.replace(/\bbaru\b/gi, "").trim();
+    input.value = state.query;
+    render();
+  });
+  tabNew?.addEventListener("click", () => {
+    tabNew.classList.add("is-active");
+    tabAll?.classList.remove("is-active");
+    if (!state.query.toLowerCase().includes("baru")) {
+      state.query = `${state.query} baru`.trim();
+      input.value = state.query;
+    }
+    render();
+  });
+
+  // Booster Banner dismissal
+  const boosterBanner = document.getElementById("search-booster-banner");
+  const closeBoosterBtn = document.getElementById("close-booster-banner");
+  closeBoosterBtn?.addEventListener("click", () => {
+    if (boosterBanner) boosterBanner.style.display = "none";
+    try {
+      localStorage.setItem("jsa_dismiss_booster", "1");
+    } catch (_) {}
+  });
+  try {
+    if (localStorage.getItem("jsa_dismiss_booster") === "1" && boosterBanner) {
+      boosterBanner.style.display = "none";
+    }
+  } catch (_) {}
 
   [50, 400, 1200].forEach((delay) => {
     window.setTimeout(syncControls, delay);

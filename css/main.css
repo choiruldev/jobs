@@ -356,29 +356,43 @@ p {
 
 @media (min-width: 960px) {
   .app-layout {
-    padding-left: var(--side-nav-width);
+    padding-left: 0;
   }
 
   .app-layout.sidebar-collapsed {
     padding-left: 0;
   }
 
+  .top-app-bar {
+    left: 0 !important;
+  }
+
+  .side-nav {
+    display: none !important;
+  }
+
   .page {
-    padding: var(--space-8) var(--space-8) var(--space-10);
+    padding: var(--space-6) var(--space-8) var(--space-10);
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .page--with-topbar {
-    padding-top: calc(var(--app-bar-height) + var(--space-8));
+    padding-top: calc(var(--app-bar-height) + var(--space-6));
   }
 
-  /* Saat sidebar kiri dibuka: list card job jadi 2 kolom */
+  /* Default job grid for standalone pages */
   .job-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: var(--space-4);
   }
 
-  /* Saat sidebar kiri ditutup: list card job jadi 3 kolom */
-  .app-layout.sidebar-collapsed .job-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Welcome to the Jungle 2-column search: main content job cards are clean full-width cards */
+  .search-main-content .job-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 16px;
   }
 }
 
