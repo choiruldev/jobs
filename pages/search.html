@@ -29,8 +29,8 @@
       document.documentElement.style.colorScheme = theme;
     })();
   </script>
-  <link rel="stylesheet" href="../css/main.css?v=20261106a">
-  <link rel="stylesheet" href="../css/components.css?v=20261106a">
+  <link rel="stylesheet" href="../css/main.css?v=20261111b">
+  <link rel="stylesheet" href="../css/components.css?v=20261111b">
 </head>
 <body data-page="search">
   <div class="app-layout">
@@ -250,7 +250,7 @@
                 </a>
                 <button type="button" class="wttj-subnav-tab" id="toggle-search-tools" aria-expanded="false" title="Buka Profil Match">
                   <span class="material-symbols-outlined" style="font-size:16px;">manage_accounts</span>
-                  <span id="tools-button-text">Profil & Alert</span>
+                  <span id="tools-button-text">Profil Match</span>
                 </button>
               </div>
 
@@ -333,27 +333,20 @@
                 </section>
               </section>
             </div>
+          </div><!-- /.wttj-search-controls -->
+
+          <!-- Slim WTTJ Feed Header -->
+          <div class="wttj-feed-header">
+            <h1 class="visually-hidden" id="search-title">Lowongan Kerja Indonesia</h1>
+            <div class="wttj-feed-meta">
+              <span class="wttj-feed-count" id="result-count" role="status">Memuat lowongan...</span>
+              <span class="wttj-feed-meta-dot" aria-hidden="true">·</span>
+              <span class="wttj-feed-status" id="source-status" role="status">Menyiapkan sumber lowongan...</span>
+            </div>
+            <p class="source-credit visually-hidden" id="source-credit">Data resmi publik LinkedIn, Indeed, JobStreet, Remote & Greenhouse. Apply ke situs resmi.</p>
           </div>
 
-          <section class="page__content" aria-labelledby="search-title" style="padding:0;max-width:100%;">
-            <div class="search-meta">
-              <div class="search-meta__header">
-                <h1 class="headline-large" id="search-title">Lowongan Kerja Indonesia</h1>
-                <div class="search-meta__info">
-                  <span class="badge result-badge" id="result-count" role="status">Memuat lowongan...</span>
-                  <span class="source-status-pill" id="source-status" role="status">Menyiapkan sumber lowongan...</span>
-                </div>
-              </div>
-              <p class="source-credit" id="source-credit">Data resmi publik LinkedIn, Indeed, JobStreet, Remote & Greenhouse. Apply ke situs resmi.</p>
-            </div>
-              <span class="badge result-badge" id="result-count" role="status">Memuat lowongan...</span>
-              <span class="source-status-pill" id="source-status" role="status">Menyiapkan sumber lowongan...</span>
-            </div>
-          </div>
-          <p class="source-credit" id="source-credit">Data resmi publik LinkedIn, Indeed, JobStreet, Remote & Greenhouse. Apply ke situs resmi.</p>
-        </div>
-
-        <div class="job-grid" id="job-grid" role="list">
+          <div class="job-grid" id="job-grid" role="list">
           <!-- Animated Skeleton Loaders -->
           <div class="skeleton-card">
             <div style="display:flex;gap:12px;align-items:center;">
@@ -406,10 +399,9 @@
             </div>
           </div>
         </div>
-      </section>
-    </div><!-- /.search-main-content -->
-  </div><!-- /.search-wttj-layout -->
-</main>
+      </div><!-- /.search-main-content -->
+    </div><!-- /.search-wttj-layout -->
+  </main>
 
     <nav class="bottom-nav" aria-label="Navigasi bawah">
       <a class="nav-link nav-link--active" data-nav="search" href="search.html" aria-current="page"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari</span></a>
@@ -420,6 +412,6 @@
     </nav>
   </div>
 
-  <script type="module" src="../js/search.js?v=20261106a"></script>
+  <script type="module" src="../js/search.js?v=20261111b"></script>
 </body>
 </html>
