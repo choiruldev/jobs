@@ -349,45 +349,43 @@ p {
   }
 }
 
-/* Sidebar Responsive Transitions & Collapsed State */
+/* ZERO-SIDEBAR GLOBAL ARCHITECTURE */
+.side-nav {
+  display: none !important;
+}
+
+.sidebar-backdrop {
+  display: none !important;
+}
+
+.js-sidebar-toggle,
+#sidebar-toggle,
+.js-sidebar-close,
+#sidebar-close {
+  display: none !important;
+}
+
 .app-layout {
-  transition: padding-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  padding-left: 0 !important;
+  transition: none !important;
+}
+
+.app-layout.sidebar-collapsed {
+  padding-left: 0 !important;
+}
+
+.top-app-bar {
+  left: 0 !important;
+}
+
+.app-layout.sidebar-collapsed .top-app-bar {
+  left: 0 !important;
 }
 
 @media (min-width: 960px) {
-  .app-layout {
-    padding-left: var(--side-nav-width, 272px);
-  }
-
-  .app-layout.sidebar-collapsed {
-    padding-left: 0;
-  }
-
-  .top-app-bar {
-    left: var(--side-nav-width, 272px);
-  }
-
-  .app-layout.sidebar-collapsed .top-app-bar {
-    left: 0;
-  }
-
-  /* Only on Welcome to the Jungle 2-column search page, desktop has top navigation pills and left filter card */
-  [data-page="search"] .app-layout,
-  [data-page="search"].app-layout {
-    padding-left: 0 !important;
-  }
-
-  [data-page="search"] .top-app-bar {
-    left: 0 !important;
-  }
-
-  [data-page="search"] .side-nav {
-    display: none !important;
-  }
-
   .page {
     padding: var(--space-6) var(--space-8) var(--space-10);
-    max-width: 1400px;
+    max-width: 1240px;
     margin: 0 auto;
     width: 100%;
     box-sizing: border-box;

@@ -84,7 +84,26 @@
           <a class="top-nav-link" href="apply.html">Tracker Lamaran</a>
           <a class="top-nav-link" href="resume-builder.html">Resume ATS</a>
           <a class="top-nav-link" href="salary-benchmark.html">Kalkulator Gaji</a>
-          <a class="top-nav-link" href="companies.html">Perusahaan Remote</a>
+          <div class="top-nav-dropdown">
+            <button class="top-nav-link top-nav-dropdown__btn" type="button" aria-expanded="false">
+              <span>Semua Fitur</span>
+              <span class="material-symbols-outlined" style="font-size:18px;">expand_more</span>
+            </button>
+            <div class="top-nav-dropdown__menu">
+              <div class="dropdown-group-label">FITUR KARIR</div>
+              <a href="interview-prep.html" class="dropdown-item"><span class="material-symbols-outlined">record_voice_over</span> Latihan Interview</a>
+              <a href="code-sandbox.html" class="dropdown-item"><span class="material-symbols-outlined">terminal</span> Coding Sandbox</a>
+              <a href="salary-submit.html" class="dropdown-item"><span class="material-symbols-outlined">volunteer_activism</span> Gaji Komunitas</a>
+              <a href="skills-roadmap.html" class="dropdown-item"><span class="material-symbols-outlined">conversion_path</span> Peta Karir & Skill</a>
+              <a href="companies.html" class="dropdown-item"><span class="material-symbols-outlined">apartment</span> Perusahaan Remote</a>
+              <a href="insights.html" class="dropdown-item"><span class="material-symbols-outlined">insights</span> Analisis Funnel</a>
+              <div class="dropdown-group-label" style="margin-top:6px;">FREELANCE & DOKUMEN</div>
+              <a href="contract-guide.html" class="dropdown-item"><span class="material-symbols-outlined">gavel</span> Panduan Kontrak & Pajak</a>
+              <a href="invoice-generator.html" class="dropdown-item"><span class="material-symbols-outlined">receipt_long</span> Generator Invoice</a>
+              <a href="portfolio-card.html" class="dropdown-item"><span class="material-symbols-outlined">badge</span> Kartu Bukti Karya</a>
+              <a href="alerts.html" class="dropdown-item"><span class="material-symbols-outlined">notifications_active</span> Pusat Notifikasi</a>
+            </div>
+          </div>
         </nav>
       </div>
       <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
@@ -236,6 +255,24 @@
               </button>
             </div>
 
+            <!-- Quick Horizontal Filter Bar -->
+            <div class="search-quick-filter-bar">
+              <div class="quick-filter-select-wrapper">
+                <span class="material-symbols-outlined" style="font-size:18px;color:var(--md-sys-color-primary);">location_on</span>
+                <select id="quick-source-select" class="quick-filter-select" aria-label="Jangkauan Wilayah">
+                  <option value="indonesia">Indonesia & Lokal</option>
+                  <option value="anywhere">Remote (Anywhere)</option>
+                  <option value="apac">Asia / APAC</option>
+                  <option value="international">Global / Luar Negeri</option>
+                </select>
+              </div>
+              <div class="quick-mode-pills" id="quick-work-mode-pills">
+                <button type="button" class="quick-mode-pill" data-mode-val="remote">Remote (WFH)</button>
+                <button type="button" class="quick-mode-pill" data-mode-val="hybrid">Hybrid</button>
+                <button type="button" class="quick-mode-pill" data-mode-val="onsite">On-site (Kantor)</button>
+              </div>
+            </div>
+
             <!-- Subnav Tabs (Yellow Pill Active like WTTJ) + Filter/Sort Controls -->
             <div class="wttj-subnav-row">
               <div class="wttj-subnav-tabs">
@@ -257,7 +294,7 @@
               <div class="wttj-subnav-actions">
                 <button type="button" class="wttj-mobile-filter-btn" id="mobile-filter-open-btn">
                   <span class="material-symbols-outlined" style="font-size:18px;">tune</span>
-                  <span>Filter Loker</span>
+                  <span>Filter Lengkap</span>
                 </button>
                 <div class="wttj-sort-wrapper">
                   <label class="sort-control" for="sort-select">

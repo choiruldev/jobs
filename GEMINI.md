@@ -1,28 +1,37 @@
-# Antigravity Workspace Design & Architecture Rules (DESIGN_LOCK)
+# Antigravity Workspace Design & Architecture Rules (ZERO_SIDEBAR_LOCK)
 
 > **CRITICAL ARCHITECTURAL CONTRACT**:
-> Every code change, feature addition, or refactoring in this repository MUST unconditionally preserve the modern **Welcome to the Jungle (WTTJ) & Linear** design system established for this platform. NEVER revert to stacked top-filters, rectangular gray buttons, or a 272px push-sidebar on desktop.
+> Every code change, feature addition, or refactoring in this repository MUST unconditionally enforce the **ZERO-SIDEBAR** modern web application architecture (Linear & Airbnb standard).
+> **NEVER ADD OR RESTORE ANY SIDEBAR** (neither vertical page-navigation sidebars nor 290px left filter sidebars). All sidebars are strictly prohibited.
 
 ---
 
 ## 1. Core Layout Architecture
 
-### A. Desktop Viewport (>= 992px)
+### A. Desktop Viewport (>= 960px) - Zero Sidebar
 - **Top Navigation Bar (Header Navbar)**:
-  - Primary navigation lives entirely on the top bar: Brand Logo on the left, horizontal navigation pills in the center (`Cari Lowongan`, `Tracker Lamaran`, `Resume ATS`, `Kalkulator Gaji`, `Semua Fitur ▾`), and Theme Toggle + Masuk/PRO button on the right.
-  - **NO 272px vertical page-navigation sidebar** on desktop. The content area has full-width breathing room (`max-width: 1320px; margin: 0 auto;`).
-- **Search Page 2-Column Split (Welcome to the Jungle Style)**:
-  - **Left Column (`.search-filter-sidebar`, width: ~300px)**: Dedicated Sticky Filter Card containing accordions for Lokasi, Mode Kerja (Remote/Hybrid/Onsite), Portal Resmi (LinkedIn, Indeed, JobStreet, Greenhouse, dll.), Estimasi Gaji, and Kategori.
-  - **Right Column (`.search-main-content`, flex: 1)**: Booster banner, Search Bar, Quick sub-navigation tabs (`Semua Loker`, `Loker Baru`, `Disimpan`), Sort dropdown, and Job Cards Grid (`#job-grid`).
-  - **NEVER stack 20+ filter chips on top of the search bar**. Filters belong in the left sidebar on desktop.
+  - Primary navigation lives entirely on the top bar: Brand Logo on the left, horizontal navigation pills in the center (`Cari Lowongan`, `Tracker Lamaran`, `Resume ATS`, `Kalkulator Gaji`, and `Semua Fitur ▾` dropdown popover), and Theme Toggle + Masuk/PRO button on the right.
+  - **NO vertical page-navigation sidebar** (`.side-nav { display: none !important; }`). The content area has full-width breathing room (`max-width: 1200px; margin: 0 auto;`).
+- **Search Page (Single Centered Feed, ~1040px max-width)**:
+  - **NO 290px left filter sidebar**.
+  - **Top Search Controls**:
+    - Booster banner (compact tips card).
+    - Omni-Search Bar.
+    - **Quick Horizontal Filter Bar**: Wilayah dropdown (`[📍 Indonesia & Lokal ▾]`), Mode Kerja choice pills (`[Remote]`, `[Hybrid]`, `[On-site]`), Filter Lengkap button (`[tune] Filter Lengkap (N)`), and Sort dropdown (`[⇅ Urut: Relevan ▾]`).
+    - Quick sub-navigation tabs (`Semua Loker`, `Loker Baru`, `Disimpan`).
+  - **Universal Filter Modal / Dialog (`#search-filter-sidebar`)**:
+    - Advanced filters (official portals, category specializations, salary range, reset/apply buttons) live in a clean centered pop-up dialog on desktop and bottom sheet on mobile.
+    - Triggered on demand via `[tune] Filter Lengkap`.
+  - **Job Cards Feed (`#job-grid`)**: Single full-width centered stream of spacious, readable job cards.
 
-### B. Mobile Viewport (< 992px)
-- **Full Width Content**: All job cards, tools, and forms must span 100% width with zero horizontal clipping or page overflow.
-- **Mobile Filter Drawer / Bottom Sheet**:
-  - The left filter sidebar is hidden from the normal page flow.
-  - A clean floating or sticky button (`[tune] Filter Loker`) opens a smooth Bottom Sheet modal from the bottom of the screen.
+### B. Mobile Viewport (< 960px)
+- **Full Width Content**: All job cards, tools, and forms span 100% width with zero horizontal clipping or page overflow.
+- **Top App Bar**: Clean, compact header showing Logo, Auth status, and Theme toggle. No hamburger icon.
+- **Mobile Filter Bottom Sheet**:
+  - Tapping `[tune] Filter Loker` opens a smooth Bottom Sheet modal from the bottom of the screen.
   - Users toggle filters easily with their thumbs, and click "Terapkan Filter" to close and apply.
-- **Bottom Navigation Bar**: Remains active at the bottom of the viewport for primary tabs (`Beranda`, `Cari`, `Tracker`, `Resume`, `Menu`).
+- **Bottom Navigation Bar**: Remains active at the bottom of the viewport for primary tabs (`Cari`, `Tracker`, `Resume`, `Simpan`, `Semua Fitur`).
+- **Floating Buttons**: Floating widgets (such as `#beta-feedback-btn`) MUST hover above the bottom nav (`bottom: calc(var(--bottom-nav-height) + 14px) !important;`) and never block navigation tabs.
 
 ---
 
@@ -32,7 +41,7 @@
   - 60% Dominant: Clean surface white (`#FFFFFF`) / Dark surface (`#0f172a`).
   - 30% Neutral: Soft off-white cards (`#f8fafc`, `#f1f5f9`), subtle outlines `rgba(0,0,0,0.08)`.
   - 10% Accents:
-    - Warm Amber/Yellow (`#F59E0B` / `#FEF3C7` / `#FCD34D`) for active highlight pills & booster banners (Welcome to the Jungle signature).
+    - Warm Amber/Yellow (`#F59E0B` / `#FEF3C7` / `#FCD34D`) for active highlight pills & booster banners.
     - Cybermint / Emerald (`#00C16E` / `#10B981`) for verified links, salaries, trust signals, and primary CTAs.
 - **Cards & Geometry**:
   - Rounded corners: `border-radius: 18px` to `22px`.
