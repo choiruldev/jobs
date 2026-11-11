@@ -71,16 +71,23 @@
     </aside>
 
     <header class="top-app-bar">
-      <div style="display:flex;align-items:center;gap:8px;min-width:0;">
-        <button class="icon-button js-sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Toggle Menu Navigasi" title="Sembunyikan/Tampilkan Menu">
+      <div style="display:flex;align-items:center;gap:16px;min-width:0;">
+        <button class="icon-button js-sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Toggle Menu Navigasi" title="Sembunyikan/Tampilkan Menu" style="display:none;">
           <span class="material-symbols-outlined" aria-hidden="true">menu</span>
         </button>
         <a class="top-app-bar__brand" href="../index.html" aria-label="JobSearch">
           <span class="logo-mark logo-mark--small" aria-hidden="true"><span class="material-symbols-outlined">work</span></span>
-          <span class="top-app-bar__title">Cari Lowongan</span>
+          <span class="top-app-bar__title" style="font-weight:900;">JobSearch</span>
         </a>
+        <nav class="top-nav-links" aria-label="Navigasi Utama">
+          <a class="top-nav-link is-active" href="search.html">Cari Lowongan</a>
+          <a class="top-nav-link" href="apply.html">Tracker Lamaran</a>
+          <a class="top-nav-link" href="resume-builder.html">Resume ATS</a>
+          <a class="top-nav-link" href="salary-benchmark.html">Kalkulator Gaji</a>
+          <a class="top-nav-link" href="companies.html">Perusahaan Remote</a>
+        </nav>
       </div>
-      <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
+      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
         <button class="icon-button js-theme-toggle" type="button" aria-label="Ganti Tema">
           <span class="material-symbols-outlined" aria-hidden="true">dark_mode</span>
         </button>
@@ -88,146 +95,257 @@
     </header>
 
     <main class="page page--with-topbar" data-page="search">
-      <section class="search-panel" aria-label="Pencarian dan filter">
-        <div class="search-panel__inner">
-          <div class="search-bar">
-            <label class="visually-hidden" for="search-input">Cari lowongan</label>
-            <span class="material-symbols-outlined" aria-hidden="true">search</span>
-            <input id="search-input" type="search" autocomplete="off" placeholder="Cari posisi, skill, kota, atau perusahaan...">
-            <button class="icon-button" id="clear-search" type="button" aria-label="Bersihkan pencarian" hidden>
-              <span class="material-symbols-outlined" aria-hidden="true">close</span>
-            </button>
-          </div>
+      <div class="search-wttj-layout">
+        <!-- 1. LEFT SIDE FILTER CARD (WELCOME TO THE JUNGLE STYLE) -->
+        <aside class="search-filter-sidebar" id="search-filter-sidebar" aria-label="Filter Lowongan">
+          <div class="wttj-filter-card">
+            <div class="wttj-filter-card__header">
+              <h2 class="wttj-filter-card__title">
+                <span class="material-symbols-outlined" style="color:var(--md-sys-color-primary);">tune</span>
+                Filter
+              </h2>
+              <button class="wttj-filter-card__reset" id="reset-filters" type="button">Reset</button>
+            </div>
 
-          <!-- Quick Portal Selector Pills -->
-          <div class="portal-pills-bar" id="portal-pills" role="group" aria-label="Pilih portal loker">
-            <button class="portal-pill is-active" type="button" data-platform="all">Semua Portal</button>
-            <button class="portal-pill" type="button" data-platform="linkedin"><span class="badge-icon">in</span> LinkedIn</button>
-            <button class="portal-pill" type="button" data-platform="indeed"><span class="badge-icon">ID</span> Indeed</button>
-            <button class="portal-pill" type="button" data-platform="jobstreet"><span class="badge-icon">JS</span> JobStreet</button>
-            <button class="portal-pill" type="button" data-platform="remotive"><span class="badge-icon">🌐</span> Remote Global</button>
-            <button class="portal-pill" type="button" data-platform="greenhouse"><span class="badge-icon">🌿</span> Greenhouse</button>
-            <button class="portal-pill" type="button" data-platform="ashby"><span class="badge-icon">⚡</span> Ashby</button>
-            <button class="portal-pill" type="button" data-platform="himalayas"><span class="badge-icon">🏔️</span> Himalayas</button>
-          </div>
-
-          <!-- Secondary Filter Controls -->
-          <div class="search-secondary-bar">
-            <div class="search-selects-group">
-              <label class="sort-control" for="source-select">
-                <span class="material-symbols-outlined" aria-hidden="true" style="font-size:18px;">public</span>
-                <select id="source-select" autocomplete="off">
+            <!-- Group 1: Lokasi & Mode Kerja -->
+            <details class="wttj-filter-group" open>
+              <summary class="wttj-filter-group__summary">
+                <span class="wttj-filter-group__title">
+                  <span class="material-symbols-outlined" style="font-size:18px;">location_on</span>
+                  Lokasi & Jangkauan
+                </span>
+                <span class="material-symbols-outlined wttj-filter-group__chevron">expand_more</span>
+              </summary>
+              <div class="wttj-filter-group__content">
+                <label class="wttj-filter-label" for="source-select">Jangkauan Wilayah</label>
+                <select id="source-select" class="wttj-filter-select" autocomplete="off">
                   <option value="indonesia">Indonesia & Lokal</option>
                   <option value="anywhere">Remote (Anywhere)</option>
                   <option value="apac">Asia / APAC</option>
                   <option value="international">Global / Luar Negeri</option>
                 </select>
-              </label>
 
-              <label class="sort-control" for="sort-select">
-                <span class="material-symbols-outlined" aria-hidden="true" style="font-size:18px;">sort</span>
-                <select id="sort-select" autocomplete="off">
-                  <option value="relevant">Urut: Relevan</option>
-                  <option value="match">Urut: Paling Cocok</option>
-                  <option value="latest">Urut: Terbaru</option>
-                  <option value="salary">Urut: Gaji Tertinggi</option>
-                </select>
-              </label>
+                <div class="wttj-filter-label" style="margin-top:6px;">Mode Kerja</div>
+                <div class="wttj-pills-stack" id="wttj-work-mode-pills">
+                  <button type="button" class="wttj-choice-pill" data-mode-val="remote">Remote (WFH)</button>
+                  <button type="button" class="wttj-choice-pill" data-mode-val="hybrid">Hybrid</button>
+                  <button type="button" class="wttj-choice-pill" data-mode-val="onsite">On-site (Kantor)</button>
+                </div>
+              </div>
+            </details>
 
-              <!-- Hidden platform select synced with portal pills for backwards-compatibility -->
-              <select id="platform-select" autocomplete="off" style="display:none;" aria-hidden="true">
-                <option value="all">Semua Portal</option>
-                <option value="linkedin">LinkedIn</option>
-                <option value="jobstreet">JobStreet</option>
-                <option value="indeed">Indeed</option>
-                <option value="remotive">Remote Global</option>
-                <option value="greenhouse">Greenhouse (Tech Global)</option>
-                <option value="ashby">Ashby ATS (Tech Leaders)</option>
-                <option value="lever">Lever ATS</option>
-                <option value="himalayas">Himalayas Remote</option>
-              </select>
+            <!-- Group 2: Portal & ATS Resmi -->
+            <details class="wttj-filter-group" open>
+              <summary class="wttj-filter-group__summary">
+                <span class="wttj-filter-group__title">
+                  <span class="material-symbols-outlined" style="font-size:18px;">verified</span>
+                  Portal & ATS Resmi
+                </span>
+                <span class="material-symbols-outlined wttj-filter-group__chevron">expand_more</span>
+              </summary>
+              <div class="wttj-filter-group__content">
+                <div class="wttj-portal-list" id="portal-pills" role="group" aria-label="Pilih portal loker">
+                  <button class="wttj-portal-item portal-pill is-active" type="button" data-platform="all">
+                    <span>Semua Portal</span> <span class="badge-icon">🌐</span>
+                  </button>
+                  <button class="wttj-portal-item portal-pill" type="button" data-platform="linkedin">
+                    <span>LinkedIn</span> <span class="badge-icon" style="color:#0a66c2;">in</span>
+                  </button>
+                  <button class="wttj-portal-item portal-pill" type="button" data-platform="indeed">
+                    <span>Indeed</span> <span class="badge-icon" style="color:#2164f3;">ID</span>
+                  </button>
+                  <button class="wttj-portal-item portal-pill" type="button" data-platform="jobstreet">
+                    <span>JobStreet</span> <span class="badge-icon" style="color:#e60278;">JS</span>
+                  </button>
+                  <button class="wttj-portal-item portal-pill" type="button" data-platform="remotive">
+                    <span>Remote Global</span> <span class="badge-icon">🌐</span>
+                  </button>
+                  <button class="wttj-portal-item portal-pill" type="button" data-platform="greenhouse">
+                    <span>Greenhouse</span> <span class="badge-icon">🌿</span>
+                  </button>
+                  <button class="wttj-portal-item portal-pill" type="button" data-platform="ashby">
+                    <span>Ashby ATS</span> <span class="badge-icon">⚡</span>
+                  </button>
+                  <button class="wttj-portal-item portal-pill" type="button" data-platform="himalayas">
+                    <span>Himalayas</span> <span class="badge-icon">🏔️</span>
+                  </button>
+                </div>
+              </div>
+            </details>
+
+            <!-- Hidden platform select synced for JS compatibility -->
+            <select id="platform-select" autocomplete="off" style="display:none;" aria-hidden="true">
+              <option value="all">Semua Portal</option>
+              <option value="linkedin">LinkedIn</option>
+              <option value="jobstreet">JobStreet</option>
+              <option value="indeed">Indeed</option>
+              <option value="remotive">Remote Global</option>
+              <option value="greenhouse">Greenhouse (Tech Global)</option>
+              <option value="ashby">Ashby ATS (Tech Leaders)</option>
+              <option value="lever">Lever ATS</option>
+              <option value="himalayas">Himalayas Remote</option>
+            </select>
+
+            <!-- Group 3: Kategori & Filter Tambahan -->
+            <details class="wttj-filter-group">
+              <summary class="wttj-filter-group__summary">
+                <span class="wttj-filter-group__title">
+                  <span class="material-symbols-outlined" style="font-size:18px;">category</span>
+                  Kategori & Spesialisasi
+                </span>
+                <span class="material-symbols-outlined wttj-filter-group__chevron">expand_more</span>
+              </summary>
+              <div class="wttj-filter-group__content">
+                <div class="wttj-pills-stack" id="filter-row" aria-label="Filter kategori"></div>
+              </div>
+            </details>
+
+            <!-- Mobile Apply Button (Visible on mobile bottom sheet) -->
+            <button type="button" class="button button--primary button--full" id="close-filter-sidebar" style="margin-top:10px;">
+              Terapkan Filter
+            </button>
+          </div>
+        </aside>
+
+        <!-- 2. RIGHT SIDE MAIN CONTENT FEED (WELCOME TO THE JUNGLE STYLE) -->
+        <div class="search-main-content">
+          <!-- Booster Banner (Yellow Card) -->
+          <div class="search-booster-banner" id="search-booster-banner">
+            <span class="material-symbols-outlined search-booster-banner__icon">lightbulb</span>
+            <div class="search-booster-banner__content">
+              <h3 class="search-booster-banner__title">Tingkatkan Peluang Diterima Kerja</h3>
+              <p class="search-booster-banner__desc">Lengkapi profil CV ATS Anda untuk mendapatkan rekomendasi loker berakurasi 95% dan auto-send lamaran 1-klik langsung ke HRD.</p>
+              <div class="search-booster-banner__actions">
+                <a href="resume-builder.html" class="search-booster-btn-primary">Buat CV ATS Saya</a>
+                <a href="interview-prep.html" class="search-booster-btn-secondary">Latihan Interview</a>
+              </div>
             </div>
+            <button type="button" class="search-booster-banner__close" id="close-booster-banner" aria-label="Tutup Banner">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
 
-            <div class="search-actions-group">
-              <button class="button button--tonal button--small" id="toggle-search-tools" type="button" aria-expanded="false" title="Buka Profil Match & Job Alert">
-                <span class="material-symbols-outlined" aria-hidden="true">tune</span>
-                <span id="tools-button-text">Profil & Alert</span>
-                <span class="material-symbols-outlined js-expand-icon" aria-hidden="true" style="transition:transform 0.2s ease;">expand_more</span>
+          <!-- Top Search Controls -->
+          <div class="wttj-search-controls">
+            <div class="search-bar">
+              <label class="visually-hidden" for="search-input">Cari lowongan</label>
+              <span class="material-symbols-outlined" aria-hidden="true">search</span>
+              <input id="search-input" type="search" autocomplete="off" placeholder="Cari posisi, skill, kota, atau perusahaan...">
+              <button class="icon-button" id="clear-search" type="button" aria-label="Bersihkan pencarian" hidden>
+                <span class="material-symbols-outlined" aria-hidden="true">close</span>
               </button>
             </div>
-          </div>
 
-          <!-- Dynamic Active Filter Chips -->
-          <div class="filter-row" id="filter-row" aria-label="Filter lowongan"></div>
+            <!-- Subnav Tabs (Yellow Pill Active like WTTJ) + Filter/Sort Controls -->
+            <div class="wttj-subnav-row">
+              <div class="wttj-subnav-tabs">
+                <button type="button" class="wttj-subnav-tab is-active" id="tab-all-jobs">
+                  Semua Loker <span class="wttj-subnav-count" id="badge-total-count">...</span>
+                </button>
+                <button type="button" class="wttj-subnav-tab" id="tab-new-jobs">
+                  Loker Baru 🔥
+                </button>
+                <a href="bookmarks.html" class="wttj-subnav-tab">
+                  Disimpan
+                </a>
+                <button type="button" class="wttj-subnav-tab" id="toggle-search-tools" aria-expanded="false" title="Buka Profil Match">
+                  <span class="material-symbols-outlined" style="font-size:16px;">manage_accounts</span>
+                  <span id="tools-button-text">Profil & Alert</span>
+                </button>
+              </div>
 
-          <!-- Collapsible Advanced Search Tools Wrapper -->
-          <div class="search-tools-wrapper" id="search-tools-wrapper" hidden>
-            <section class="search-tools" aria-label="Profil match dan job alert lokal">
-              <form class="tool-panel profile-form" id="profile-form">
-                <div class="tool-panel__header">
-                  <div>
-                    <h2 class="title-medium">Profil Match</h2>
-                    <p class="tool-panel__summary" id="profile-summary">Profil belum diisi.</p>
+              <div class="wttj-subnav-actions">
+                <button type="button" class="wttj-mobile-filter-btn" id="mobile-filter-open-btn">
+                  <span class="material-symbols-outlined" style="font-size:18px;">tune</span>
+                  <span>Filter Loker</span>
+                </button>
+                <div class="wttj-sort-wrapper">
+                  <label class="sort-control" for="sort-select">
+                    <span class="material-symbols-outlined" aria-hidden="true" style="font-size:18px;">sort</span>
+                    <select id="sort-select" autocomplete="off">
+                      <option value="relevant">Urut: Relevan</option>
+                      <option value="match">Urut: Paling Cocok</option>
+                      <option value="latest">Urut: Terbaru</option>
+                      <option value="salary">Urut: Gaji Tertinggi</option>
+                    </select>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Collapsible Advanced Search Tools Wrapper -->
+            <div class="search-tools-wrapper" id="search-tools-wrapper" hidden>
+              <section class="search-tools" aria-label="Profil match dan job alert lokal">
+                <form class="tool-panel profile-form" id="profile-form">
+                  <div class="tool-panel__header">
+                    <div>
+                      <h2 class="title-medium">Profil Match</h2>
+                      <p class="tool-panel__summary" id="profile-summary">Profil belum diisi.</p>
+                    </div>
                   </div>
-                </div>
-                <div class="profile-form__grid">
-                  <label class="compact-field">
-                    Role target
-                    <input name="targetRole" type="text" autocomplete="off" placeholder="Frontend Developer">
-                  </label>
-                  <label class="compact-field">
-                    Skill
-                    <input name="skills" type="text" autocomplete="off" placeholder="React, SQL, UI">
-                  </label>
-                  <label class="compact-field">
-                    Pengalaman
-                    <input name="experience" type="text" autocomplete="off" placeholder="3 tahun">
-                  </label>
-                  <label class="compact-field">
-                    Gaji min.
-                    <input name="expectedSalary" type="text" inputmode="numeric" autocomplete="off" placeholder="Rp 12.000.000">
-                  </label>
-                  <label class="compact-field">
-                    Timezone
-                    <input name="timezone" type="text" autocomplete="off" value="Asia/Jakarta">
-                  </label>
-                </div>
-                <div class="tool-actions">
-                  <button class="button button--tonal" type="button" id="edit-profile">
-                    <span class="material-symbols-outlined" aria-hidden="true">manage_accounts</span>
-                    Edit Profil
-                  </button>
-                  <button class="button button--primary profile-form__save" type="submit">
-                    <span class="material-symbols-outlined" aria-hidden="true">person_check</span>
-                    Simpan Profil
-                  </button>
-                  <button class="button button--text" type="button" id="clear-profile">Reset</button>
-                </div>
-              </form>
-
-              <section class="tool-panel saved-search-panel" aria-labelledby="saved-search-title">
-                <div class="tool-panel__header">
-                  <div>
-                    <h2 class="title-medium" id="saved-search-title">Job Alert Lokal</h2>
-                    <p class="tool-panel__summary" id="saved-search-summary">Belum ada alert tersimpan.</p>
+                  <div class="profile-form__grid">
+                    <label class="compact-field">
+                      Role target
+                      <input name="targetRole" type="text" autocomplete="off" placeholder="Frontend Developer">
+                    </label>
+                    <label class="compact-field">
+                      Skill
+                      <input name="skills" type="text" autocomplete="off" placeholder="React, SQL, UI">
+                    </label>
+                    <label class="compact-field">
+                      Pengalaman
+                      <input name="experience" type="text" autocomplete="off" placeholder="3 tahun">
+                    </label>
+                    <label class="compact-field">
+                      Gaji min.
+                      <input name="expectedSalary" type="text" inputmode="numeric" autocomplete="off" placeholder="Rp 12.000.000">
+                    </label>
+                    <label class="compact-field">
+                      Timezone
+                      <input name="timezone" type="text" autocomplete="off" value="Asia/Jakarta">
+                    </label>
                   </div>
-                  <button class="button button--tonal" type="button" id="save-search">
-                    <span class="material-symbols-outlined" aria-hidden="true">notifications</span>
-                    Simpan Alert
-                  </button>
-                </div>
-                <div class="saved-search-list" id="saved-search-list"></div>
+                  <div class="tool-actions">
+                    <button class="button button--tonal" type="button" id="edit-profile">
+                      <span class="material-symbols-outlined" aria-hidden="true">manage_accounts</span>
+                      Edit Profil
+                    </button>
+                    <button class="button button--primary profile-form__save" type="submit">
+                      <span class="material-symbols-outlined" aria-hidden="true">person_check</span>
+                      Simpan Profil
+                    </button>
+                    <button class="button button--text" type="button" id="clear-profile">Reset</button>
+                  </div>
+                </form>
+
+                <section class="tool-panel saved-search-panel" aria-labelledby="saved-search-title">
+                  <div class="tool-panel__header">
+                    <div>
+                      <h2 class="title-medium" id="saved-search-title">Job Alert Lokal</h2>
+                      <p class="tool-panel__summary" id="saved-search-summary">Belum ada alert tersimpan.</p>
+                    </div>
+                    <button class="button button--tonal" type="button" id="save-search">
+                      <span class="material-symbols-outlined" aria-hidden="true">notifications</span>
+                      Simpan Alert
+                    </button>
+                  </div>
+                  <div class="saved-search-list" id="saved-search-list"></div>
+                </section>
               </section>
-            </section>
+            </div>
           </div>
-        </div>
-      </section>
 
-      <section class="page__content" aria-labelledby="search-title">
-        <div class="search-meta">
-          <div class="search-meta__header">
-            <h1 class="headline-large" id="search-title">Lowongan Kerja Indonesia</h1>
-            <div class="search-meta__info">
+          <section class="page__content" aria-labelledby="search-title" style="padding:0;max-width:100%;">
+            <div class="search-meta">
+              <div class="search-meta__header">
+                <h1 class="headline-large" id="search-title">Lowongan Kerja Indonesia</h1>
+                <div class="search-meta__info">
+                  <span class="badge result-badge" id="result-count" role="status">Memuat lowongan...</span>
+                  <span class="source-status-pill" id="source-status" role="status">Menyiapkan sumber lowongan...</span>
+                </div>
+              </div>
+              <p class="source-credit" id="source-credit">Data resmi publik LinkedIn, Indeed, JobStreet, Remote & Greenhouse. Apply ke situs resmi.</p>
+            </div>
               <span class="badge result-badge" id="result-count" role="status">Memuat lowongan...</span>
               <span class="source-status-pill" id="source-status" role="status">Menyiapkan sumber lowongan...</span>
             </div>
@@ -275,7 +393,7 @@
             </div>
             <h2 class="headline-medium">Belum ada hasil yang cocok</h2>
             <p class="body-medium">Coba kata kunci yang lebih umum atau hapus filter yang aktif.</p>
-            <p><button class="button button--primary" id="reset-filters" type="button">Reset Filter</button></p>
+            <p><button class="button button--primary" id="reset-filters-empty" type="button">Reset Filter</button></p>
             
             <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--md-sys-color-outline-variant);display:flex;flex-wrap:wrap;justify-content:center;gap:8px;">
               <span style="font-size:12px;color:var(--md-sys-color-outline);width:100%;text-align:center;font-weight:600;">Saran Pencarian Populer:</span>
@@ -289,7 +407,9 @@
           </div>
         </div>
       </section>
-    </main>
+    </div><!-- /.search-main-content -->
+  </div><!-- /.search-wttj-layout -->
+</main>
 
     <nav class="bottom-nav" aria-label="Navigasi bawah">
       <a class="nav-link nav-link--active" data-nav="search" href="search.html" aria-current="page"><span class="nav-link__indicator" aria-hidden="true"></span><span class="material-symbols-outlined" aria-hidden="true">search</span><span>Cari</span></a>
