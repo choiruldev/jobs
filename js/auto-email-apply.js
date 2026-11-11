@@ -357,12 +357,22 @@ function injectDetailAutoEmailButtons() {
         `;
         btn.addEventListener("click", () => openAutoEmailModal(job));
         actionsRow.appendChild(btn);
+        return true;
       }
     }
+    return Boolean(document.getElementById("detail-auto-email-btn"));
   };
 
-  tryInject();
-  setTimeout(tryInject, 400);
+  if (!tryInject()) {
+    const observer = new MutationObserver(() => {
+      if (tryInject()) {
+        observer.disconnect();
+      }
+    });
+    const target = document.getElementById("detail-root") || document.body;
+    observer.observe(target, { childList: true, subtree: true });
+    setTimeout(() => observer.disconnect(), 10000);
+  }
 }
 
 function injectTrackerBatchAutoEmailWidget() {
