@@ -582,7 +582,7 @@ function initSearchPage() {
     profileSummary.textContent = summary || "Profil belum diisi.";
     if (toolsButtonText) {
       const hasSignal = profileHasSignal(profile);
-      toolsButtonText.textContent = hasSignal ? "Profil (Aktif) & Alert" : "Profil & Alert";
+      toolsButtonText.textContent = hasSignal ? "Profil (Aktif)" : "Profil Match";
     }
   }
 

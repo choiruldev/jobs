@@ -5103,11 +5103,48 @@ textarea:focus-visible,
   font-weight: 800;
 }
 
+/* Slim WTTJ Feed Header (Replaces bulky H1 and duplicate banners) */
+.wttj-feed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 0 4px;
+}
+
+.wttj-feed-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--md-sys-color-on-surface-variant);
+  font-weight: 500;
+}
+
+.wttj-feed-count {
+  font-weight: 800;
+  color: var(--md-sys-color-on-surface);
+}
+
+.wttj-feed-meta-dot {
+  opacity: 0.4;
+}
+
+.wttj-feed-status {
+  font-size: 0.82rem;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
 /* Mobile Filter & Subnav Actions */
 .wttj-subnav-actions {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
+}
+
+#close-filter-sidebar {
+  display: none !important;
 }
 
 .wttj-sort-wrapper {
@@ -5273,6 +5310,16 @@ textarea:focus-visible,
     max-width: calc(100% - 24px);
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  #close-filter-sidebar {
+    display: inline-flex !important;
+    justify-content: center;
+    align-items: center;
+    margin-top: 14px;
+    min-height: 44px;
+    border-radius: 999px;
+    font-weight: 800;
   }
 
   /* Filter Sidebar becomes Bottom Sheet / Mobile Modal */
