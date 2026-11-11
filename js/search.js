@@ -556,6 +556,10 @@ function initSearchPage() {
 
   function syncControls() {
     sourceSelect.value = state.source;
+    const quickSourceSelect = document.getElementById("quick-source-select");
+    if (quickSourceSelect) {
+      quickSourceSelect.value = state.source;
+    }
     sortSelect.value = state.sort;
     const selected = Array.from(state.filters.platform || [])[0] || "all";
     if (platformSelect) {
@@ -740,10 +744,20 @@ function initSearchPage() {
 
   sourceSelect.addEventListener("change", () => {
     state.source = sourceSelect.value;
+    const quickSourceSelect = document.getElementById("quick-source-select");
+    if (quickSourceSelect) quickSourceSelect.value = state.source;
     Object.values(state.filters).forEach((set) => set.clear());
     trackEvent("source_change", { source: state.source });
     refreshJobs();
   });
+
+  const quickSourceSelect = document.getElementById("quick-source-select");
+  if (quickSourceSelect) {
+    quickSourceSelect.addEventListener("change", () => {
+      sourceSelect.value = quickSourceSelect.value;
+      sourceSelect.dispatchEvent(new Event("change"));
+    });
+  }
 
   if (platformSelect) {
     platformSelect.addEventListener("change", () => {
@@ -919,6 +933,11 @@ function initSearchPage() {
   closeFilterBtn?.addEventListener("click", closeMobileFilter);
   filterSidebar?.addEventListener("click", (e) => {
     if (e.target === filterSidebar) closeMobileFilter();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && filterSidebar?.classList.contains("is-open")) {
+      closeMobileFilter();
+    }
   });
 
   // WTTJ Mode Choice Pills (Remote, Hybrid, Onsite)
