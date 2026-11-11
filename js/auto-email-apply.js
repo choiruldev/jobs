@@ -34,13 +34,33 @@ export function inferRecruiterEmail(job = {}) {
   return `careers@${domain}.com`;
 }
 
-export function composeAutoApplicationEmail({ job = {}, language = "id", tone = "confident" } = {}) {
+export function composeAutoApplicationEmail({ job = {}, language = "id", tone = "confident", cvLink = "", attachedFileName = "" } = {}) {
   const user = getCurrentUser();
   const profile = readMatchProfile() || {};
-  const candidateName = profile.fullName || user?.name || "Kandidat Profesional";
-  const candidateEmail = user?.email || profile.email || "kandidat@email.com";
-  const candidatePhone = profile.phone || "+62 812-xxxx-xxxx";
-  const portfolioUrl = profile.portfolio || profile.linkedin || "https://jobsearch.id/pages/resume-builder.html";
+  let resumeData = {};
+  try {
+    if (typeof localStorage !== "undefined") {
+      const rawResume = localStorage.getItem("jsa_resume_builder_data_v1");
+      if (rawResume) resumeData = JSON.parse(rawResume);
+    }
+  } catch (_) {}
+
+  const candidateName = profile.fullName || resumeData.fullName || user?.name || "Kandidat Profesional";
+  const candidateEmail = user?.email || profile.email || resumeData.email || "kandidat@email.com";
+  const candidatePhone = profile.phone || resumeData.phone || "+62 812-xxxx-xxxx";
+
+  let savedCvLink = "";
+  let savedCvFile = "";
+  try {
+    if (typeof localStorage !== "undefined") {
+      savedCvLink = localStorage.getItem("jsa_candidate_cv_link_v1") || "";
+      const rawMeta = localStorage.getItem("jsa_candidate_cv_meta_v1");
+      if (rawMeta) savedCvFile = JSON.parse(rawMeta)?.name || "";
+    }
+  } catch (_) {}
+
+  const activeCvLink = cvLink || savedCvLink || profile.portfolio || resumeData.portfolio || profile.linkedin || resumeData.linkedin || "https://jobsearch.id/pages/resume-builder.html";
+  const activeFileName = attachedFileName || savedCvFile || "";
 
   const subject =
     language === "en"
@@ -59,17 +79,23 @@ export function composeAutoApplicationEmail({ job = {}, language = "id", tone = 
     tone
   });
 
+  const fileDocLine = activeFileName
+    ? (language === "en" ? `\n• Attached Resume File: ${activeFileName}` : `\n• Berkas Lampiran CV: ${activeFileName}`)
+    : "";
+
   const footer =
     language === "en"
-      ? `\n\n---\nCandidate Contact Info:\n• Name: ${candidateName}\n• Email: ${candidateEmail}\n• Phone/WhatsApp: ${candidatePhone}\n• ATS Resume / Portfolio: ${portfolioUrl}`
-      : `\n\n---\nKontak & Dokumen Pelamar:\n• Nama Lengkap: ${candidateName}\n• Email Resmi: ${candidateEmail}\n• WhatsApp/Telp: ${candidatePhone}\n• Tautan CV ATS / Portofolio: ${portfolioUrl}`;
+      ? `\n\n---\nCandidate Contact Info:\n• Name: ${candidateName}\n• Email: ${candidateEmail}\n• Phone/WhatsApp: ${candidatePhone}\n• CV Document / Portfolio Link: ${activeCvLink}${fileDocLine}`
+      : `\n\n---\nKontak & Dokumen Pelamar:\n• Nama Lengkap: ${candidateName}\n• Email Resmi: ${candidateEmail}\n• WhatsApp/Telp: ${candidatePhone}\n• Tautan CV ATS / Portofolio: ${activeCvLink}${fileDocLine}`;
 
   return {
     to: inferRecruiterEmail(job),
     fromName: candidateName,
     fromEmail: candidateEmail,
     subject,
-    body: `${coverLetter}${footer}`
+    body: `${coverLetter}${footer}`,
+    portfolioUrl: activeCvLink,
+    attachedFileName: activeFileName
   };
 }
 
@@ -83,7 +109,7 @@ export function getAutoEmailHistory() {
   }
 }
 
-function recordAutoEmailSent({ job, to, subject, method }) {
+function recordAutoEmailSent({ job, to, subject, method, attachmentName = "" }) {
   try {
     if (typeof localStorage === "undefined") return null;
     const history = getAutoEmailHistory();
@@ -96,12 +122,14 @@ function recordAutoEmailSent({ job, to, subject, method }) {
       to,
       subject,
       method,
+      attachmentName: attachmentName || null,
       sentAt: now,
       status: "Terkirim & Dicatat di Kanban"
     };
     history.unshift(entry);
     localStorage.setItem(AUTO_EMAIL_HISTORY_KEY, JSON.stringify(history.slice(0, 50)));
 
+    const docNote = attachmentName ? ` (Berkas: ${attachmentName})` : "";
     // Auto-record into Kanban Tracker ("Applied" status)
     const rawApps = localStorage.getItem("jsa_applications");
     const applications = rawApps ? JSON.parse(rawApps) : {};
@@ -110,12 +138,12 @@ function recordAutoEmailSent({ job, to, subject, method }) {
       status: "Applied",
       submittedAt: now,
       updatedAt: now,
-      notes: `⚡ Auto-Send Email Lamaran dikirim ke ${to} (${method})`,
+      notes: `⚡ Auto-Send Email Lamaran dikirim ke ${to} (${method})${docNote}`,
       history: [
         {
           date: now,
           status: "Applied",
-          label: `⚡ Auto-Send Email terkirim ke ${to}`
+          label: `⚡ Auto-Send Email terkirim ke ${to}${docNote}`
         },
         ...(applications[job.id]?.history || [])
       ]
@@ -127,7 +155,7 @@ function recordAutoEmailSent({ job, to, subject, method }) {
   }
 }
 
-export async function dispatchEmailViaWebhook({ to, fromName, fromEmail, subject, body, job }) {
+export async function dispatchEmailViaWebhook({ to, fromName, fromEmail, subject, body, job, attachment }) {
   const webhookUrl =
     typeof localStorage !== "undefined" ? localStorage.getItem(AUTO_EMAIL_WEBHOOK_KEY) || "" : "";
 
@@ -145,6 +173,7 @@ export async function dispatchEmailViaWebhook({ to, fromName, fromEmail, subject
           jobId: job?.id,
           company: job?.company,
           title: job?.title,
+          attachment: attachment || null,
           sentAt: new Date().toISOString()
         })
       });
@@ -170,7 +199,22 @@ export function openAutoEmailModal(job) {
 
 function renderAutoEmailComposerModal(job) {
   let lang = "id";
-  let draft = composeAutoApplicationEmail({ job, language: lang });
+  let savedCvMeta = null;
+  let savedCvLink = "";
+  try {
+    const raw = localStorage.getItem("jsa_candidate_cv_meta_v1");
+    if (raw) savedCvMeta = JSON.parse(raw);
+    savedCvLink = localStorage.getItem("jsa_candidate_cv_link_v1") || "";
+  } catch (_) {}
+
+  let attachedFileObj = savedCvMeta;
+  let attachedBase64 = null;
+  let draft = composeAutoApplicationEmail({
+    job,
+    language: lang,
+    cvLink: savedCvLink,
+    attachedFileName: attachedFileObj?.name || ""
+  });
   const quota = getQuotaStatus("auto_email_apply");
   const savedWebhook = localStorage.getItem(AUTO_EMAIL_WEBHOOK_KEY) || "";
 
@@ -211,6 +255,44 @@ function renderAutoEmailComposerModal(job) {
           <div>
             <label style="display:block;font-size:11.5px;font-weight:700;margin-bottom:4px;">Email Tujuan HRD / Rekruter</label>
             <input id="jsa-ae-to" type="email" value="${draft.to}" style="width:100%;padding:9px 11px;border-radius:10px;border:1px solid var(--md-sys-color-outline-variant);background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);font-size:12.5px;font-weight:600;box-sizing:border-box;">
+          </div>
+        </div>
+
+        <!-- Lampiran Berkas CV & Link Cloud -->
+        <div style="background:var(--md-sys-color-surface-container-low);border:1px solid var(--md-sys-color-outline-variant);border-radius:14px;padding:12px;margin-bottom:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+            <label style="font-size:12px;font-weight:800;display:flex;align-items:center;gap:6px;color:var(--md-sys-color-on-surface);margin:0;">
+              <span class="material-symbols-outlined" style="font-size:17px;color:var(--md-sys-color-primary);">attach_file</span>
+              Lampiran Berkas CV & Link Cloud (PDF / GDrive)
+            </label>
+            <span style="font-size:11px;color:var(--md-sys-color-outline);">Otomatis tertulis di isi email</span>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div>
+              <input type="file" id="jsa-ae-cv-file" accept=".pdf,.doc,.docx" style="display:none;">
+              <button type="button" id="jsa-ae-pick-file-btn" class="button button--tonal button--small" style="width:100%;justify-content:center;font-weight:700;padding:8px 10px;font-size:11.5px;min-height:36px;">
+                <span class="material-symbols-outlined" style="font-size:16px;">upload_file</span>
+                <span id="jsa-ae-file-label" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px;">
+                  ${savedCvMeta?.name ? `✓ ${savedCvMeta.name}` : "Pilih File CV (PDF/DOCX)"}
+                </span>
+              </button>
+              <div id="jsa-ae-file-info" style="font-size:10.5px;color:var(--md-sys-color-primary);margin-top:4px;font-weight:600;">
+                ${savedCvMeta?.name ? `✓ Tersimpan: ${savedCvMeta.name} (${Math.round((savedCvMeta.size || 0) / 1024)} KB)` : "Pilih file CV lokal dari HP/Laptop"}
+              </div>
+            </div>
+
+            <div>
+              <input id="jsa-ae-cv-link" type="url" value="${savedCvLink || draft.portfolioUrl || ""}" placeholder="Tautan Google Drive CV / Portofolio" style="width:100%;padding:8px 10px;border-radius:10px;border:1px solid var(--md-sys-color-outline-variant);background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);font-size:12px;box-sizing:border-box;">
+              <div style="font-size:10.5px;color:var(--md-sys-color-outline);margin-top:4px;">
+                Link publik Google Drive agar HRD bisa langsung baca
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:8px;padding:6px 10px;border-radius:8px;background:rgba(0,193,110,0.08);border:1px solid rgba(0,193,110,0.2);font-size:11px;color:var(--md-sys-color-on-surface);display:flex;align-items:center;gap:6px;">
+            <span class="material-symbols-outlined" style="font-size:15px;color:var(--md-sys-color-primary);flex-shrink:0;">info</span>
+            <span>Nama berkas & link CV otomatis masuk ke footer surat. Pada <strong>1-Klik Gmail</strong>, klik juga ikon klip 📎 di Gmail untuk menyertakan file fisik.</span>
           </div>
         </div>
 
@@ -262,15 +344,58 @@ function renderAutoEmailComposerModal(job) {
     if (e.target.id === "jsa-auto-email-backdrop") close();
   });
 
+  const fileInput = host.querySelector("#jsa-ae-cv-file");
+  const pickBtn = host.querySelector("#jsa-ae-pick-file-btn");
+  const fileLabel = host.querySelector("#jsa-ae-file-label");
+  const fileInfo = host.querySelector("#jsa-ae-file-info");
+  const linkInput = host.querySelector("#jsa-ae-cv-link");
+
+  const refreshDraftBody = () => {
+    const cvLinkVal = linkInput?.value.trim() || "";
+    const fileNameVal = attachedFileObj?.name || "";
+    draft = composeAutoApplicationEmail({
+      job,
+      language: lang,
+      cvLink: cvLinkVal,
+      attachedFileName: fileNameVal
+    });
+    const bodyEl = host.querySelector("#jsa-ae-body");
+    if (bodyEl) bodyEl.value = draft.body;
+  };
+
+  pickBtn?.addEventListener("click", () => fileInput?.click());
+
+  fileInput?.addEventListener("change", () => {
+    const file = fileInput.files?.[0];
+    if (file) {
+      attachedFileObj = { name: file.name, size: file.size, type: file.type };
+      localStorage.setItem("jsa_candidate_cv_meta_v1", JSON.stringify(attachedFileObj));
+      if (fileLabel) fileLabel.textContent = `✓ ${file.name}`;
+      if (fileInfo) fileInfo.textContent = `✓ File siap: ${file.name} (${Math.round(file.size / 1024)} KB)`;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        attachedBase64 = e.target.result;
+      };
+      reader.readAsDataURL(file);
+
+      refreshDraftBody();
+    }
+  });
+
+  linkInput?.addEventListener("input", () => {
+    localStorage.setItem("jsa_candidate_cv_link_v1", linkInput.value.trim());
+    refreshDraftBody();
+  });
+
   host.querySelectorAll("[data-ae-lang]").forEach((btn) => {
     btn.addEventListener("click", () => {
       lang = btn.getAttribute("data-ae-lang");
       host.querySelectorAll("[data-ae-lang]").forEach((b) => {
         b.className = `chip chip--small ${b.getAttribute("data-ae-lang") === lang ? "chip--active" : "chip--outline"}`;
       });
-      draft = composeAutoApplicationEmail({ job, language: lang });
+      refreshDraftBody();
       host.querySelector("#jsa-ae-subject").value = draft.subject;
-      host.querySelector("#jsa-ae-body").value = draft.body;
     });
   });
 
@@ -297,8 +422,18 @@ function renderAutoEmailComposerModal(job) {
       btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Mengirim Email Otomatis...`;
     }
 
-    const res = await dispatchEmailViaWebhook({ ...vals, job });
-    recordAutoEmailSent({ job, to: vals.to, subject: vals.subject, method: res.mode });
+    const attachmentPayload = attachedFileObj
+      ? { ...attachedFileObj, base64: attachedBase64 }
+      : null;
+
+    const res = await dispatchEmailViaWebhook({ ...vals, job, attachment: attachmentPayload });
+    recordAutoEmailSent({
+      job,
+      to: vals.to,
+      subject: vals.subject,
+      method: res.mode,
+      attachmentName: attachedFileObj?.name || ""
+    });
 
     if (statusBox) {
       statusBox.style.display = "block";
@@ -320,16 +455,32 @@ function renderAutoEmailComposerModal(job) {
 
   host.querySelector("#jsa-ae-gmail-btn")?.addEventListener("click", () => {
     const vals = getFormValues();
-    recordAutoEmailSent({ job, to: vals.to, subject: vals.subject, method: "Gmail 1-Klik" });
+    recordAutoEmailSent({
+      job,
+      to: vals.to,
+      subject: vals.subject,
+      method: "Gmail 1-Klik",
+      attachmentName: attachedFileObj?.name || ""
+    });
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(vals.to)}&su=${encodeURIComponent(vals.subject)}&body=${encodeURIComponent(vals.body)}`;
     window.open(gmailUrl, "_blank", "noopener,noreferrer");
     close();
-    showQuotaToast(`📧 Draf Gmail terbuka & lamaran ke ${job.company} dicatat di Kanban!`);
+    if (attachedFileObj?.name) {
+      showQuotaToast(`📧 Tab Gmail terbuka! Jangan lupa klik ikon klip 📎 di Gmail untuk melampirkan ${attachedFileObj.name}`);
+    } else {
+      showQuotaToast(`📧 Draf Gmail terbuka & lamaran ke ${job.company} dicatat di Kanban!`);
+    }
   });
 
   host.querySelector("#jsa-ae-mailto-btn")?.addEventListener("click", () => {
     const vals = getFormValues();
-    recordAutoEmailSent({ job, to: vals.to, subject: vals.subject, method: "Mail Client" });
+    recordAutoEmailSent({
+      job,
+      to: vals.to,
+      subject: vals.subject,
+      method: "Mail Client",
+      attachmentName: attachedFileObj?.name || ""
+    });
     const mailtoUrl = `mailto:${encodeURIComponent(vals.to)}?subject=${encodeURIComponent(vals.subject)}&body=${encodeURIComponent(vals.body)}`;
     window.location.href = mailtoUrl;
     close();
