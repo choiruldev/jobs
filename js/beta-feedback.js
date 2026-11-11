@@ -74,27 +74,9 @@ export function initBetaFeedbackWidget() {
   // 1. Create Floating Button
   const btn = document.createElement("button");
   btn.id = "beta-feedback-btn";
+  btn.className = "beta-feedback-floating-btn";
   btn.setAttribute("aria-label", "Beri masukan beta testing");
   btn.title = "Beri Masukan / Laporkan Bug Beta";
-  btn.style.cssText = `
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 998;
-    background: var(--md-sys-color-primary, #0284c7);
-    color: var(--md-sys-color-on-primary, #ffffff);
-    border: none;
-    border-radius: 28px;
-    padding: 10px 18px;
-    font-size: 13px;
-    font-weight: 700;
-    box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-  `;
 
   btn.innerHTML = `
     <span class="material-symbols-outlined" style="font-size: 18px;">bug_report</span>
