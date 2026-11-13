@@ -1122,12 +1122,25 @@
 
 @media (min-width: 960px) {
   .comparator-floating-bar {
-    bottom: 24px;
-    left: calc(50% + (var(--side-nav-width) / 2));
+    bottom: 28px;
+    left: 50%;
   }
 
   .app-layout.sidebar-collapsed ~ .comparator-floating-bar {
     left: 50%;
+  }
+}
+
+@media (max-width: 959px) {
+  .comparator-floating-bar {
+    left: auto;
+    right: 14px;
+    bottom: calc(var(--bottom-nav-height, 64px) + 64px) !important;
+    transform: none;
+  }
+
+  .comparator-floating-bar:hover {
+    transform: translateY(-2px);
   }
 }
 
@@ -5157,6 +5170,13 @@ textarea:focus-visible,
   font-weight: 800;
 }
 
+@media (max-width: 600px) {
+  .wttj-subnav-tab {
+    padding: 6px 12px;
+    font-size: 0.76rem;
+  }
+}
+
 [data-theme="dark"] .wttj-subnav-tab.is-active {
   background: #ca8a04 !important;
   color: #fff !important;
@@ -5459,9 +5479,9 @@ textarea:focus-visible,
   color: var(--md-sys-color-primary, #00c16e);
 }
 
-@media (max-width: 991px) {
+@media (max-width: 959px) {
   .top-nav-links {
-    display: none;
+    display: none !important;
   }
 
   .wttj-subnav-row {
@@ -5528,6 +5548,87 @@ textarea:focus-visible,
     border-radius: 999px;
     font-weight: 800;
   }
+}
+
+/* ==========================================================================
+   MOBILE BOTTOM SHEET FOR SEMUA FITUR
+   ========================================================================== */
+.mobile-features-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.mobile-features-sheet.is-open {
+  display: flex;
+}
+
+.mobile-features-sheet__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.mobile-features-sheet__panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 540px;
+  max-height: 85vh;
+  background: var(--md-sys-color-surface, #ffffff);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: sheetSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="dark"] .mobile-features-sheet__panel {
+  background: #0f172a;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@keyframes sheetSlideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.mobile-features-sheet__handle {
+  width: 40px;
+  height: 4px;
+  background: var(--md-sys-color-outline-variant, #cbd5e1);
+  border-radius: 999px;
+  margin: 10px auto 4px;
+}
+
+.mobile-features-sheet__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant, rgba(0, 0, 0, 0.08));
+}
+
+.mobile-features-sheet__body {
+  padding: 12px 14px 28px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-features-sheet__body .dropdown-item {
+  padding: 10px 14px;
+  font-size: 14px;
 }
 
 /* ==========================================================================
@@ -5669,9 +5770,13 @@ textarea:focus-visible,
   }
 }
 
-/* ==========================================================================
-   PREMIUM MOBILE BOTTOM NAVIGATION BAR
-   ========================================================================== */
+/* Desktop Viewport (>= 960px): Enforce ZERO_SIDEBAR & Never Display Bottom Nav */
+@media (min-width: 960px) {
+  .bottom-nav {
+    display: none !important;
+  }
+}
+
 .bottom-nav {
   background: #ffffff !important;
   border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
