@@ -2718,78 +2718,12 @@ mark {
 
 @media (min-width: 960px) {
   .top-app-bar {
-    left: var(--side-nav-width);
+    left: 0 !important;
     padding-inline: var(--space-8);
   }
 
-  /* On desktop when sidebar is open, hide duplicate hamburger and duplicate briefcase icon in top app bar */
-  .app-layout:not(.sidebar-collapsed) .top-app-bar .js-sidebar-toggle,
-  .app-layout:not(.sidebar-collapsed) .top-app-bar .logo-mark {
-    display: none !important;
-  }
-
-  /* When sidebar is collapsed on desktop, show toggle and brand mark in top app bar */
-  .app-layout.sidebar-collapsed .top-app-bar .js-sidebar-toggle {
-    display: inline-flex !important;
-  }
-
-  .app-layout.sidebar-collapsed .top-app-bar .logo-mark {
-    display: inline-grid !important;
-  }
-
-  .tracker-workspace__grid {
-    grid-template-columns: minmax(0, 1fr) minmax(320px, 360px);
-  }
-
-  .tracker-workspace--empty .tracker-workspace__grid {
-    grid-template-columns: minmax(0, 720px);
-  }
-
-  .manual-tracker-form.form-grid--two {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(220px, 0.7fr);
-  }
-
-  .manual-tracker-form .compact-field--full {
-    grid-column: 1 / -1;
-  }
-
-  .manual-tracker-form__actions {
-    grid-column: 1 / -1;
-  }
-
-  .tracker-list-panel {
-    position: sticky;
-    top: calc(var(--app-bar-height) + var(--space-4));
-  }
-
-  .tracker-list-scroll {
-    max-height: calc(100vh - var(--app-bar-height) - 190px);
-  }
-
   .side-nav {
-    position: fixed;
-    z-index: 25;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    width: var(--side-nav-width);
-    flex-direction: column;
-    gap: var(--space-4);
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    border-right: 1px solid var(--md-sys-color-outline-variant);
-    background: var(--md-sys-color-surface-container);
-    padding: var(--space-4);
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .app-layout.sidebar-collapsed .side-nav {
-    transform: translateX(-100%);
-  }
-
-  .app-layout.sidebar-collapsed .top-app-bar {
-    left: 0;
+    display: none !important;
   }
 
   .side-nav__links {
@@ -4665,11 +4599,14 @@ textarea:focus-visible,
   word-break: break-word;
 }
 
-/* 2. Sidebar-Open Layout Optimization on Desktop/Laptop Screens (960px - 1380px) */
+/* Desktop Viewport (>= 960px): Enforce ZERO_SIDEBAR Layout Contract */
 @media (min-width: 960px) {
+  .app-layout .page,
   .app-layout:not(.sidebar-collapsed) .page {
-    padding-left: calc(var(--side-nav-width) + clamp(16px, 2.2vw, 32px));
-    padding-right: clamp(16px, 2.2vw, 32px);
+    padding-left: var(--space-8) !important;
+    padding-right: var(--space-8) !important;
+    margin: 0 auto !important;
+    max-width: 1240px !important;
   }
 }
 
