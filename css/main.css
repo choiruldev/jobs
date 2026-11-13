@@ -401,9 +401,9 @@ p {
     gap: var(--space-4);
   }
 
-  /* Welcome to the Jungle 2-column search: main content job cards are clean full-width cards */
+  /* Search page job cards feed: 2 clean proportional columns on desktop */
   .search-main-content .job-grid {
-    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 16px;
   }
 }

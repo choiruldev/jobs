@@ -22,7 +22,7 @@
   - **Universal Filter Modal / Dialog (`#search-filter-sidebar`)**:
     - Advanced filters (official portals, category specializations, salary range, reset/apply buttons) live in a clean centered pop-up dialog on desktop and bottom sheet on mobile.
     - Triggered on demand via `[tune] Filter Lengkap`.
-  - **Job Cards Feed (`#job-grid`)**: Single full-width centered stream of spacious, readable job cards.
+  - **Job Cards Feed (`#job-grid`)**: 2-column grid of spacious, readable job cards on desktop (>=600px), 1-column on mobile (<600px).
 
 ### B. Mobile Viewport (< 960px)
 - **Full Width Content**: All job cards, tools, and forms span 100% width with zero horizontal clipping or page overflow.
