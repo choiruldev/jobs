@@ -42,7 +42,7 @@ export function initUniversalTopNav() {
 
   let linksHtml = items
     .map((item) => {
-      const active = pathname.endsWith(item.match);
+      const active = pathname.endsWith(item.match) || (item.match.endsWith(".html") && pathname.endsWith("/" + item.match.replace(".html", "")));
       return `<a class="top-nav-link ${active ? "is-active" : ""}" href="${item.href}">${item.label}</a>`;
     })
     .join("");
@@ -55,6 +55,7 @@ export function initUniversalTopNav() {
       </button>
       <div class="top-nav-dropdown__menu">
         <div class="dropdown-group-label">FITUR KARIR</div>
+        <a href="${base}bookmarks.html" class="dropdown-item"><span class="material-symbols-outlined">bookmark</span> Lowongan Tersimpan</a>
         <a href="${base}interview-prep.html" class="dropdown-item"><span class="material-symbols-outlined">record_voice_over</span> Latihan Interview</a>
         <a href="${base}code-sandbox.html" class="dropdown-item"><span class="material-symbols-outlined">terminal</span> Coding Sandbox</a>
         <a href="${base}salary-submit.html" class="dropdown-item"><span class="material-symbols-outlined">volunteer_activism</span> Gaji Komunitas</a>
@@ -103,6 +104,7 @@ export function initMobileFeaturesBottomSheet() {
         </div>
         <div class="mobile-features-sheet__body">
           <div class="dropdown-group-label" style="padding:4px 8px 2px;">FITUR KARIR</div>
+          <a href="${base}bookmarks.html" class="dropdown-item"><span class="material-symbols-outlined">bookmark</span> Lowongan Tersimpan</a>
           <a href="${base}companies.html" class="dropdown-item"><span class="material-symbols-outlined">apartment</span> Perusahaan Remote</a>
           <a href="${base}interview-prep.html" class="dropdown-item"><span class="material-symbols-outlined">record_voice_over</span> Latihan Interview</a>
           <a href="${base}code-sandbox.html" class="dropdown-item"><span class="material-symbols-outlined">terminal</span> Coding Sandbox</a>
