@@ -287,7 +287,7 @@
   <script type="module">
     import { readResumeData, writeResumeData, renderLivePreview } from "../js/resume-builder.js?v=20261106a";
     import { parseResumeText } from "../js/resume-parser.js?v=20261106a";
-    import { showSnackbar } from "../js/bookmark.js?v=20261106a";
+    import { showSnackbar, escapeHtml } from "../js/bookmark.js?v=20261106a";
 
     document.addEventListener("DOMContentLoaded", () => {
       let resume = readResumeData();
@@ -383,11 +383,11 @@
               </button>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-              <input class="field__input exp-role" type="text" placeholder="Posisi / Jabatan" value="${exp.role || ""}">
-              <input class="field__input exp-company" type="text" placeholder="Nama Perusahaan" value="${exp.company || ""}">
+              <input class="field__input exp-role" type="text" placeholder="Posisi / Jabatan" value="${escapeHtml(exp.role || "")}">
+              <input class="field__input exp-company" type="text" placeholder="Nama Perusahaan" value="${escapeHtml(exp.company || "")}">
             </div>
-            <input class="field__input exp-period" type="text" placeholder="Periode (cth: 2022 - Sekarang)" value="${exp.period || ""}">
-            <textarea class="field__input exp-bullets" rows="3" placeholder="Poin tanggung jawab & pencapaian (pisahkan per baris)">${exp.bullets || ""}</textarea>
+            <input class="field__input exp-period" type="text" placeholder="Periode (cth: 2022 - Sekarang)" value="${escapeHtml(exp.period || "")}">
+            <textarea class="field__input exp-bullets" rows="3" placeholder="Poin tanggung jawab & pencapaian (pisahkan per baris)">${escapeHtml(exp.bullets || "")}</textarea>
           </div>
         `).join("");
 
@@ -428,10 +428,10 @@
               </button>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-              <input class="field__input edu-degree" type="text" placeholder="Gelar / Jurusan" value="${edu.degree || ""}">
-              <input class="field__input edu-school" type="text" placeholder="Universitas / Kampus" value="${edu.school || ""}">
+              <input class="field__input edu-degree" type="text" placeholder="Gelar / Jurusan" value="${escapeHtml(edu.degree || "")}">
+              <input class="field__input edu-school" type="text" placeholder="Universitas / Kampus" value="${escapeHtml(edu.school || "")}">
             </div>
-            <input class="field__input edu-period" type="text" placeholder="Tahun (cth: 2018 - 2022)" value="${edu.period || ""}">
+            <input class="field__input edu-period" type="text" placeholder="Tahun (cth: 2018 - 2022)" value="${escapeHtml(edu.period || "")}">
           </div>
         `).join("");
 

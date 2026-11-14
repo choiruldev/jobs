@@ -6,7 +6,8 @@
  * - Integrates with Hybrid Login & Freemium Quota Gate (Free: 2 Auto-Emails/day, PRO VIP: Unlimited & Batch Apply).
  */
 
-import { getCurrentUser, isProUser, getQuotaStatus, requireQuotaOrPrompt, openProUpgradeModal, showQuotaToast } from "./auth-quota.js?v=20261110a";
+import { getCurrentUser, isProUser, getQuotaStatus, checkQuotaOrPrompt, requireQuotaOrPrompt, openProUpgradeModal, showQuotaToast } from "./auth-quota.js?v=20261110a";
+import { escapeHtml } from "./bookmark.js?v=20261106a";
 import { readMatchProfile } from "./profile.js?v=20261106a";
 import { generateCoverLetter } from "./ai-writer.js?v=20261106a";
 import { getJobById, getAllKnownJobs } from "./data.js?v=20261106a";
@@ -163,7 +164,11 @@ export async function dispatchEmailViaWebhook({ to, fromName, fromEmail, subject
   const webhookUrl =
     typeof localStorage !== "undefined" ? localStorage.getItem(AUTO_EMAIL_WEBHOOK_KEY) || "" : "";
 
-  if (webhookUrl && /^https?:\/\//i.test(webhookUrl)) {
+  let isHttpsWebhook = false;
+  try {
+    isHttpsWebhook = Boolean(webhookUrl && new URL(webhookUrl).protocol === "https:");
+  } catch {}
+  if (isHttpsWebhook) {
     try {
       const res = await fetch(webhookUrl, {
         method: "POST",
@@ -195,8 +200,8 @@ export async function dispatchEmailViaWebhook({ to, fromName, fromEmail, subject
 export function openAutoEmailModal(job) {
   if (typeof document === "undefined" || !job) return;
 
-  // Enforce Hybrid Login & Freemium Quota first
-  requireQuotaOrPrompt("auto_email_apply", () => {
+  // Enforce Hybrid Login & Freemium Quota check (deduct upon send)
+  checkQuotaOrPrompt("auto_email_apply", () => {
     renderAutoEmailComposerModal(job);
   });
 }
@@ -246,7 +251,7 @@ function renderAutoEmailComposerModal(job) {
           </span>
         </div>
 
-        <h2 style="margin:0 0 4px;font-size:19px;font-weight:800;">${job.title} — ${job.company}</h2>
+        <h2 style="margin:0 0 4px;font-size:19px;font-weight:800;">${escapeHtml(job.title)} — ${escapeHtml(job.company)}</h2>
         <p style="margin:0 0 14px;font-size:12.5px;color:var(--md-sys-color-outline);">
           AI telah menyusun Subjek, Surat Lamaran, dan Ringkasan CV ATS Anda. Begitu dikirim, lamaran otomatis masuk ke papan Kanban <strong>"Applied"</strong>.
         </p>
@@ -254,11 +259,11 @@ function renderAutoEmailComposerModal(job) {
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
           <div>
             <label style="display:block;font-size:11.5px;font-weight:700;margin-bottom:4px;">Pengirim (Reply-To Anda)</label>
-            <input id="jsa-ae-from" type="email" value="${draft.fromEmail}" readonly style="width:100%;padding:9px 11px;border-radius:10px;border:1px solid var(--md-sys-color-outline-variant);background:var(--md-sys-color-surface-container-low);color:var(--md-sys-color-on-surface);font-size:12.5px;box-sizing:border-box;">
+            <input id="jsa-ae-from" type="email" value="${escapeHtml(draft.fromEmail)}" readonly style="width:100%;padding:9px 11px;border-radius:10px;border:1px solid var(--md-sys-color-outline-variant);background:var(--md-sys-color-surface-container-low);color:var(--md-sys-color-on-surface);font-size:12.5px;box-sizing:border-box;">
           </div>
           <div>
             <label style="display:block;font-size:11.5px;font-weight:700;margin-bottom:4px;">Email Tujuan HRD / Rekruter</label>
-            <input id="jsa-ae-to" type="email" value="${draft.to}" style="width:100%;padding:9px 11px;border-radius:10px;border:1px solid var(--md-sys-color-outline-variant);background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);font-size:12.5px;font-weight:600;box-sizing:border-box;">
+            <input id="jsa-ae-to" type="email" value="${escapeHtml(draft.to)}" style="width:100%;padding:9px 11px;border-radius:10px;border:1px solid var(--md-sys-color-outline-variant);background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);font-size:12.5px;font-weight:600;box-sizing:border-box;">
           </div>
         </div>
 
@@ -278,16 +283,16 @@ function renderAutoEmailComposerModal(job) {
               <button type="button" id="jsa-ae-pick-file-btn" class="button button--tonal button--small" style="width:100%;justify-content:center;font-weight:700;padding:8px 10px;font-size:11.5px;min-height:36px;">
                 <span class="material-symbols-outlined" style="font-size:16px;">upload_file</span>
                 <span id="jsa-ae-file-label" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px;">
-                  ${savedCvMeta?.name ? `✓ ${savedCvMeta.name}` : "Pilih File CV (PDF/DOCX)"}
+                  ${savedCvMeta?.name ? `✓ ${escapeHtml(savedCvMeta.name)}` : "Pilih File CV (PDF/DOCX)"}
                 </span>
               </button>
               <div id="jsa-ae-file-info" style="font-size:10.5px;color:var(--md-sys-color-primary);margin-top:4px;font-weight:600;">
-                ${savedCvMeta?.name ? `✓ Tersimpan: ${savedCvMeta.name} (${Math.round((savedCvMeta.size || 0) / 1024)} KB)` : "Pilih file CV lokal dari HP/Laptop"}
+                ${savedCvMeta?.name ? `✓ Tersimpan: ${escapeHtml(savedCvMeta.name)} (${Math.round((savedCvMeta.size || 0) / 1024)} KB)` : "Pilih file CV lokal dari HP/Laptop"}
               </div>
             </div>
 
             <div>
-              <input id="jsa-ae-cv-link" type="url" value="${savedCvLink || draft.portfolioUrl || ""}" placeholder="Tautan Google Drive CV / Portofolio" style="width:100%;padding:8px 10px;border-radius:10px;border:1px solid var(--md-sys-color-outline-variant);background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);font-size:12px;box-sizing:border-box;">
+              <input id="jsa-ae-cv-link" type="url" value="${escapeHtml(savedCvLink || draft.portfolioUrl || "")}" placeholder="Tautan Google Drive CV / Portofolio" style="width:100%;padding:8px 10px;border-radius:10px;border:1px solid var(--md-sys-color-outline-variant);background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);font-size:12px;box-sizing:border-box;">
               <div style="font-size:10.5px;color:var(--md-sys-color-outline);margin-top:4px;">
                 Link publik Google Drive agar HRD bisa langsung baca
               </div>
@@ -307,15 +312,15 @@ function renderAutoEmailComposerModal(job) {
             <button type="button" class="chip chip--small chip--outline" data-ae-lang="en">🇬🇧 English</button>
           </div>
         </div>
-        <input id="jsa-ae-subject" type="text" value="${draft.subject}" style="width:100%;padding:9px 11px;border-radius:10px;border:1px solid var(--md-sys-color-outline-variant);background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);font-size:13px;font-weight:700;margin-bottom:10px;box-sizing:border-box;">
+        <input id="jsa-ae-subject" type="text" value="${escapeHtml(draft.subject)}" style="width:100%;padding:9px 11px;border-radius:10px;border:1px solid var(--md-sys-color-outline-variant);background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);font-size:13px;font-weight:700;margin-bottom:10px;box-sizing:border-box;">
 
         <label style="display:block;font-size:11.5px;font-weight:700;margin-bottom:4px;">Isi Email (Cover Letter AI + Kontak & Tautan CV ATS)</label>
-        <textarea id="jsa-ae-body" rows="8" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--md-sys-color-outline-variant);background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);font-size:12.5px;line-height:1.5;resize:vertical;box-sizing:border-box;">${draft.body}</textarea>
+        <textarea id="jsa-ae-body" rows="8" style="width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--md-sys-color-outline-variant);background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);font-size:12.5px;line-height:1.5;resize:vertical;box-sizing:border-box;">${escapeHtml(draft.body)}</textarea>
 
         <details style="margin-top:10px;font-size:12px;color:var(--md-sys-color-outline);">
           <summary style="cursor:pointer;font-weight:700;">⚙️ Konfigurasi Direct Auto-Send Webhook (Google Apps Script / EmailJS Opsional)</summary>
           <div style="margin-top:8px;display:flex;gap:8px;">
-            <input id="jsa-ae-webhook" type="url" value="${savedWebhook}" placeholder="https://script.google.com/macros/s/.../exec" style="flex:1;padding:8px 10px;border-radius:8px;border:1px solid var(--md-sys-color-outline-variant);font-size:12px;">
+            <input id="jsa-ae-webhook" type="url" value="${escapeHtml(savedWebhook)}" placeholder="https://script.google.com/macros/s/.../exec" style="flex:1;padding:8px 10px;border-radius:8px;border:1px solid var(--md-sys-color-outline-variant);font-size:12px;">
             <button type="button" id="jsa-ae-save-webhook" class="button button--tonal button--small">Simpan URL</button>
           </div>
         </details>
@@ -405,6 +410,18 @@ function renderAutoEmailComposerModal(job) {
 
   host.querySelector("#jsa-ae-save-webhook")?.addEventListener("click", () => {
     const val = host.querySelector("#jsa-ae-webhook")?.value.trim() || "";
+    if (val) {
+      try {
+        const parsed = new URL(val);
+        if (parsed.protocol !== "https:") {
+          showQuotaToast("❌ URL Webhook harus menggunakan protokol HTTPS.");
+          return;
+        }
+      } catch {
+        showQuotaToast("❌ Format URL Webhook tidak valid.");
+        return;
+      }
+    }
     localStorage.setItem(AUTO_EMAIL_WEBHOOK_KEY, val);
     showQuotaToast("✓ URL Webhook Auto-Send berhasil disimpan!");
   });
@@ -417,77 +434,83 @@ function renderAutoEmailComposerModal(job) {
     body: host.querySelector("#jsa-ae-body")?.value || draft.body
   });
 
-  host.querySelector("#jsa-ae-send-direct-btn")?.addEventListener("click", async () => {
-    const vals = getFormValues();
-    const statusBox = host.querySelector("#jsa-ae-status-msg");
-    const btn = host.querySelector("#jsa-ae-send-direct-btn");
-    if (btn) {
-      btn.disabled = true;
-      btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Mengirim Email Otomatis...`;
-    }
+  host.querySelector("#jsa-ae-send-direct-btn")?.addEventListener("click", () => {
+    requireQuotaOrPrompt("auto_email_apply", async () => {
+      const vals = getFormValues();
+      const statusBox = host.querySelector("#jsa-ae-status-msg");
+      const btn = host.querySelector("#jsa-ae-send-direct-btn");
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span class="material-symbols-outlined">sync</span> Mengirim Email Otomatis...`;
+      }
 
-    const attachmentPayload = attachedFileObj
-      ? { ...attachedFileObj, base64: attachedBase64 }
-      : null;
+      const attachmentPayload = attachedFileObj
+        ? { ...attachedFileObj, base64: attachedBase64 }
+        : null;
 
-    const res = await dispatchEmailViaWebhook({ ...vals, job, attachment: attachmentPayload });
-    recordAutoEmailSent({
-      job,
-      to: vals.to,
-      subject: vals.subject,
-      method: res.mode,
-      attachmentName: attachedFileObj?.name || ""
+      const res = await dispatchEmailViaWebhook({ ...vals, job, attachment: attachmentPayload });
+      recordAutoEmailSent({
+        job,
+        to: vals.to,
+        subject: vals.subject,
+        method: res.mode,
+        attachmentName: attachedFileObj?.name || ""
+      });
+
+      if (statusBox) {
+        statusBox.style.display = "block";
+        statusBox.style.background = "rgba(16,185,129,0.15)";
+        statusBox.style.color = "var(--md-sys-color-primary)";
+        statusBox.textContent = `✅ Email lamaran ke ${vals.to} berhasil diproses (${res.mode}) & otomatis masuk ke Kanban kolom "Applied"!`;
+      }
+
+      if (btn) {
+        btn.innerHTML = `<span class="material-symbols-outlined">check_circle</span> Terkirim & Tercatat!`;
+      }
+
+      window.dispatchEvent(new CustomEvent("jsa:auto-email-sent", { detail: { job, to: vals.to } }));
+      setTimeout(() => {
+        close();
+        showQuotaToast(`🚀 Auto-Send Email ke ${job.company} sukses & dicatat di Kanban!`);
+      }, 1300);
     });
-
-    if (statusBox) {
-      statusBox.style.display = "block";
-      statusBox.style.background = "rgba(16,185,129,0.15)";
-      statusBox.style.color = "var(--md-sys-color-primary)";
-      statusBox.textContent = `✅ Email lamaran ke ${vals.to} berhasil diproses (${res.mode}) & otomatis masuk ke Kanban kolom "Applied"!`;
-    }
-
-    if (btn) {
-      btn.innerHTML = `<span class="material-symbols-outlined">check_circle</span> Terkirim & Tercatat!`;
-    }
-
-    window.dispatchEvent(new CustomEvent("jsa:auto-email-sent", { detail: { job, to: vals.to } }));
-    setTimeout(() => {
-      close();
-      showQuotaToast(`🚀 Auto-Send Email ke ${job.company} sukses & dicatat di Kanban!`);
-    }, 1300);
   });
 
   host.querySelector("#jsa-ae-gmail-btn")?.addEventListener("click", () => {
-    const vals = getFormValues();
-    recordAutoEmailSent({
-      job,
-      to: vals.to,
-      subject: vals.subject,
-      method: "Gmail 1-Klik",
-      attachmentName: attachedFileObj?.name || ""
+    requireQuotaOrPrompt("auto_email_apply", () => {
+      const vals = getFormValues();
+      recordAutoEmailSent({
+        job,
+        to: vals.to,
+        subject: vals.subject,
+        method: "Gmail 1-Klik",
+        attachmentName: attachedFileObj?.name || ""
+      });
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(vals.to)}&su=${encodeURIComponent(vals.subject)}&body=${encodeURIComponent(vals.body)}`;
+      window.open(gmailUrl, "_blank", "noopener,noreferrer");
+      close();
+      if (attachedFileObj?.name) {
+        showQuotaToast(`📧 Tab Gmail terbuka! Jangan lupa klik ikon klip 📎 di Gmail untuk melampirkan ${attachedFileObj.name}`);
+      } else {
+        showQuotaToast(`📧 Draf Gmail terbuka & lamaran ke ${job.company} dicatat di Kanban!`);
+      }
     });
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(vals.to)}&su=${encodeURIComponent(vals.subject)}&body=${encodeURIComponent(vals.body)}`;
-    window.open(gmailUrl, "_blank", "noopener,noreferrer");
-    close();
-    if (attachedFileObj?.name) {
-      showQuotaToast(`📧 Tab Gmail terbuka! Jangan lupa klik ikon klip 📎 di Gmail untuk melampirkan ${attachedFileObj.name}`);
-    } else {
-      showQuotaToast(`📧 Draf Gmail terbuka & lamaran ke ${job.company} dicatat di Kanban!`);
-    }
   });
 
   host.querySelector("#jsa-ae-mailto-btn")?.addEventListener("click", () => {
-    const vals = getFormValues();
-    recordAutoEmailSent({
-      job,
-      to: vals.to,
-      subject: vals.subject,
-      method: "Mail Client",
-      attachmentName: attachedFileObj?.name || ""
+    requireQuotaOrPrompt("auto_email_apply", () => {
+      const vals = getFormValues();
+      recordAutoEmailSent({
+        job,
+        to: vals.to,
+        subject: vals.subject,
+        method: "Mail Client",
+        attachmentName: attachedFileObj?.name || ""
+      });
+      const mailtoUrl = `mailto:${encodeURIComponent(vals.to)}?subject=${encodeURIComponent(vals.subject)}&body=${encodeURIComponent(vals.body)}`;
+      window.location.href = mailtoUrl;
+      close();
     });
-    const mailtoUrl = `mailto:${encodeURIComponent(vals.to)}?subject=${encodeURIComponent(vals.subject)}&body=${encodeURIComponent(vals.body)}`;
-    window.location.href = mailtoUrl;
-    close();
   });
 }
 
@@ -607,11 +630,11 @@ export function openBatchAutoEmailModal() {
           ${allJobs.slice(0, 3).map((j) => `
             <div style="border:1px solid var(--md-sys-color-outline-variant);border-radius:12px;padding:12px;background:var(--md-sys-color-surface-container-low);display:flex;flex-direction:column;justify-content:space-between;gap:10px;min-width:0;overflow-wrap:anywhere;">
               <div style="min-width:0;">
-                <div style="font-size:11px;font-weight:700;color:var(--md-sys-color-outline);">${j.company} · ${j.location}</div>
-                <div style="font-size:13.5px;font-weight:800;margin-top:2px;">${j.title}</div>
-                <div style="font-size:11.5px;color:var(--md-sys-color-primary);margin-top:4px;overflow-wrap:anywhere;word-break:break-word;">Tujuan: ${inferRecruiterEmail(j)}</div>
+                <div style="font-size:11px;font-weight:700;color:var(--md-sys-color-outline);">${escapeHtml(j.company)} · ${escapeHtml(j.location)}</div>
+                <div style="font-size:13.5px;font-weight:800;margin-top:2px;">${escapeHtml(j.title)}</div>
+                <div style="font-size:11.5px;color:var(--md-sys-color-primary);margin-top:4px;overflow-wrap:anywhere;word-break:break-word;">Tujuan: ${escapeHtml(inferRecruiterEmail(j))}</div>
               </div>
-              <button type="button" class="button button--tonal button--small js-trigger-auto-email" data-job-id="${j.id}" style="width:100%;justify-content:center;font-weight:800;">
+              <button type="button" class="button button--tonal button--small js-trigger-auto-email" data-job-id="${escapeHtml(j.id)}" style="width:100%;justify-content:center;font-weight:800;">
                 <span class="material-symbols-outlined" style="font-size:16px;">forward_to_inbox</span>
                 Auto-Send Email Lamaran
               </button>
@@ -625,8 +648,8 @@ export function openBatchAutoEmailModal() {
             <div style="display:grid;gap:6px;font-size:12px;">
               ${history.slice(0, 3).map((h) => `
                 <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:6px 10px;border-radius:8px;background:var(--md-sys-color-surface-container-low);min-width:0;">
-                  <span style="min-width:0;overflow-wrap:anywhere;"><strong>${h.jobTitle}</strong> (${h.company}) → <code>${h.to}</code></span>
-                  <span style="color:var(--md-sys-color-primary);font-weight:700;white-space:nowrap;">✓ ${h.method}</span>
+                  <span style="min-width:0;overflow-wrap:anywhere;"><strong>${escapeHtml(h.jobTitle)}</strong> (${escapeHtml(h.company)}) → <code>${escapeHtml(h.to)}</code></span>
+                  <span style="color:var(--md-sys-color-primary);font-weight:700;white-space:nowrap;">✓ ${escapeHtml(h.method)}</span>
                 </div>
               `).join("")}
             </div>
@@ -751,11 +774,11 @@ function injectDailyEmailAlertSubscriptionCard() {
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
         <div class="field">
           <label class="field__label" style="font-weight:600;">Email Penerima Notifikasi</label>
-          <input class="field__input" type="email" id="jsa-sub-email" required value="${savedSub?.email || user?.email || ""}" placeholder="nama@gmail.com" style="font-size:13px;">
+          <input class="field__input" type="email" id="jsa-sub-email" required value="${escapeHtml(savedSub?.email || user?.email || "")}" placeholder="nama@gmail.com" style="font-size:13px;">
         </div>
         <div class="field">
           <label class="field__label" style="font-weight:600;">Kata Kunci Posisi & Min. Gaji</label>
-          <input class="field__input" type="text" id="jsa-sub-keyword" value="${savedSub?.keyword || "Remote Engineer >= 19 Juta"}" placeholder="Frontend, Data, min 19jt" style="font-size:13px;">
+          <input class="field__input" type="text" id="jsa-sub-keyword" value="${escapeHtml(savedSub?.keyword || "Remote Engineer >= 19 Juta")}" placeholder="Frontend, Data, min 19jt" style="font-size:13px;">
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
@@ -764,7 +787,7 @@ function injectDailyEmailAlertSubscriptionCard() {
           Aktifkan Auto-Email Loker Harian
         </button>
         <span id="jsa-sub-status" style="font-size:12px;font-weight:700;color:var(--md-sys-color-primary);">
-          ${savedSub?.active ? `✓ Aktif mengirim ke ${savedSub.email}` : ""}
+          ${savedSub?.active ? `✓ Aktif mengirim ke ${escapeHtml(savedSub.email)}` : ""}
         </span>
       </div>
     </form>

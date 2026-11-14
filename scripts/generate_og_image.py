@@ -7,10 +7,13 @@ Uses macOS native qlmanage and sips.
 import os
 import subprocess
 import shutil
+import tempfile
+import atexit
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ASSETS_DIR = os.path.join(BASE_DIR, "assets")
-TMP_DIR = "/tmp/jobsearch_og"
+TMP_DIR = tempfile.mkdtemp(prefix="jobsearch_og_")
+atexit.register(shutil.rmtree, TMP_DIR, ignore_errors=True)
 
 os.makedirs(ASSETS_DIR, exist_ok=True)
 os.makedirs(TMP_DIR, exist_ok=True)

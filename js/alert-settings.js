@@ -35,8 +35,19 @@ export function writeAlertConfig(config) {
 }
 
 export async function sendTestDiscordNotification(webhookUrl) {
-  if (!webhookUrl || !webhookUrl.startsWith("http")) {
+  let parsedWebhook;
+  try {
+    parsedWebhook = new URL(String(webhookUrl || "").trim());
+  } catch {
     throw new Error("URL Discord Webhook tidak valid.");
+  }
+  const allowedHosts = new Set(["discord.com", "discordapp.com", "ptb.discord.com", "canary.discord.com"]);
+  if (
+    parsedWebhook.protocol !== "https:" ||
+    !allowedHosts.has(parsedWebhook.hostname) ||
+    !parsedWebhook.pathname.startsWith("/api/webhooks/")
+  ) {
+    throw new Error("URL Discord Webhook harus menggunakan HTTPS dari domain resmi Discord (/api/webhooks/...).");
   }
 
   const payload = {

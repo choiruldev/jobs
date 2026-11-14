@@ -13,8 +13,12 @@ import { extractKeywords, analyzeAtsMatch } from "../js/ats-checker.js";
 import { estimateTakeHomePay, calculateProgressiveTax } from "../js/salary-calculator.js";
 import { generateCoverLetter } from "../js/ai-writer.js";
 import { generateBookmarkletCode } from "../js/autofill-bookmarklet.js";
-import { getQuotaStatus, verifyAndActivateProCode, APP_EDITION } from "../js/auth-quota.js";
+import { getQuotaStatus, loginWithHybridAccount, logoutHybridAccount, verifyAndActivateProCode, APP_EDITION } from "../js/auth-quota.js";
 import { inferRecruiterEmail, composeAutoApplicationEmail } from "../js/auto-email-apply.js";
+import { escapeHtml, sanitizeUrl } from "../js/bookmark.js";
+import { escapeCSV } from "../js/backup-sync.js";
+import { escapeIcsText } from "../js/apply-reminders.js";
+import { validateSupabaseOrigin } from "../js/supabase-client.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -110,5 +114,50 @@ const autoDraft = composeAutoApplicationEmail({
 assert.ok(autoDraft.subject.includes("Senior Backend Engineer"));
 assert.ok(autoDraft.body.includes("Fintech Nusantara"));
 console.log("  ✓ Hybrid Auth Quota & Auto-Send Email Composer berfungsi akurat.");
+
+// 8. Security Regression Checks (XSS, URL, CSV Formula, ICS CRLF, Auth/Logout Isolation)
+console.log("[8/8] Menguji Pertahanan Keamanan (XSS, URL, CSV, ICS, Auth Isolation)...");
+assert.strictEqual(sanitizeUrl("//evil.example/phish"), "#");
+assert.strictEqual(sanitizeUrl("javascript:alert(1)"), "#");
+assert.strictEqual(sanitizeUrl("https://ok.example/apply?a=1&b='x'"), "https://ok.example/apply?a=1&b=%27x%27");
+assert.ok(escapeHtml(`<img src=x onerror="alert(1)">`).includes("&lt;img"));
+assert.strictEqual(escapeCSV("=CMD|'/C calc'!A0"), `"'=CMD|'/C calc'!A0"`);
+assert.strictEqual(escapeCSV(" +1+1"), `"' +1+1"`);
+assert.strictEqual(escapeCSV("\t@SUM(1,2)"), `"'\t@SUM(1,2)"`);
+const escapedIcs = escapeIcsText("Meet\r\nBEGIN:VALARM\nTRIGGER:-PT0M;x,y\\z");
+assert.ok(!/[\r\n]/.test(escapedIcs), "ICS text must not contain raw CR/LF line breaks");
+assert.ok(escapedIcs.includes("\\;") && escapedIcs.includes("\\,") && escapedIcs.includes("\\\\"));
+assert.strictEqual(validateSupabaseOrigin("https://abc.supabase.co/rest/v1"), "https://abc.supabase.co");
+assert.strictEqual(validateSupabaseOrigin("https://evil.example.com"), "");
+
+const hadStorage = "localStorage" in globalThis;
+const prevStorage = globalThis.localStorage;
+const store = new Map();
+globalThis.localStorage = {
+  getItem: (k) => (store.has(k) ? store.get(k) : null),
+  setItem: (k, v) => { store.set(k, String(v)); },
+  removeItem: (k) => { store.delete(k); },
+  clear: () => { store.clear(); }
+};
+try {
+  loginWithHybridAccount({ email: "user.one@example.com", name: "User One" });
+  store.set("jsa_candidate_cv_link_v1", "https://drive.google.com/user-one");
+  logoutHybridAccount();
+  assert.strictEqual(store.get("jsa_match_profile_v1"), undefined);
+  assert.strictEqual(store.get("jsa_candidate_cv_link_v1"), undefined);
+
+  loginWithHybridAccount({ email: "user.two@example.com", name: "User Two" });
+  const profTwo = JSON.parse(store.get("jsa_match_profile_v1") || "{}");
+  assert.strictEqual(profTwo.email, "user.two@example.com");
+  assert.strictEqual(verifyAndActivateProCode("JSA-VIP-BYPASS-999").success, false);
+  assert.strictEqual(verifyAndActivateProCode("PRO-19JT-VIP").success, false);
+} finally {
+  if (hadStorage) {
+    globalThis.localStorage = prevStorage;
+  } else {
+    delete globalThis.localStorage;
+  }
+}
+console.log("  ✓ Seluruh regresi keamanan (XSS/URL/CSV/ICS/Auth Cleanup/PRO Bypass) lulus.");
 
 console.log("\n🎉 SEMUA PENGUJIAN LULUS DENGAN SUKSES (100% Passed)!");

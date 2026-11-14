@@ -1657,7 +1657,7 @@ function renderExternalApply(root, job) {
         </div>
 
         <div class="apply-hub-actions">
-          <a class="button button--primary button--large" href="${externalUrl}" target="_blank" rel="noopener noreferrer" id="official-apply-link">
+          <a class="button button--primary button--large" href="${escapeHtml(externalUrl)}" target="_blank" rel="noopener noreferrer" id="official-apply-link">
             <span class="material-symbols-outlined" aria-hidden="true">open_in_new</span>
             Buka Halaman Apply Resmi ↗
           </a>

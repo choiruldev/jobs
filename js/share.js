@@ -3,7 +3,7 @@
  * Supports Native Web Share API, WhatsApp, LinkedIn, Telegram, and 1-Click Clipboard.
  */
 
-import { showToast } from "./bookmark.js?v=20261106a";
+import { showToast, escapeHtml, sanitizeUrl } from "./bookmark.js?v=20261106a";
 
 /**
  * Format payload teks share untuk media sosial
@@ -63,6 +63,9 @@ export function openShareModal(job, payload) {
 
   const encodedText = encodeURIComponent(payload.text);
   const encodedUrl = encodeURIComponent(payload.url);
+  const safeTitle = escapeHtml(job.title || "Lowongan Menarik");
+  const safeCompany = escapeHtml(job.company || "Perusahaan");
+  const safeShareUrl = escapeHtml(sanitizeUrl(payload.url));
 
   modal.innerHTML = `
     <div class="dialog" style="max-width:440px;width:90%;">
@@ -74,7 +77,7 @@ export function openShareModal(job, payload) {
       </div>
       <div class="dialog__content stack" style="gap:16px;padding:16px 0;">
         <p class="body-medium" style="margin:0;color:var(--md-sys-color-on-surface-variant);">
-          Bagikan info lowongan <strong>${job.title}</strong> di <strong>${job.company}</strong> ke rekan pencari kerja:
+          Bagikan info lowongan <strong>${safeTitle}</strong> di <strong>${safeCompany}</strong> ke rekan pencari kerja:
         </p>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
@@ -95,7 +98,7 @@ export function openShareModal(job, payload) {
         <div style="margin-top:8px;">
           <label class="field-label" style="font-size:12px;font-weight:600;display:block;margin-bottom:6px;">Salin Tautan Langsung:</label>
           <div style="display:flex;gap:8px;">
-            <input type="text" id="share-copy-input" class="text-input" value="${payload.url}" readonly style="flex:1;font-size:13px;padding:8px 12px;background:var(--md-sys-color-surface-container);">
+            <input type="text" id="share-copy-input" class="text-input" value="${safeShareUrl}" readonly style="flex:1;font-size:13px;padding:8px 12px;background:var(--md-sys-color-surface-container);">
             <button type="button" class="button button--primary" id="btn-copy-share-url" style="white-space:nowrap;">
               <span class="material-symbols-outlined" aria-hidden="true">content_copy</span>
               <span>Salin</span>

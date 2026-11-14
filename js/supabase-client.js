@@ -17,9 +17,33 @@ export function getSupabaseConfig() {
   }
 }
 
+export function validateSupabaseOrigin(rawUrl) {
+  try {
+    const parsed = new URL(String(rawUrl || "").trim());
+    if (parsed.protocol !== "https:") return "";
+    if (!parsed.hostname.endsWith(".supabase.co") && !parsed.hostname.endsWith(".supabase.in")) {
+      return "";
+    }
+    return parsed.origin;
+  } catch {
+    return "";
+  }
+}
+
 export function saveSupabaseConfig(config = {}) {
   try {
-    localStorage.setItem(SUPABASE_CONFIG_KEY, JSON.stringify(config));
+    const safeOrigin = config.url ? validateSupabaseOrigin(config.url) : "";
+    if (config.enabled && !safeOrigin) {
+      return false;
+    }
+    localStorage.setItem(
+      SUPABASE_CONFIG_KEY,
+      JSON.stringify({
+        url: safeOrigin,
+        anonKey: String(config.anonKey || "").trim(),
+        enabled: Boolean(config.enabled && safeOrigin)
+      })
+    );
     return true;
   } catch (err) {
     return false;
@@ -28,8 +52,9 @@ export function saveSupabaseConfig(config = {}) {
 
 export async function syncToSupabase() {
   const config = getSupabaseConfig();
-  if (!config.enabled || !config.url || !config.anonKey) {
-    return { synced: false, message: "Cloud sync belum dikonfigurasi." };
+  const safeOrigin = validateSupabaseOrigin(config.url);
+  if (!config.enabled || !safeOrigin || !config.anonKey) {
+    return { synced: false, message: "Cloud sync belum dikonfigurasi atau URL Supabase tidak valid." };
   }
 
   const [apps, bookmarks] = await Promise.all([
@@ -46,7 +71,7 @@ export async function syncToSupabase() {
   };
 
   try {
-    const res = await fetch(`${config.url}/rest/v1/user_sync`, {
+    const res = await fetch(`${safeOrigin}/rest/v1/user_sync`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

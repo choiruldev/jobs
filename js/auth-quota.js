@@ -11,13 +11,19 @@ export const APP_EDITION = "FREEMIUM"; // Set to "PRO_VIP" on pro-vip branch for
 const AUTH_USER_KEY = "jsa_hybrid_auth_user_v1";
 const QUOTA_MASTER_LEDGER_KEY = "jsa_quota_master_ledger_v1";
 const PRO_PAYMENT_URL = "https://mayar.id/"; // Link pembayaran QRIS / VIP (dapat disesuaikan)
+const SESSION_SCOPED_USER_KEYS = [
+  "jsa_match_profile_v1",
+  "jsa_candidate_cv_meta_v1",
+  "jsa_candidate_cv_link_v1",
+  "jsa_auto_email_webhook_url_v1",
+  "jsa_auto_email_history_v1",
+  "jsa_resume_builder_data_v1"
+];
 
-export const VALID_PRO_CODES = new Set([
-  "PRO-19JT-VIP",
-  "JSA-PRO-2026",
-  "VIP-UNLIMITED",
-  "CYBERMINT-PRO"
-]);
+import { escapeHtml } from "./bookmark.js?v=20261106a";
+
+// Lisensi PRO harus diverifikasi server atau dibangun melalui edisi PRO_VIP
+export const VALID_PRO_CODES = new Set();
 
 export const QUOTA_DEFINITIONS = {
   auto_email_apply: {
@@ -186,6 +192,17 @@ export function loginWithHybridAccount({ email, name = "", provider = "email" } 
     throw new Error("Masukkan alamat email yang valid (contoh: nama@gmail.com).");
   }
 
+  const prevUser = getCurrentUser();
+  if (prevUser && prevUser.email && prevUser.email.toLowerCase() !== cleanEmail) {
+    try {
+      if (typeof localStorage !== "undefined") {
+        for (const k of SESSION_SCOPED_USER_KEYS) {
+          localStorage.removeItem(k);
+        }
+      }
+    } catch (e) {}
+  }
+
   const displayName = String(name || cleanEmail.split("@")[0])
     .replace(/[<>]/g, "")
     .trim();
@@ -203,23 +220,24 @@ export function loginWithHybridAccount({ email, name = "", provider = "email" } 
   }
 
   const accountRecord = ledger[cleanEmail];
+  const isProEdition = APP_EDITION === "PRO_VIP";
   const sessionUser = {
     email: cleanEmail,
     name: displayName || accountRecord.name || cleanEmail.split("@")[0],
     provider,
-    isPro: Boolean(accountRecord.isPro),
-    licenseKey: accountRecord.licenseKey || null,
+    isPro: isProEdition,
+    licenseKey: isProEdition ? (accountRecord.licenseKey || "PRO-VIP-EDITION") : null,
     loggedInAt: new Date().toISOString()
   };
 
   safeSetStorage(AUTH_USER_KEY, JSON.stringify(sessionUser));
 
-  // Sync email & name into candidate match profile if empty
+  // Always overwrite email/name in candidate match profile for the active account
   try {
     const rawProfile = safeGetStorage("jsa_match_profile_v1");
     const profile = rawProfile ? JSON.parse(rawProfile) : {};
-    if (!profile.email) profile.email = cleanEmail;
-    if (!profile.fullName && displayName) profile.fullName = displayName;
+    profile.email = cleanEmail;
+    if (displayName) profile.fullName = displayName;
     safeSetStorage("jsa_match_profile_v1", JSON.stringify(profile));
   } catch (e) {}
 
@@ -235,6 +253,9 @@ export function logoutHybridAccount() {
   try {
     if (typeof localStorage !== "undefined") {
       localStorage.removeItem(AUTH_USER_KEY);
+      for (const k of SESSION_SCOPED_USER_KEYS) {
+        localStorage.removeItem(k);
+      }
     }
   } catch (e) {}
   if (typeof window !== "undefined") {
@@ -245,24 +266,21 @@ export function logoutHybridAccount() {
 
 export function verifyAndActivateProCode(rawCode = "") {
   const code = String(rawCode || "").trim().toUpperCase();
-  const isValid =
-    VALID_PRO_CODES.has(code) ||
-    (code.startsWith("JSA-VIP-") && code.length >= 12);
+  const isValid = APP_EDITION === "PRO_VIP" && Boolean(code) && VALID_PRO_CODES.has(code);
 
   if (!isValid) {
     return {
       success: false,
-      message: "Kode lisensi tidak valid. Pastikan kode sesuai dengan bukti pembayaran Anda."
+      message: "Kode lisensi tidak valid atau memerlukan verifikasi server / edisi PRO VIP resmi."
     };
   }
 
-  let user = getCurrentUser();
+  const user = getCurrentUser();
   if (!user) {
-    user = loginWithHybridAccount({
-      email: "member.pro@jobsearch.id",
-      name: "Member PRO VIP",
-      provider: "license"
-    });
+    return {
+      success: false,
+      message: "Silakan masuk dengan akun email Anda terlebih dahulu sebelum aktivasi."
+    };
   }
 
   const ledger = readMasterLedger();
@@ -384,6 +402,25 @@ export function consumeQuota(featureKey) {
   return { allowed: true, status: nextStatus };
 }
 
+export function checkQuotaOrPrompt(featureKey, onAllowedCallback) {
+  const status = getQuotaStatus(featureKey);
+  if (status.isPro || (status.loggedIn && status.remaining > 0)) {
+    if (typeof onAllowedCallback === "function") {
+      onAllowedCallback(status);
+    }
+    return true;
+  }
+  if (!status.loggedIn) {
+    openHybridAuthModal({
+      featureKey,
+      onSuccessLogin: () => checkQuotaOrPrompt(featureKey, onAllowedCallback)
+    });
+    return false;
+  }
+  openProUpgradeModal({ featureKey });
+  return false;
+}
+
 export function requireQuotaOrPrompt(featureKey, onAllowedCallback) {
   const check = consumeQuota(featureKey);
   if (check.allowed) {
@@ -417,15 +454,22 @@ export function showQuotaToast(message) {
       "position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:#0c261e;color:#ecfdf5;border:1px solid #10b981;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:600;z-index:9998;box-shadow:0 10px 28px rgba(0,0,0,0.28);display:flex;align-items:center;gap:10px;max-width:92vw;transition:opacity 0.25s ease;";
     document.body.appendChild(toast);
   }
-  toast.innerHTML = `
-    <span>${message}</span>
-    <button type="button" id="jsa-toast-upgrade-btn" style="background:#a3e635;color:#052e16;border:none;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;">Upgrade PRO</button>
-  `;
-  toast.style.opacity = "1";
-  toast.style.pointerEvents = "auto";
-  toast.querySelector("#jsa-toast-upgrade-btn")?.addEventListener("click", () => {
+  toast.textContent = "";
+  const msgSpan = document.createElement("span");
+  msgSpan.textContent = String(message ?? "");
+  const upgradeBtn = document.createElement("button");
+  upgradeBtn.type = "button";
+  upgradeBtn.id = "jsa-toast-upgrade-btn";
+  upgradeBtn.style.cssText =
+    "background:#a3e635;color:#052e16;border:none;border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;";
+  upgradeBtn.textContent = "Upgrade PRO";
+  upgradeBtn.addEventListener("click", () => {
     openProUpgradeModal();
   });
+  toast.appendChild(msgSpan);
+  toast.appendChild(upgradeBtn);
+  toast.style.opacity = "1";
+  toast.style.pointerEvents = "auto";
 
   clearTimeout(window.__jsaQuotaToastTimer);
   window.__jsaQuotaToastTimer = setTimeout(() => {
@@ -597,7 +641,7 @@ export function openProUpgradeModal({ featureKey = "auto_email_apply" } = {}) {
             Sudah Bayar? Masukkan Kode Lisensi VIP Anda:
           </label>
           <div style="display:flex;gap:8px;">
-            <input id="jsa-pro-code-input" type="text" required placeholder="Contoh: PRO-19JT-VIP" style="flex:1;padding:10px 12px;border-radius:10px;border:1px solid var(--md-sys-color-outline-variant);background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);font-size:13px;font-weight:700;text-transform:uppercase;">
+            <input id="jsa-pro-code-input" type="text" required placeholder="Kode Lisensi PRO Terverifikasi" style="flex:1;padding:10px 12px;border-radius:10px;border:1px solid var(--md-sys-color-outline-variant);background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);font-size:13px;font-weight:700;text-transform:uppercase;">
             <button type="submit" class="button button--tonal" style="padding:10px 16px;border-radius:10px;font-weight:800;white-space:nowrap;">
               Aktifkan PRO
             </button>
@@ -607,7 +651,7 @@ export function openProUpgradeModal({ featureKey = "auto_email_apply" } = {}) {
 
         ${user ? `
           <div style="margin-top:12px;display:flex;align-items:center;justify-content:space-between;font-size:11.5px;color:var(--md-sys-color-outline);">
-            <span>Login sebagai: <strong>${user.email}</strong></span>
+            <span>Login sebagai: <strong>${escapeHtml(user.email)}</strong></span>
             <button type="button" id="jsa-modal-logout-btn" style="background:none;border:none;color:#dc2626;cursor:pointer;font-weight:700;">Ganti Akun</button>
           </div>
         ` : ""}
@@ -699,7 +743,7 @@ export function refreshAuthQuotaUI() {
       pill.style.background = "rgba(16,185,129,0.12)";
       pill.style.color = "var(--md-sys-color-primary)";
       pill.style.borderColor = "rgba(16,185,129,0.35)";
-      pill.innerHTML = `<span class="material-symbols-outlined" style="font-size:15px;">account_circle</span><span>${shortName}</span>`;
+      pill.innerHTML = `<span class="material-symbols-outlined" style="font-size:15px;">account_circle</span><span>${escapeHtml(shortName)}</span>`;
     } else {
       pill.style.background = "rgba(0, 193, 110, 0.14)";
       pill.style.color = "var(--md-sys-color-primary)";
@@ -747,7 +791,7 @@ export function refreshAuthQuotaUI() {
     banner.innerHTML = `
       <div style="display:flex;align-items:center;gap:8px;font-weight:700;color:var(--md-sys-color-primary);">
         <span class="material-symbols-outlined" style="font-size:18px;">verified</span>
-        <span>Status Akun: <strong>PRO VIP (${user?.email || "Unlimited"})</strong> — Seluruh Fitur & Auto-Send Email Tanpa Batas!</span>
+        <span>Status Akun: <strong>PRO VIP (${escapeHtml(user?.email || "Unlimited")})</strong> — Seluruh Fitur & Auto-Send Email Tanpa Batas!</span>
       </div>
       ${closeBtnHtml}
     `;
@@ -755,7 +799,7 @@ export function refreshAuthQuotaUI() {
     banner.innerHTML = `
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
         <span class="material-symbols-outlined" style="font-size:18px;color:var(--md-sys-color-primary);">bolt</span>
-        <span>Akun Gratis (<strong>${user.email}</strong>) · Sisa Kuota <strong>${status.label}</strong>: <strong style="color:${status.remaining > 0 ? "var(--md-sys-color-primary)" : "#dc2626"};">${status.remaining} dari ${status.limit}</strong></span>
+        <span>Akun Gratis (<strong>${escapeHtml(user.email)}</strong>) · Sisa Kuota <strong>${escapeHtml(status.label)}</strong>: <strong style="color:${status.remaining > 0 ? "var(--md-sys-color-primary)" : "#dc2626"};">${status.remaining} dari ${status.limit}</strong></span>
       </div>
       <div style="display:flex;align-items:center;gap:6px;">
         <button type="button" class="js-open-pro-modal" style="background:#052e16;color:#a3e635;border:1px solid #10b981;padding:5px 12px;border-radius:999px;font-size:11.5px;font-weight:800;cursor:pointer;">
@@ -798,12 +842,12 @@ function bindGlobalPaidButtonInterceptors() {
   window.__jsaQuotaInterceptorsBound = true;
 
   const selectorToFeatureMap = [
-    { selector: "#print-pdf-btn, #export-html-btn, #export-json-btn", feature: "resume_pdf" },
-    { selector: "#generate-cover-letter-btn, #generate-outreach-btn", feature: "ai_writer" },
-    { selector: "#export-csv-btn, #btn-export-csv, #btn-export-json", feature: "kanban_export" },
-    { selector: "#eval-answer-btn, #voice-record-btn, #btn-start-voice", feature: "interview_voice" },
+    { selector: "#print-resume-btn, #print-pdf-btn, #export-html-btn, #export-json-btn", feature: "resume_pdf" },
+    { selector: "#generate-cover-letter-btn, #generate-outreach-btn, #btn-generate-cl", feature: "ai_writer" },
+    { selector: "#export-csv-btn, #export-backup-btn, #btn-export-csv, #btn-export-json", feature: "kanban_export" },
+    { selector: ".js-record-btn, #eval-answer-btn, #voice-record-btn, #btn-start-voice", feature: "interview_voice" },
     { selector: "#run-code-btn, #btn-run-tests", feature: "coding_sandbox" },
-    { selector: "#print-invoice-btn", feature: "invoice_pdf" },
+    { selector: "#btn-print-invoice, #btn-print-invoice-hero, #print-invoice-btn", feature: "invoice_pdf" },
     { selector: "#print-card-btn, #copy-card-link-btn", feature: "portfolio_card" },
     { selector: "#scan-contract-btn", feature: "contract_scan" }
   ];
@@ -836,18 +880,6 @@ function bindGlobalPaidButtonInterceptors() {
 
 export function initAuthQuotaEngine() {
   if (typeof window === "undefined") return;
-
-  // Check URL for instant Pro activation parameter (?activate_pro=PRO-19JT-VIP)
-  try {
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get("activate_pro");
-    if (code) {
-      const res = verifyAndActivateProCode(code);
-      if (res.success) {
-        setTimeout(() => showQuotaToast(res.message), 500);
-      }
-    }
-  } catch (e) {}
 
   bindGlobalPaidButtonInterceptors();
   refreshAuthQuotaUI();
