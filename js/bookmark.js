@@ -82,11 +82,22 @@ export function escapeHtml(value) {
 
 export function sanitizeUrl(url) {
   if (!url || typeof url !== "string") return "#";
-  const trimmed = url.trim();
-  if (/^(?:https?:\/\/|\/|#|mailto:|tel:)/i.test(trimmed)) {
-    if (/javascript\s*:/i.test(trimmed) || /data\s*:/i.test(trimmed) || /vbscript\s*:/i.test(trimmed)) {
+  const trimmed = url.trim().replace(/[\u0000-\u001f\u007f]/g, "");
+  if (!trimmed || trimmed.startsWith("//")) return "#";
+  if (/javascript\s*:/i.test(trimmed) || /data\s*:/i.test(trimmed) || /vbscript\s*:/i.test(trimmed)) {
+    return "#";
+  }
+  if (/^https?:\/\//i.test(trimmed)) {
+    try {
+      const parsed = new URL(trimmed);
+      if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return "#";
+      return parsed.toString().replace(/["'<>`]/g, (ch) => `%${ch.charCodeAt(0).toString(16).toUpperCase()}`);
+    } catch {
       return "#";
     }
+  }
+  if (/^(?:\/[^/]|#|mailto:|tel:)/i.test(trimmed) || trimmed === "/") {
+    if (/["'<>]/.test(trimmed)) return "#";
     return trimmed;
   }
   return "#";
@@ -1163,8 +1174,10 @@ async function initDetailPage() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  initShellNavigation();
-  initBookmarksPage();
-  initDetailPage();
-});
+if (typeof document !== "undefined") {
+  document.addEventListener("DOMContentLoaded", () => {
+    initShellNavigation();
+    initBookmarksPage();
+    initDetailPage();
+  });
+}

@@ -101,14 +101,34 @@ function escapeRegExp(value = "") {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+function cleanSingleLine(value = "", fallback = "") {
+  const raw = String(value || "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/[\u0000-\u001f\u007f]+/g, " ");
+  const cleaned = repairMojibake(raw).replace(/\s+/g, " ").trim();
+  return cleaned || fallback;
+}
+
+function cleanExternalUrl(rawUrl) {
+  const candidate = String(rawUrl || "").replace(/[\u0000-\u001f\u007f]/g, "").trim();
+  if (!candidate || candidate.startsWith("//")) return "#";
+  try {
+    const parsed = new URL(candidate);
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return "#";
+    return parsed.toString().replace(/["'<>`]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
+  } catch {
+    return "#";
+  }
+}
+
 function cleanTitle(value = "") {
-  return repairMojibake(value || "Untitled role")
+  return cleanSingleLine(value, "Untitled role")
     .replace(/\s+read\s+description\s+before/gi, "")
     .replace(/\s+befristet\s+\d+\s+monate?/gi, "")
     .replace(/\s*\((?:m\/f\/d|m\/w\/d|f\/m\/d|all genders|ref\.?nr\.?:?[^)]*)\)/gi, "")
     .replace(/\s+-\s*(?:m\/f\/d|m\/w\/d|f\/m\/d|all genders)\b/gi, "")
-    .replace(/\s{2,}/g, " ")
-    .trim();
+    .replace(/\s+/g, " ")
+    .trim() || "Untitled role";
 }
 
 function narrativeAnchorIndex(text, company = "") {
@@ -425,14 +445,14 @@ function mapRemotiveJob(job) {
     ]),
     about_company: `${company} membuka lowongan remote melalui Remotive. Buka tautan sumber untuk detail resmi dan instruksi apply.`,
     tags: job.tags || [],
-    applyUrl: job.url,
-    source: sourceMeta("remotive", "Remotive", job.url)
+    applyUrl: cleanExternalUrl(job.url),
+    source: sourceMeta("remotive", "Remotive", cleanExternalUrl(job.url))
   };
 }
 
 function mapArbeitnowJob(job) {
   const title = cleanTitle(job.title);
-  const company = job.company_name || "Unknown company";
+  const company = cleanSingleLine(job.company_name, "Unknown company");
   const remote = Boolean(job.remote);
   const jobTypes = Array.isArray(job.job_types) ? job.job_types.map(cleanType) : [];
   const location = cleanLocation(job.location, remote ? "Remote" : "Germany");
@@ -455,14 +475,14 @@ function mapArbeitnowJob(job) {
     ]),
     about_company: `${company} memasang lowongan melalui Arbeitnow. Buka tautan sumber untuk detail resmi dan instruksi apply.`,
     tags: job.tags || [],
-    applyUrl: job.url,
-    source: sourceMeta("arbeitnow", "Arbeitnow", job.url)
+    applyUrl: cleanExternalUrl(job.url),
+    source: sourceMeta("arbeitnow", "Arbeitnow", cleanExternalUrl(job.url))
   };
 }
 
 function mapRemoteOkJob(job) {
   const title = cleanTitle(job.position);
-  const company = job.company || "Unknown company";
+  const company = cleanSingleLine(job.company, "Unknown company");
   const description = cleanDescription(job.description, { title, company });
   const salaryLabel = formatUsdSalary(job.salary_min, job.salary_max);
 
@@ -480,14 +500,14 @@ function mapRemoteOkJob(job) {
     requirements: uniq((job.tags || []).slice(0, 8).map((tag) => `Tag: ${tag}`)),
     about_company: `${company} membuka lowongan remote melalui Remote OK. Buka tautan sumber untuk detail resmi dan instruksi apply.`,
     tags: job.tags || [],
-    applyUrl: job.apply_url || job.url,
-    source: sourceMeta("remoteok", "Remote OK", job.url || job.apply_url)
+    applyUrl: cleanExternalUrl(job.apply_url || job.url),
+    source: sourceMeta("remoteok", "Remote OK", cleanExternalUrl(job.url || job.apply_url))
   };
 }
 
 function mapJobicyJob(job) {
   const title = cleanTitle(job.jobTitle);
-  const company = job.companyName || "Unknown company";
+  const company = cleanSingleLine(job.companyName, "Unknown company");
   const location = cleanLocation(job.jobGeo, "Remote");
   const description = cleanDescription(job.jobDescription || job.jobExcerpt, { title, company });
   const jobTypes = Array.isArray(job.jobType) ? job.jobType.map(cleanType) : [];
@@ -512,8 +532,8 @@ function mapJobicyJob(job) {
     ]),
     about_company: `${company} memasang lowongan remote melalui Jobicy. Buka tautan sumber untuk detail resmi dan instruksi apply.`,
     tags: uniq([...(job.jobLevel ? [job.jobLevel] : []), ...industries]),
-    applyUrl: job.url,
-    source: sourceMeta("jobicy", "Jobicy", job.url)
+    applyUrl: cleanExternalUrl(job.url),
+    source: sourceMeta("jobicy", "Jobicy", cleanExternalUrl(job.url))
   };
 }
 
@@ -607,32 +627,37 @@ async function fetchFreshLocalFeed() {
         ? rawDescHtml
         : `<p>${safeDescText}</p>`;
 
+      const safeTitle = cleanSingleLine(j.title, "Lowongan Kerja");
+      const safeCompany = cleanSingleLine(j.company, "Perusahaan");
+      const safeLocation = cleanSingleLine(j.location, "Indonesia / Remote");
+      const safeApplyUrl = cleanExternalUrl(j.applyUrl);
+
       return {
         id: j.id,
-        title: j.title,
-        company: j.company,
-        location: j.location,
+        title: safeTitle,
+        company: safeCompany,
+        location: safeLocation,
         salary: {
           min: isNaN(Number(j.salary?.min)) ? 0 : Number(j.salary?.min || 0),
           max: isNaN(Number(j.salary?.max)) ? 0 : Number(j.salary?.max || 0),
-          label: (j.salary?.display && String(j.salary.display).toUpperCase() !== "NAN") ? j.salary.display : "Gaji kompetitif",
-          currency: (j.salary?.currency && String(j.salary.currency).toUpperCase() !== "NAN") ? j.salary.currency : "IDR",
+          label: (j.salary?.display && String(j.salary.display).toUpperCase() !== "NAN") ? cleanSingleLine(j.salary.display, "Gaji kompetitif") : "Gaji kompetitif",
+          currency: (j.salary?.currency && String(j.salary.currency).toUpperCase() !== "NAN") ? cleanSingleLine(j.salary.currency, "IDR") : "IDR",
           period: j.salary?.period || "monthly"
         },
         type: [
           wpLabel,
           isId ? "Dari Indonesia" : (j.remoteTier === "apac" ? "Asia/APAC" : "Remote Global")
         ].filter(Boolean),
-        category: j.category || "Teknologi",
+        category: cleanSingleLine(j.category, "Teknologi"),
         posted: j.postedAt || new Date().toISOString(),
         date: j.postedAt || new Date().toISOString(),
-        logo: j.logo || makeLogo(j.company),
-        applyUrl: j.applyUrl,
-        sourcePlatform: j.sourcePlatform || "JobStreet",
+        logo: cleanExternalUrl(j.logo) !== "#" ? cleanExternalUrl(j.logo) : makeLogo(safeCompany),
+        applyUrl: safeApplyUrl,
+        sourcePlatform: cleanSingleLine(j.sourcePlatform, "JobStreet"),
         source: {
-          key: (j.sourcePlatform || "feed").toLowerCase(),
-          name: j.sourcePlatform || "Portal Resmi",
-          url: j.applyUrl
+          key: cleanSingleLine(j.sourcePlatform || "feed", "feed").toLowerCase(),
+          name: cleanSingleLine(j.sourcePlatform, "Portal Resmi"),
+          url: safeApplyUrl
         },
         description: safeDescText,
         descriptionHtml: safeDescHtml,

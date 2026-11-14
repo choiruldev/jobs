@@ -40,16 +40,19 @@ export async function exportAllData() {
   return true;
 }
 
+export function escapeCSV(val) {
+  if (val === null || val === undefined) return '""';
+  let str = String(val).replace(/\r\n|\r|\n/g, " ");
+  if (/^[ \t\r\n]*[=+\-@\t\r]/.test(str)) {
+    str = `'${str}`;
+  }
+  return `"${str.replace(/"/g, '""')}"`;
+}
+
 export function exportApplicationsCSV(items) {
   if (!items || !items.length) {
     throw new Error("Belum ada data lamaran untuk diekspor ke CSV.");
   }
-
-  const escapeCSV = (val) => {
-    if (val === null || val === undefined) return '""';
-    const str = String(val).replace(/"/g, '""');
-    return `"${str}"`;
-  };
 
   const headers = [
     "ID",

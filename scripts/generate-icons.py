@@ -7,11 +7,14 @@ Uses macOS native qlmanage and sips to render pixel-perfect PNGs.
 import os
 import subprocess
 import shutil
+import tempfile
+import atexit
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ASSETS_DIR = os.path.join(BASE_DIR, "assets", "icons")
 CSS_DIR = os.path.join(BASE_DIR, "css")
-TMP_DIR = "/tmp/jobsearch_icons"
+TMP_DIR = tempfile.mkdtemp(prefix="jobsearch_icons_")
+atexit.register(shutil.rmtree, TMP_DIR, ignore_errors=True)
 
 os.makedirs(ASSETS_DIR, exist_ok=True)
 os.makedirs(CSS_DIR, exist_ok=True)

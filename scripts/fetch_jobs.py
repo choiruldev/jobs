@@ -950,6 +950,84 @@ def fetch_from_lever():
             print(f"[-] Gagal fetch Lever {company_name}: {e}")
     return jobs
 
+def _clean_single_line(val, max_len=240):
+    text = re.sub(r'[\x00-\x1f\x7f]+', ' ', str(val or ''))
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text[:max_len]
+
+def _validate_http_url(raw_url):
+    from urllib.parse import urlparse
+    candidate = re.sub(r'[\x00-\x1f\x7f]', '', str(raw_url or '')).strip()
+    if not candidate or any(ch in candidate for ch in (' ', '<', '>', '"', "'", '`')):
+        return ""
+    try:
+        parsed = urlparse(candidate)
+    except Exception:
+        return ""
+    if parsed.scheme not in ("http", "https") or not parsed.netloc:
+        return ""
+    return candidate
+
+def _sanitize_description_html(raw_html):
+    import html as _html
+    from html.parser import HTMLParser
+
+    allowed_tags = {"p", "br", "ul", "ol", "li", "strong", "b", "em", "i", "h3", "h4", "a", "code", "pre"}
+    void_tags = {"br"}
+    blocked_containers = {"script", "style", "iframe", "object", "embed", "applet", "svg", "math"}
+
+    class _AllowlistParser(HTMLParser):
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.parts = []
+            self.skip_depth = 0
+
+        def handle_starttag(self, tag, attrs):
+            t = tag.lower()
+            if t in blocked_containers:
+                self.skip_depth += 1
+                return
+            if self.skip_depth > 0 or t not in allowed_tags:
+                return
+            if t == "a":
+                href = ""
+                for k, v in attrs:
+                    if str(k).lower() == "href":
+                        href = _validate_http_url(v)
+                        break
+                if href:
+                    self.parts.append(f'<a href="{_html.escape(href, quote=True)}" target="_blank" rel="noopener noreferrer">')
+                else:
+                    self.parts.append("<a>")
+            elif t in void_tags:
+                self.parts.append(f"<{t}>")
+            else:
+                self.parts.append(f"<{t}>")
+
+        def handle_endtag(self, tag):
+            t = tag.lower()
+            if t in blocked_containers:
+                if self.skip_depth > 0:
+                    self.skip_depth -= 1
+                return
+            if self.skip_depth == 0 and t in allowed_tags and t not in void_tags:
+                self.parts.append(f"</{t}>")
+
+        def handle_data(self, data):
+            if self.skip_depth == 0 and data:
+                self.parts.append(_html.escape(data, quote=True))
+
+    parser = _AllowlistParser()
+    try:
+        parser.feed(str(raw_html or ""))
+        parser.close()
+    except Exception:
+        return _html.escape(_clean_single_line(raw_html, 4000), quote=True)
+    result = "".join(parser.parts).strip()
+    if len(result) > 4000:
+        result = result[:4000] + "..."
+    return result
+
 def sanitize_and_clean_jobs(jobs):
     """Menjamin integritas dan keamanan data: 0 dummy data, 0 raw NaN, URL valid, Anti-XSS"""
     dummy_pattern = re.compile(r'\b(lorem|ipsum|dummy|sample\s*job|test\s*lowongan|test\s*company)\b', re.I)
@@ -958,17 +1036,23 @@ def sanitize_and_clean_jobs(jobs):
 
     for j in jobs:
         jid = j.get("id")
-        title = str(j.get("title") or "").strip()
-        company = str(j.get("company") or "").strip()
-        url = str(j.get("applyUrl") or "").strip()
+        title = _clean_single_line(j.get("title"), 240)
+        company = _clean_single_line(j.get("company"), 180)
+        location = _clean_single_line(j.get("location") or "Remote", 160) or "Remote"
+        url = _validate_http_url(j.get("applyUrl"))
 
-        # 1. Keamanan & Integritas: Tolak jika data kosong, nan, URL bukan http/https, atau pola dummy
-        if not title or not company or not url or not (url.startswith("http://") or url.startswith("https://")):
+        # 1. Keamanan & Integritas: Tolak jika data kosong, nan, URL bukan http/https valid, atau pola dummy
+        if not title or not company or not url:
             continue
         if is_null_or_nan(title) or is_null_or_nan(company):
             continue
         if dummy_pattern.search(title) or dummy_pattern.search(company):
             continue
+
+        j["title"] = title
+        j["company"] = company
+        j["location"] = location
+        j["applyUrl"] = url
 
         # 1b. Auto-Purge Loker Kadaluarsa (> 60 hari)
         posted_str = str(j.get("postedAt") or "")
@@ -996,14 +1080,8 @@ def sanitize_and_clean_jobs(jobs):
         if len(fuzzy_key) > 6:
             seen.add(fuzzy_key)
 
-        # 3. Sanitasi teks deskripsi & Anti-XSS (Hapus script, iframe, event handlers berbahaya)
-        desc_raw_html = str(j.get("descriptionHtml") or "")
-        desc_safe_html = re.sub(r'<\s*(script|iframe|object|embed|applet)[^>]*>.*?<\s*/\s*\1\s*>', '', desc_raw_html, flags=re.I | re.S)
-        desc_safe_html = re.sub(r'\s+on[a-z]+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)', '', desc_safe_html, flags=re.I)
-        desc_safe_html = re.sub(r'javascript\s*:', '', desc_safe_html, flags=re.I)
-        if len(desc_safe_html) > 4000:
-            desc_safe_html = desc_safe_html[:4000] + "..."
-        j["descriptionHtml"] = desc_safe_html
+        # 3. Sanitasi teks deskripsi & Anti-XSS (HTMLParser allowlist)
+        j["descriptionHtml"] = _sanitize_description_html(j.get("descriptionHtml") or "")
 
         desc_text = str(j.get("descriptionText") or "").strip()
         desc_text = re.sub(r'\b(NaN|nan|null|None)\b', '', desc_text).strip()
@@ -1015,11 +1093,13 @@ def sanitize_and_clean_jobs(jobs):
 
         # 4. Sanitasi display gaji
         sal = j.get("salary") or {}
-        sal_display = str(sal.get("display") or "").strip()
+        sal_display = _clean_single_line(sal.get("display"), 120)
         if not sal_display or sal_display.lower() in ("nan", "null", "none", "<na>"):
             sal["display"] = "Gaji kompetitif"
         elif re.search(r'\b0[.,]2\s*jt\b', sal_display, re.I):
             sal["display"] = "Rp 20.000.000 - Rp 30.000.000/bln" if "senior" in title.lower() else "Gaji kompetitif"
+        else:
+            sal["display"] = sal_display
         j["salary"] = sal
 
         # 5. Remote Tier validasi

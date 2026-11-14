@@ -34,6 +34,19 @@ export function getPendingFollowUps(items = []) {
 /**
  * Generate dan unduh file iCalendar (.ics) untuk jadwal interview
  */
+export function escapeIcsText(val, { preserveNewlines = false } = {}) {
+  const raw = String(val ?? "");
+  const step1 = raw.replace(/\\/g, "\\\\");
+  const step2 = preserveNewlines
+    ? step1.replace(/\r\n|\r|\n/g, "\\n")
+    : step1.replace(/\r\n|\r|\n/g, " ");
+  return step2
+    .replace(/[\u0000-\u001f\u007f]/g, " ")
+    .replace(/;/g, "\\;")
+    .replace(/,/g, "\\,")
+    .trim();
+}
+
 export function downloadInterviewIcs(interviewData = {}) {
   const {
     jobTitle = "Interview Kerja",
@@ -47,8 +60,13 @@ export function downloadInterviewIcs(interviewData = {}) {
   const end = new Date(start.getTime() + 60 * 60 * 1000); // Durasi default 1 jam
 
   const formatIcsDate = (date) => {
-    return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+    const safeDate = Number.isNaN(date.getTime()) ? new Date() : date;
+    return safeDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
   };
+
+  const safeSummary = escapeIcsText(`Wawancara Kerja: ${jobTitle || "Interview Kerja"} - ${companyName || "Perusahaan"}`);
+  const safeDescription = escapeIcsText(notes || "Wawancara proses rekrutmen", { preserveNewlines: true });
+  const safeLocation = escapeIcsText(locationUrl || "Online Meeting");
 
   const icsContent = [
     "BEGIN:VCALENDAR",
@@ -59,9 +77,9 @@ export function downloadInterviewIcs(interviewData = {}) {
     `DTSTAMP:${formatIcsDate(new Date())}`,
     `DTSTART:${formatIcsDate(start)}`,
     `DTEND:${formatIcsDate(end)}`,
-    `SUMMARY:Wawancara Kerja: ${jobTitle} - ${companyName}`,
-    `DESCRIPTION:${notes || "Wawancara proses rekrutmen"}`,
-    `LOCATION:${locationUrl || "Online Meeting"}`,
+    `SUMMARY:${safeSummary}`,
+    `DESCRIPTION:${safeDescription}`,
+    `LOCATION:${safeLocation}`,
     "STATUS:CONFIRMED",
     "BEGIN:VALARM",
     "TRIGGER:-PT15M",
