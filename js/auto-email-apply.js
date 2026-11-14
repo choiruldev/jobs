@@ -14,6 +14,10 @@ import { getJobById, getAllKnownJobs } from "./data.js?v=20261106a";
 const AUTO_EMAIL_HISTORY_KEY = "jsa_auto_email_history_v1";
 const AUTO_EMAIL_WEBHOOK_KEY = "jsa_auto_email_webhook_url_v1";
 const AUTO_EMAIL_SUBSCRIPTION_KEY = "jsa_auto_email_alert_sub_v1";
+const AUTO_EMAIL_PROMO_DISMISS_KEY = "jsa_batch_auto_email_dismiss_until_v1";
+const AUTO_EMAIL_PROMO_SESSION_KEY = "jsa_batch_auto_email_seen_session_v1";
+const PROMO_COOLDOWN_MS = 3 * 24 * 60 * 60 * 1000; // 3 hari
+const PROMO_SNOOZE_LONG_MS = 14 * 24 * 60 * 60 * 1000; // 14 hari
 
 export function inferRecruiterEmail(job = {}) {
   const desc = String(job.description || "");
@@ -526,96 +530,195 @@ function injectDetailAutoEmailButtons() {
   }
 }
 
+function shouldAutoShowBatchEmailPromo() {
+  try {
+    if (typeof sessionStorage !== "undefined" && sessionStorage.getItem(AUTO_EMAIL_PROMO_SESSION_KEY) === "1") {
+      return false;
+    }
+    if (typeof localStorage !== "undefined") {
+      const dismissUntil = Number(localStorage.getItem(AUTO_EMAIL_PROMO_DISMISS_KEY) || "0");
+      if (dismissUntil > Date.now()) return false;
+    }
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
+function dismissBatchEmailPromo(durationMs = PROMO_COOLDOWN_MS) {
+  try {
+    if (typeof sessionStorage !== "undefined") {
+      sessionStorage.setItem(AUTO_EMAIL_PROMO_SESSION_KEY, "1");
+    }
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem(AUTO_EMAIL_PROMO_DISMISS_KEY, String(Date.now() + durationMs));
+    }
+  } catch (_) {}
+}
+
+export function openBatchAutoEmailModal() {
+  if (typeof document === "undefined") return;
+
+  try {
+    if (typeof sessionStorage !== "undefined") {
+      sessionStorage.setItem(AUTO_EMAIL_PROMO_SESSION_KEY, "1");
+    }
+  } catch (_) {}
+
+  const allJobs = getAllKnownJobs().slice(0, 6);
+  const history = getAutoEmailHistory();
+  const pro = isProUser();
+  const quota = getQuotaStatus("auto_email_apply");
+
+  let host = document.getElementById("jsa-batch-auto-email-modal-host");
+  if (!host) {
+    host = document.createElement("div");
+    host.id = "jsa-batch-auto-email-modal-host";
+    document.body.appendChild(host);
+  }
+
+  host.innerHTML = `
+    <div id="jsa-batch-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="jsa-batch-modal-title" style="position:fixed;inset:0;background:rgba(5,20,15,0.68);backdrop-filter:blur(6px);z-index:9998;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto;">
+      <div style="background:var(--md-sys-color-surface, #ffffff);color:var(--md-sys-color-on-surface, #0f172a);border:1.5px solid rgba(16,185,129,0.45);border-radius:22px;max-width:740px;width:100%;padding:22px;box-shadow:0 24px 56px rgba(0,0,0,0.34);position:relative;max-height:90vh;overflow-y:auto;">
+        <button type="button" id="jsa-batch-modal-close" aria-label="Tutup" style="position:absolute;top:14px;right:14px;background:var(--md-sys-color-surface-container-low, #f1f5f9);border:1px solid var(--md-sys-color-outline-variant, #cbd5e1);color:var(--md-sys-color-on-surface);cursor:pointer;width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;">
+          <span class="material-symbols-outlined" style="font-size:19px;">close</span>
+        </button>
+
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:14px;padding-right:40px;">
+          <div>
+            <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.15);color:var(--md-sys-color-primary);padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:800;margin-bottom:6px;">
+              <span class="material-symbols-outlined" style="font-size:15px;">smart_toy</span>
+              FITUR BARU · AI AUTOMATIC EMAIL DISPATCHER
+            </div>
+            <h2 id="jsa-batch-modal-title" class="title-large" style="margin:0;font-size:18px;">⚡ Auto-Send Email Lowongan Kerja ke HRD</h2>
+            <p class="body-medium" style="margin:4px 0 0;font-size:13px;color:var(--md-sys-color-outline);">
+              Kirim email lamaran otomatis beserta Cover Letter AI & CV ATS langsung ke rekruter dan otomatis catat ke papan Kanban.
+            </p>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span class="badge" style="background:rgba(16,185,129,0.12);color:var(--md-sys-color-primary);font-weight:800;padding:6px 12px;">
+              ${pro ? "👑 Mode PRO: Unlimited Batch Email" : `Kuota Gratis: ${quota.remaining}/${quota.limit} Email Hari Ini`}
+            </span>
+            ${!pro ? `<button type="button" id="jsa-batch-upgrade-btn" class="button button--primary button--small">Upgrade PRO</button>` : ""}
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 210px), 1fr));gap:10px;margin-bottom:14px;">
+          ${allJobs.slice(0, 3).map((j) => `
+            <div style="border:1px solid var(--md-sys-color-outline-variant);border-radius:12px;padding:12px;background:var(--md-sys-color-surface-container-low);display:flex;flex-direction:column;justify-content:space-between;gap:10px;min-width:0;overflow-wrap:anywhere;">
+              <div style="min-width:0;">
+                <div style="font-size:11px;font-weight:700;color:var(--md-sys-color-outline);">${j.company} · ${j.location}</div>
+                <div style="font-size:13.5px;font-weight:800;margin-top:2px;">${j.title}</div>
+                <div style="font-size:11.5px;color:var(--md-sys-color-primary);margin-top:4px;overflow-wrap:anywhere;word-break:break-word;">Tujuan: ${inferRecruiterEmail(j)}</div>
+              </div>
+              <button type="button" class="button button--tonal button--small js-trigger-auto-email" data-job-id="${j.id}" style="width:100%;justify-content:center;font-weight:800;">
+                <span class="material-symbols-outlined" style="font-size:16px;">forward_to_inbox</span>
+                Auto-Send Email Lamaran
+              </button>
+            </div>
+          `).join("")}
+        </div>
+
+        ${history.length ? `
+          <div style="margin-top:10px;margin-bottom:14px;padding-top:10px;border-top:1px solid var(--md-sys-color-outline-variant);">
+            <div style="font-size:12px;font-weight:800;margin-bottom:6px;">📬 Riwayat Auto-Send Email Terakhir (${history.length}):</div>
+            <div style="display:grid;gap:6px;font-size:12px;">
+              ${history.slice(0, 3).map((h) => `
+                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:6px 10px;border-radius:8px;background:var(--md-sys-color-surface-container-low);min-width:0;">
+                  <span style="min-width:0;overflow-wrap:anywhere;"><strong>${h.jobTitle}</strong> (${h.company}) → <code>${h.to}</code></span>
+                  <span style="color:var(--md-sys-color-primary);font-weight:700;white-space:nowrap;">✓ ${h.method}</span>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        ` : ""}
+
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding-top:12px;border-top:1px solid var(--md-sys-color-outline-variant);">
+          <button type="button" id="jsa-batch-snooze-long" style="background:transparent;border:none;color:var(--md-sys-color-outline);font-size:12px;font-weight:600;cursor:pointer;padding:6px 4px;text-decoration:underline;">
+            Jangan munculkan 14 hari
+          </button>
+          <button type="button" id="jsa-batch-dismiss-btn" class="button button--secondary button--small">
+            Tutup (Ingatkan 3 Hari Lagi)
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const closeAndSnooze = (durationMs = PROMO_COOLDOWN_MS) => {
+    dismissBatchEmailPromo(durationMs);
+    host.remove();
+    document.removeEventListener("keydown", onEsc);
+  };
+
+  const onEsc = (e) => {
+    if (e.key === "Escape") closeAndSnooze(PROMO_COOLDOWN_MS);
+  };
+  document.addEventListener("keydown", onEsc);
+
+  host.querySelector("#jsa-batch-modal-close")?.addEventListener("click", () => closeAndSnooze(PROMO_COOLDOWN_MS));
+  host.querySelector("#jsa-batch-dismiss-btn")?.addEventListener("click", () => closeAndSnooze(PROMO_COOLDOWN_MS));
+  host.querySelector("#jsa-batch-snooze-long")?.addEventListener("click", () => {
+    closeAndSnooze(PROMO_SNOOZE_LONG_MS);
+    showQuotaToast("Pop-up Auto-Send Email disembunyikan selama 14 hari.");
+  });
+  host.querySelector("#jsa-batch-modal-backdrop")?.addEventListener("click", (e) => {
+    if (e.target?.id === "jsa-batch-modal-backdrop") closeAndSnooze(PROMO_COOLDOWN_MS);
+  });
+
+  host.querySelector("#jsa-batch-upgrade-btn")?.addEventListener("click", () => {
+    closeAndSnooze(PROMO_COOLDOWN_MS);
+    openProUpgradeModal({ featureKey: "auto_email_apply" });
+  });
+
+  host.querySelectorAll(".js-trigger-auto-email").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetJob = getJobById(btn.getAttribute("data-job-id"));
+      closeAndSnooze(PROMO_COOLDOWN_MS);
+      if (targetJob) openAutoEmailModal(targetJob);
+    });
+  });
+}
+
 function injectTrackerBatchAutoEmailWidget() {
   const page = document.querySelector('[data-page="apply"]');
   if (!page) return;
 
-  const tryInject = () => {
-    const root = document.getElementById("application-root");
-    if (!root || document.getElementById("jsa-batch-auto-email-card")) return;
+  // Sisipkan tombol pemicu ringkas di toolbar agar halaman tetap lega
+  const ensureTriggerButton = () => {
+    if (document.getElementById("jsa-open-batch-email-btn")) return;
+    const container =
+      document.querySelector(".kanban-view-controls .landing-actions") ||
+      document.querySelector(".detail-breadcrumb-bar__right");
+    if (!container) return;
 
-    const allJobs = getAllKnownJobs().slice(0, 6);
-    const history = getAutoEmailHistory();
-    const pro = isProUser();
-    const quota = getQuotaStatus("auto_email_apply");
-
-    const widget = document.createElement("section");
-    widget.id = "jsa-batch-auto-email-card";
-    widget.className = "content-block";
-    widget.style.cssText =
-      "border:1.5px solid rgba(16,185,129,0.45);border-radius:18px;padding:20px;margin-bottom:24px;background:var(--md-sys-color-surface-container-low);";
-
-    widget.innerHTML = `
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:14px;">
-        <div>
-          <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.15);color:var(--md-sys-color-primary);padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:800;margin-bottom:6px;">
-            <span class="material-symbols-outlined" style="font-size:15px;">smart_toy</span>
-            FITUR BARU · AI AUTOMATIC EMAIL DISPATCHER
-          </div>
-          <h2 class="title-large" style="margin:0;font-size:18px;">⚡ Auto-Send Email Lowongan Kerja ke HRD</h2>
-          <p class="body-medium" style="margin:4px 0 0;font-size:13px;color:var(--md-sys-color-outline);">
-            Kirim email lamaran otomatis beserta Cover Letter AI & CV ATS langsung ke rekruter dan otomatis catat ke papan Kanban.
-          </p>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span class="badge" style="background:rgba(16,185,129,0.12);color:var(--md-sys-color-primary);font-weight:800;padding:6px 12px;">
-            ${pro ? "👑 Mode PRO: Unlimited Batch Email" : `Kuota Gratis: ${quota.remaining}/${quota.limit} Email Hari Ini`}
-          </span>
-          ${!pro ? `<button type="button" id="jsa-batch-upgrade-btn" class="button button--primary button--small">Upgrade PRO</button>` : ""}
-        </div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 250px), 1fr));gap:10px;margin-bottom:12px;">
-        ${allJobs.slice(0, 3).map((j) => `
-          <div style="border:1px solid var(--md-sys-color-outline-variant);border-radius:12px;padding:12px;background:var(--md-sys-color-surface);display:flex;flex-direction:column;justify-content:space-between;gap:10px;min-width:0;overflow-wrap:anywhere;">
-            <div style="min-width:0;">
-              <div style="font-size:11px;font-weight:700;color:var(--md-sys-color-outline);">${j.company} · ${j.location}</div>
-              <div style="font-size:13.5px;font-weight:800;margin-top:2px;">${j.title}</div>
-              <div style="font-size:11.5px;color:var(--md-sys-color-primary);margin-top:4px;overflow-wrap:anywhere;word-break:break-word;">Tujuan: ${inferRecruiterEmail(j)}</div>
-            </div>
-            <button type="button" class="button button--tonal button--small js-trigger-auto-email" data-job-id="${j.id}" style="width:100%;justify-content:center;font-weight:800;">
-              <span class="material-symbols-outlined" style="font-size:16px;">forward_to_inbox</span>
-              Auto-Send Email Lamaran
-            </button>
-          </div>
-        `).join("")}
-      </div>
-
-      ${history.length ? `
-        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--md-sys-color-outline-variant);">
-          <div style="font-size:12px;font-weight:800;margin-bottom:6px;">📬 Riwayat Auto-Send Email Terakhir (${history.length}):</div>
-          <div style="display:grid;gap:6px;font-size:12px;">
-            ${history.slice(0, 3).map((h) => `
-              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:6px 10px;border-radius:8px;background:var(--md-sys-color-surface);min-width:0;">
-                <span style="min-width:0;overflow-wrap:anywhere;"><strong>${h.jobTitle}</strong> (${h.company}) → <code>${h.to}</code></span>
-                <span style="color:var(--md-sys-color-primary);font-weight:700;white-space:nowrap;">✓ ${h.method}</span>
-              </div>
-            `).join("")}
-          </div>
-        </div>
-      ` : ""}
-    `;
-
-    root.prepend(widget);
-
-    widget.querySelector("#jsa-batch-upgrade-btn")?.addEventListener("click", () => {
-      openProUpgradeModal({ featureKey: "auto_email_apply" });
-    });
-
-    widget.querySelectorAll(".js-trigger-auto-email").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const targetJob = getJobById(btn.getAttribute("data-job-id"));
-        if (targetJob) openAutoEmailModal(targetJob);
-      });
-    });
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.id = "jsa-open-batch-email-btn";
+    btn.className = "button button--tonal button--small";
+    btn.title = "Buka Auto-Send Email Lowongan Kerja ke HRD";
+    btn.innerHTML = `<span class="material-symbols-outlined" aria-hidden="true">forward_to_inbox</span> ⚡ Auto-Send HRD`;
+    btn.addEventListener("click", () => openBatchAutoEmailModal());
+    container.appendChild(btn);
   };
 
-  tryInject();
-  setTimeout(tryInject, 450);
-  window.addEventListener("jsa:auto-email-sent", () => {
-    document.getElementById("jsa-batch-auto-email-card")?.remove();
-    setTimeout(tryInject, 100);
-  });
+  ensureTriggerButton();
+  setTimeout(ensureTriggerButton, 350);
+
+  const root = document.getElementById("application-root");
+  if (root && typeof MutationObserver !== "undefined") {
+    const observer = new MutationObserver(() => ensureTriggerButton());
+    observer.observe(root, { childList: true });
+  }
+
+  // Tampilkan pop-up otomatis hanya jika tidak dalam masa jeda (cooldown 3 hari & 1x per sesi)
+  if (shouldAutoShowBatchEmailPromo()) {
+    setTimeout(() => {
+      if (shouldAutoShowBatchEmailPromo()) {
+        openBatchAutoEmailModal();
+      }
+    }, 650);
+  }
 }
 
 function injectDailyEmailAlertSubscriptionCard() {

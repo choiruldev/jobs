@@ -708,9 +708,17 @@ export function refreshAuthQuotaUI() {
     }
   }
 
-  // 2. Contextual Feature Quota Banner on Career Tool Pages
+  // 2. Contextual Feature Quota Banner on Career Tool Pages (dismissible, 24h cooldown)
   const featureKey = getPageFeatureKey();
   if (!featureKey) return;
+
+  try {
+    const dismissUntil = Number(localStorage.getItem("jsa_quota_banner_dismiss_until_v1") || "0");
+    if (dismissUntil > Date.now()) {
+      document.getElementById("jsa-feature-quota-banner")?.remove();
+      return;
+    }
+  } catch (_) {}
 
   const status = getQuotaStatus(featureKey);
   const mainContainer =
@@ -729,12 +737,19 @@ export function refreshAuthQuotaUI() {
     mainContainer.prepend(banner);
   }
 
+  const closeBtnHtml = `
+    <button type="button" class="js-dismiss-quota-banner" aria-label="Tutup banner" title="Sembunyikan 24 jam" style="background:transparent;border:none;color:var(--md-sys-color-outline);cursor:pointer;padding:4px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;">
+      <span class="material-symbols-outlined" style="font-size:17px;">close</span>
+    </button>
+  `;
+
   if (pro) {
     banner.innerHTML = `
       <div style="display:flex;align-items:center;gap:8px;font-weight:700;color:var(--md-sys-color-primary);">
         <span class="material-symbols-outlined" style="font-size:18px;">verified</span>
         <span>Status Akun: <strong>PRO VIP (${user?.email || "Unlimited"})</strong> — Seluruh Fitur & Auto-Send Email Tanpa Batas!</span>
       </div>
+      ${closeBtnHtml}
     `;
   } else if (user) {
     banner.innerHTML = `
@@ -742,10 +757,11 @@ export function refreshAuthQuotaUI() {
         <span class="material-symbols-outlined" style="font-size:18px;color:var(--md-sys-color-primary);">bolt</span>
         <span>Akun Gratis (<strong>${user.email}</strong>) · Sisa Kuota <strong>${status.label}</strong>: <strong style="color:${status.remaining > 0 ? "var(--md-sys-color-primary)" : "#dc2626"};">${status.remaining} dari ${status.limit}</strong></span>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;">
+      <div style="display:flex;align-items:center;gap:6px;">
         <button type="button" class="js-open-pro-modal" style="background:#052e16;color:#a3e635;border:1px solid #10b981;padding:5px 12px;border-radius:999px;font-size:11.5px;font-weight:800;cursor:pointer;">
           💎 Upgrade PRO (Unlimited)
         </button>
+        ${closeBtnHtml}
       </div>
     `;
     banner.querySelector(".js-open-pro-modal")?.addEventListener("click", () => {
@@ -757,16 +773,24 @@ export function refreshAuthQuotaUI() {
         <span class="material-symbols-outlined" style="font-size:18px;color:var(--md-sys-color-primary);">lock_open</span>
         <span>Mode Tamu: Anda mendapat <strong>${status.limit}x Kuota Gratis ${status.label}</strong> setelah Login 1-Klik.</span>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;">
+      <div style="display:flex;align-items:center;gap:6px;">
         <button type="button" class="js-open-login-modal" style="background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary, #fff);border:none;padding:5px 12px;border-radius:999px;font-size:11.5px;font-weight:800;cursor:pointer;">
           👤 Masuk & Klaim Kuota Gratis
         </button>
+        ${closeBtnHtml}
       </div>
     `;
     banner.querySelector(".js-open-login-modal")?.addEventListener("click", () => {
       openHybridAuthModal({ featureKey });
     });
   }
+
+  banner.querySelector(".js-dismiss-quota-banner")?.addEventListener("click", () => {
+    try {
+      localStorage.setItem("jsa_quota_banner_dismiss_until_v1", String(Date.now() + 24 * 60 * 60 * 1000));
+    } catch (_) {}
+    banner.remove();
+  });
 }
 
 function bindGlobalPaidButtonInterceptors() {
