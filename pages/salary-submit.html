@@ -59,7 +59,7 @@
 
         <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:24px;">
           <!-- Submission Form -->
-          <div class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:22px;">
+          <div class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:20px;padding:24px;background:var(--md-sys-color-surface-container-low);box-shadow:0 4px 20px rgba(0,0,0,0.035);">
             <h2 class="title-medium" style="margin:0 0 12px;font-size:17px;">Laporkan Gaji Anonim</h2>
 
             <form id="salary-submit-form" class="stack" style="gap:12px;">
@@ -139,7 +139,7 @@
 
       const feedContainer = document.getElementById("salary-feed-container");
       feedContainer.innerHTML = reports.map(r => `
-        <div style="background:var(--md-sys-color-surface-container);border:1px solid var(--md-sys-color-outline-variant);border-radius:12px;padding:14px;">
+        <div style="background:var(--md-sys-color-surface-container-low);border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.02);">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
             <div>
               <div style="font-weight:800;font-size:15px;">${escapeHtml(r.role)}</div>
