@@ -61,14 +61,14 @@
 
         <div class="salary-benchmark-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 320px), 1fr));gap:24px;">
           <!-- Controls Panel -->
-          <div class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:24px;">
+          <div class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:20px;padding:24px;background:var(--md-sys-color-surface-container-low);box-shadow:0 4px 20px rgba(0,0,0,0.035);">
             <h2 class="title-large" style="margin:0 0 16px;font-size:18px;">Input Penawaran Kerja</h2>
 
             <div class="field" style="margin-bottom:14px;">
               <label class="field__label" for="salary-amount" style="font-weight:600;">Nominal Gaji Bulanan</label>
-              <div style="display:flex;gap:8px;">
+              <div style="display:flex;gap:10px;align-items:center;">
                 <input class="field__input" id="salary-amount" type="number" value="3500" min="100" step="50" style="flex:1;">
-                <select class="field__input" id="salary-currency" style="width:110px;">
+                <select class="field__input" id="salary-currency" style="width:130px;flex-shrink:0;">
                   <option value="USD" selected>USD ($)</option>
                   <option value="SGD">SGD (S$)</option>
                   <option value="EUR">EUR (€)</option>
@@ -103,8 +103,8 @@
               </select>
             </div>
 
-            <div class="cluster" style="gap:6px;">
-              <span class="label-small" style="font-weight:700;width:100%;">Preset Cepat:</span>
+            <div class="cluster" style="gap:8px;margin-top:14px;">
+              <span class="label-small" style="font-weight:700;width:100%;color:var(--md-sys-color-outline);text-transform:uppercase;letter-spacing:0.04em;font-size:11px;">Preset Cepat:</span>
               <button type="button" class="chip chip--outline chip--small js-preset-btn" data-amt="1500" data-cur="USD">$1.5k / bln</button>
               <button type="button" class="chip chip--outline chip--small js-preset-btn" data-amt="3000" data-cur="USD">$3.0k / bln</button>
               <button type="button" class="chip chip--outline chip--small js-preset-btn" data-amt="5000" data-cur="USD">$5.0k / bln</button>
@@ -117,7 +117,7 @@
         </div>
 
         <!-- Comparative Benchmark Table -->
-        <section class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:24px;margin-top:8px;">
+        <section class="content-block" style="border:1px solid var(--md-sys-color-outline-variant);border-radius:20px;padding:24px;background:var(--md-sys-color-surface-container-low);box-shadow:0 4px 20px rgba(0,0,0,0.035);margin-top:16px;">
           <h2 class="title-large" style="margin:0 0 8px;font-size:18px;">Standar Benchmark Gaji Remote Software Engineer Indonesia</h2>
           <p class="body-medium" style="margin:0 0 16px;color:var(--md-sys-color-outline);">Berdasarkan data agregasi penawaran kerja regional & global terkini.</p>
           <div class="horizontal-scroll-table" style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
@@ -187,19 +187,19 @@
 
       root.innerHTML = `
         <div class="stack" style="gap:16px;">
-          <div class="ats-scorecard" style="background:var(--md-sys-color-surface-container-low);border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:20px;margin:0;">
+          <div class="ats-scorecard" style="background:var(--md-sys-color-surface-container-low);border:1px solid var(--md-sys-color-outline-variant);border-radius:20px;padding:24px;box-shadow:0 4px 20px rgba(0,0,0,0.035);margin:0;">
             <div class="ats-scorecard__header" style="align-items:flex-start;">
               <div>
-                <span class="label-small" style="color:var(--md-sys-color-outline);font-weight:700;">ESTIMASI GAJI BERSIH (NET)</span>
+                <span class="label-small" style="color:var(--md-sys-color-outline);font-weight:700;letter-spacing:0.04em;">ESTIMASI GAJI BERSIH (NET)</span>
                 <div style="font-size:26px;font-weight:900;color:var(--md-sys-color-primary);margin:4px 0;">${ppp.formatted.netMonthlyIdr} <span style="font-size:14px;font-weight:500;color:var(--md-sys-color-on-surface);">/ bulan</span></div>
                 <div class="body-medium" style="font-size:13px;color:var(--md-sys-color-outline);">
                   Kotor: ${ppp.formatted.grossMonthlyIdr} | Estimasi PPh 21: - ${ppp.formatted.monthlyTax}
                 </div>
               </div>
-              <span class="badge" style="background:#e8f5e9;color:#2e7d32;font-weight:800;font-size:14px;">${ppp.savingsRatePercent}% Tabungan</span>
+              <span class="badge" style="background:rgba(0,193,110,0.14);color:var(--md-sys-color-primary);font-weight:800;font-size:13px;padding:6px 14px;border-radius:999px;">${ppp.savingsRatePercent}% Tabungan</span>
             </div>
 
-            <div class="ppp-metric-grid" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--md-sys-color-outline-variant);display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 200px), 1fr));gap:12px;font-size:13px;">
+            <div class="ppp-metric-grid" style="margin-top:16px;padding-top:16px;border-top:1px solid var(--md-sys-color-outline-variant);display:grid;grid-template-columns:repeat(auto-fit, minmax(min(100%, 200px), 1fr));gap:14px;font-size:13px;">
               <div>
                 <span class="label-small" style="color:var(--md-sys-color-outline);">Ekuivalen Gaya Hidup di ${escapeHtml(ppp.input.targetCity.name)}:</span>
                 <div style="font-size:16px;font-weight:800;color:var(--md-sys-color-tertiary);margin-top:2px;">${escapeHtml(ppp.equivalentDisplay)}</div>
@@ -207,13 +207,13 @@
               </div>
               <div>
                 <span class="label-small" style="color:var(--md-sys-color-outline);">Potensi Tabungan Bersih:</span>
-                <div style="font-size:16px;font-weight:800;color:#2e7d32;margin-top:2px;">${ppp.formatted.potentialSavings} / bln</div>
+                <div style="font-size:16px;font-weight:800;color:var(--md-sys-color-primary);margin-top:2px;">${ppp.formatted.potentialSavings} / bln</div>
                 <span class="label-small" style="color:var(--md-sys-color-outline);font-size:11px;">Setelah living cost: ${ppp.formatted.estLivingCost}</span>
               </div>
             </div>
           </div>
 
-          <div class="content-block" style="border-radius:16px;background:var(--md-sys-color-surface-container);padding:18px;">
+          <div class="content-block" style="border-radius:20px;background:var(--md-sys-color-surface-container);border:1px solid var(--md-sys-color-outline-variant);padding:20px;box-shadow:0 2px 12px rgba(0,0,0,0.025);">
             <strong class="title-medium" style="display:flex;align-items:center;gap:6px;font-size:14px;color:var(--md-sys-color-primary);">
               <span class="material-symbols-outlined" style="font-size:18px;">psychology_alt</span>
               Rekomendasi Strategi Negosiasi Gaji:
